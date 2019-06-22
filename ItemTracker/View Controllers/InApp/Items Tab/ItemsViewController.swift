@@ -21,9 +21,23 @@ class ItemsViewController: UIViewController {
         itemsCollectionView.delegate            = self
         itemsCollectionView.dataSource          = self
         itemsCollectionView.layer.masksToBounds = false
+        itemsCollectionView.clipsToBounds       = true
         
     }
-
+    
+    // MARK: - IBAction Methods
+    @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
+        
+        // Instantiate a view controller and check that it isn't nil
+        let addItemVC = storyboard?.instantiateViewController(withIdentifier: Constants.ADD_ITEM_VCID) as? AddItemViewController
+        guard addItemVC != nil else { return }
+        
+        // Set the presentation style and present
+        addItemVC!.modalPresentationStyle = .overCurrentContext
+        present(addItemVC!, animated: true, completion: nil)
+        
+    }
+    
 }
 
 extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -39,14 +53,6 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.ITEM_CELL_ID, for: indexPath) as! ItemCollectionViewCell
         
         return cell
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        let footerCell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.ADD_ITEM_CELL_ID, for: indexPath) as! AddItemCollectionReusableView
-        
-        return footerCell
         
     }
     

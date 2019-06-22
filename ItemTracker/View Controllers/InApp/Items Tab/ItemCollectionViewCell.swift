@@ -20,7 +20,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
         // Setup the cell
         self.layer.shadowColor   = UIColor.darkGray.cgColor
         self.layer.shadowOffset  = CGSize(width: 1, height: 1)
-        self.layer.shadowRadius  = 2
+        self.layer.shadowRadius  = 1
         self.layer.shadowOpacity = 0.5
         self.layer.masksToBounds = false
         self.layer.cornerRadius  = Constants.GENERAL_CORNER_RADIUS

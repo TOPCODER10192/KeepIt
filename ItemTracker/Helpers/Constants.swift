@@ -15,6 +15,7 @@ class Constants {
     static let LOGIN_VCID           = "LoginVC"
     static let CREATE_ACCOUNT_VCID  = "CreateAccountVC"
     static let FORGOT_PASSWORD_VCID = "ForgotPasswordVC"
+    static let ADD_ITEM_VCID        = "AddItemVC"
     
     // Segue Identifiers
     static let LOGGED_IN_SEGUE_ID       = "LoggedIn"
@@ -34,6 +35,9 @@ class Constants {
     static let FORGOT_PASSWORD_VIEW_WIDTH: CGFloat = min(400, UIScreen.main.bounds.width - 20)
     
     static let ERROR_VIEW_Y: CGFloat = UIScreen.main.bounds.height * 0.3
+    
+    // MARK: - MapView Sizes
+    static let REGION_IN_METERS: Double = 10000
     
     // Colors
     static let FLOATING_VIEW_COLOR   = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 204/255)
