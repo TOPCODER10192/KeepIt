@@ -34,6 +34,9 @@ class Constants {
     
     static let FORGOT_PASSWORD_VIEW_WIDTH: CGFloat = min(400, UIScreen.main.bounds.width - 20)
     
+    static let ADD_ITEM_VIEW_WIDTH: CGFloat  = min(400, UIScreen.main.bounds.width - 20)
+    static let ADD_ITEM_VIEW_HEIGHT: CGFloat = 310
+    
     static let ERROR_VIEW_Y: CGFloat = UIScreen.main.bounds.height * 0.3
     
     // MARK: - MapView Sizes
@@ -61,15 +64,15 @@ class Constants {
     static let WRONG_PASSWORD           = "Incorrect password"
     
     // MARK: Database Keys
-    static let USERS_KEY      = "Users"
-    static let USER_ID_KEY    = "User ID"
-    static let FIRST_NAME_KEY = "First Name"
-    static let LAST_NAME_KEY  = "Last Name"
-    static let EMAIL_KEY      = "Email"
-    static let CARDS_KEY      = "Cards"
-    static let CARD_NAME_KEY  = "Card Name"
-    static let PURCHASES_KEY  = "Purchases"
-    static let CARD_OWNER_KEY = "Card Owner"
+    static let USERS_KEY         = "Users"
+    static let USER_ID_KEY       = "User ID"
+    static let FIRST_NAME_KEY    = "First Name"
+    static let LAST_NAME_KEY     = "Last Name"
+    static let EMAIL_KEY         = "Email"
+    static let ITEMS_KEY         = "Items"
+    static let ITEM_NAME_KEY     = "Item Name"
+    static let ITEM_MOVEMENT_KEY = "Is Moved Often"
+    static let ITEM_LOCATION_KEY = "Location"
     
     // MARK: - Cell ID's
     static let ITEM_CELL_ID     = "ItemCell"

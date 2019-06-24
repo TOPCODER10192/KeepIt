@@ -13,6 +13,9 @@ class ItemsViewController: UIViewController {
     // MARK: - IBOutlet Properties
     @IBOutlet weak var itemsCollectionView: UICollectionView!
     
+    // MARK: Properties
+
+    
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,32 +28,58 @@ class ItemsViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Reload the collection view
+        itemsCollectionView.reloadData()
+        
+    }
+    
     // MARK: - IBAction Methods
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
         // Instantiate a view controller and check that it isn't nil
-        let addItemVC = storyboard?.instantiateViewController(withIdentifier: Constants.ADD_ITEM_VCID) as? AddItemViewController
+        let addItemVC = self.storyboard?.instantiateViewController(withIdentifier: Constants.ADD_ITEM_VCID) as? AddItemViewController
         guard addItemVC != nil else { return }
+        
+        // Set self as delegate
+        addItemVC?.delegate = self
         
         // Set the presentation style and present
         addItemVC!.modalPresentationStyle = .overCurrentContext
-        present(addItemVC!, animated: true, completion: nil)
+        self.present(addItemVC!, animated: false, completion: nil)
         
     }
     
 }
 
+// MARK: - Methods that conform to AddItemProtocol
+extension ItemsViewController: AddItemProtocol {
+    
+    func itemAdded(item: Item) {
+        
+        // Refresh the collectionView
+        itemsCollectionView.reloadData()
+        
+    }
+    
+}
+
+// MARK: - Methods that conform to UICollectionView
 extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return 20
+        return Shared.userItems.count
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.ITEM_CELL_ID, for: indexPath) as! ItemCollectionViewCell
+        
+        cell.itemLabel.text = Shared.userItems[indexPath.row].name!
         
         return cell
         
@@ -65,6 +94,5 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         
     }
     
-    
-    
 }
+

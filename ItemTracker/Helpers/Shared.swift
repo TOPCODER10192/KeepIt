@@ -10,6 +10,7 @@ import Foundation
 
 struct Shared {
     
-    static var userProfile: UserInfo?
+    static var userProfile = UserInfo()
+    static var userItems = [Item]()
     
 }

@@ -13,6 +13,9 @@
         <array key="SF-Pro-Text-Regular.otf">
             <string>SFProText-Regular</string>
         </array>
+        <array key="SF-Pro-Text-Semibold.otf">
+            <string>SFProText-Semibold</string>
+        </array>
     </customFonts>
     <scenes>
         <!--Tab Bar Controller-->
@@ -53,13 +56,13 @@
                                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="aV3-TZ-2CI">
                                             <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
-                                                <action selector="addButtonTapped:" destination="nfB-OK-GR7" id="UJV-Uh-iyH"/>
+                                                <action selector="addButtonTapped:" destination="i6Y-8G-RJl" id="NWB-Tq-fHz"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mOp-Pd-ncT">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mOp-Pd-ncT">
                                 <rect key="frame" x="0.0" y="89" width="414" height="807"/>
                                 <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                             </mapView>
@@ -182,148 +185,193 @@
         <scene sceneID="q7N-JW-PCB">
             <objects>
                 <viewController storyboardIdentifier="AddItemVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="MLH-9B-2yx" customClass="AddItemViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="d8I-dG-TKc">
+                    <view key="view" contentMode="scaleToFill" id="d8I-dG-TKc" userLabel="Dim View">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Zb-4P-Gs3">
-                                <rect key="frame" x="0.0" y="44" width="414" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="EIi-gs-0cy"/>
-                                </constraints>
-                                <items>
-                                    <navigationItem title="Add an Item" id="Mmf-h0-Fg5">
-                                        <barButtonItem key="leftBarButtonItem" title="Back" id="NP7-N2-50c">
-                                            <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="backButtonTapped:" destination="MLH-9B-2yx" id="V95-4b-ro4"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="f8z-Ee-fuD" userLabel="Add Item Stack View">
-                                <rect key="frame" x="20" y="104" width="374" height="450"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="na8-Rv-aAi" userLabel="Floating View">
+                                <rect key="frame" x="32" y="223" width="350" height="450"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Item Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RhK-HP-uhx" userLabel="Item Name Text Field">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="35"/>
+                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="91b-Ui-eMD">
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="XY4-rB-L4Q"/>
+                                            <constraint firstAttribute="height" constant="40" id="ypx-mM-rbp"/>
                                         </constraints>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="2kD-pm-Hbc" userLabel="Item Movement Stack View">
-                                        <rect key="frame" x="0.0" y="53" width="374" height="57"/>
+                                        <items>
+                                            <navigationItem title="Title" id="kbA-hI-5UZ">
+                                                <barButtonItem key="leftBarButtonItem" title="Back" id="GCR-GH-ngS">
+                                                    <connections>
+                                                        <action selector="backButtonTapped:" destination="MLH-9B-2yx" id="ygi-at-Ffl"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                            </navigationItem>
+                                        </items>
+                                    </navigationBar>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="f8z-Ee-fuD" userLabel="Add Item Stack View">
+                                        <rect key="frame" x="10" y="50" width="330" height="390"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is this item frequently moved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pZ-NX-464" userLabel="Movement Label">
-                                                <rect key="frame" x="0.0" y="0.0" width="374" height="20"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Item Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RhK-HP-uhx" userLabel="Item Name Text Field">
+                                                <rect key="frame" x="0.0" y="0.0" width="330" height="35"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="20" id="cy6-lt-zwM"/>
+                                                    <constraint firstAttribute="height" constant="35" id="XY4-rB-L4Q"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
                                                 <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="cJo-kR-Yxr" userLabel="Yes No Segmented Control ">
-                                                <rect key="frame" x="0.0" y="27" width="374" height="31"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="v4k-pA-K7u"/>
-                                                </constraints>
-                                                <segments>
-                                                    <segment title="Yes"/>
-                                                    <segment title="No"/>
-                                                </segments>
-                                                <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                            </segmentedControl>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="9pZ-NX-464" firstAttribute="centerX" secondItem="2kD-pm-Hbc" secondAttribute="centerX" id="Z52-T2-YmX"/>
-                                            <constraint firstItem="cJo-kR-Yxr" firstAttribute="centerX" secondItem="2kD-pm-Hbc" secondAttribute="centerX" id="fcr-vO-LRX"/>
-                                        </constraints>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="Fdx-qn-n74" userLabel="Item Location Stack View">
-                                        <rect key="frame" x="0.0" y="128" width="374" height="264"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is this item right now" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxn-xS-e9r" userLabel="Location Label">
-                                                <rect key="frame" x="0.0" y="0.0" width="374" height="20"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="20" id="T4a-vI-kwB"/>
-                                                </constraints>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N6J-hK-3x1" userLabel="Location Segmented Control">
-                                                <rect key="frame" x="0.0" y="27" width="374" height="31"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="sdI-KW-dw1"/>
-                                                </constraints>
-                                                <segments>
-                                                    <segment title="Near Me"/>
-                                                    <segment title="Custom Location"/>
-                                                </segments>
-                                                <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <textInputTraits key="textInputTraits"/>
                                                 <connections>
-                                                    <action selector="locationSegmentChanged:" destination="MLH-9B-2yx" eventType="valueChanged" id="LxR-Eq-dmF"/>
+                                                    <action selector="itemNameTextFieldEditing:" destination="MLH-9B-2yx" eventType="editingChanged" id="ipf-ab-GKk"/>
                                                 </connections>
-                                            </segmentedControl>
-                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="lnQ-Vb-pLW">
-                                                <rect key="frame" x="0.0" y="64" width="374" height="200"/>
+                                            </textField>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="2kD-pm-Hbc" userLabel="Item Movement Stack View">
+                                                <rect key="frame" x="0.0" y="46.5" width="330" height="61"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is this item frequently moved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pZ-NX-464" userLabel="Movement Label">
+                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="20" id="cy6-lt-zwM"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="cJo-kR-Yxr" userLabel="Yes No Segmented Control ">
+                                                        <rect key="frame" x="0.0" y="31" width="330" height="31"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="v4k-pA-K7u"/>
+                                                        </constraints>
+                                                        <segments>
+                                                            <segment title="Yes"/>
+                                                            <segment title="No"/>
+                                                        </segments>
+                                                        <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="movementSegmentChanged:" destination="MLH-9B-2yx" eventType="valueChanged" id="VBj-Zb-NHa"/>
+                                                        </connections>
+                                                    </segmentedControl>
+                                                </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="200" id="W6K-yc-l1f"/>
+                                                    <constraint firstItem="9pZ-NX-464" firstAttribute="centerX" secondItem="2kD-pm-Hbc" secondAttribute="centerX" id="Z52-T2-YmX"/>
+                                                    <constraint firstItem="cJo-kR-Yxr" firstAttribute="centerX" secondItem="2kD-pm-Hbc" secondAttribute="centerX" id="fcr-vO-LRX"/>
                                                 </constraints>
-                                            </mapView>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Fdx-qn-n74" userLabel="Item Location Stack View">
+                                                <rect key="frame" x="0.0" y="118.5" width="330" height="220"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is this item right now" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxn-xS-e9r" userLabel="Location Label">
+                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="20" id="T4a-vI-kwB"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N6J-hK-3x1" userLabel="Location Segmented Control">
+                                                        <rect key="frame" x="0.0" y="30" width="330" height="31"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="sdI-KW-dw1"/>
+                                                        </constraints>
+                                                        <segments>
+                                                            <segment title="Near Me"/>
+                                                            <segment title="Custom Location"/>
+                                                        </segments>
+                                                        <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="locationSegmentChanged:" destination="MLH-9B-2yx" eventType="valueChanged" id="LxR-Eq-dmF"/>
+                                                        </connections>
+                                                    </segmentedControl>
+                                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zur-Qh-UIR">
+                                                        <rect key="frame" x="0.0" y="70" width="330" height="150"/>
+                                                        <gestureRecognizers/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="150" id="a7c-kJ-4iQ"/>
+                                                        </constraints>
+                                                        <connections>
+                                                            <outletCollection property="gestureRecognizers" destination="4o0-Ne-P1r" appends="YES" id="hrt-jK-xy7"/>
+                                                        </connections>
+                                                    </mapView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="zur-Qh-UIR" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="awd-c8-JGQ"/>
+                                                    <constraint firstItem="N6J-hK-3x1" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="gLE-DB-0Uu"/>
+                                                    <constraint firstItem="uxn-xS-e9r" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="yFz-bQ-k7c"/>
+                                                </constraints>
+                                            </stackView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWw-oh-ZeM" userLabel="Add Item Button">
+                                                <rect key="frame" x="66" y="350" width="198" height="40"/>
+                                                <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="AZt-RR-NbH"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="18"/>
+                                                <state key="normal" title="Add Item">
+                                                    <color key="titleColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="addItemButtonTapped:" destination="MLH-9B-2yx" eventType="touchUpInside" id="dqo-5c-XPg"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="lnQ-Vb-pLW" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="Wlz-7P-guv"/>
-                                            <constraint firstItem="N6J-hK-3x1" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="gLE-DB-0Uu"/>
-                                            <constraint firstItem="uxn-xS-e9r" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="yFz-bQ-k7c"/>
+                                            <constraint firstItem="N6J-hK-3x1" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" id="ZLY-lE-GyJ"/>
+                                            <constraint firstItem="Fdx-qn-n74" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="bWe-rH-wU5"/>
+                                            <constraint firstItem="RhK-HP-uhx" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="iA0-tU-JYd"/>
+                                            <constraint firstItem="zWw-oh-ZeM" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" multiplier="0.6" id="jkm-Yk-Kzk"/>
+                                            <constraint firstItem="zur-Qh-UIR" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" id="osH-gE-QDe"/>
+                                            <constraint firstItem="zWw-oh-ZeM" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="qsh-qh-KxQ"/>
+                                            <constraint firstItem="2kD-pm-Hbc" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="rgg-dW-Alp"/>
+                                            <constraint firstItem="RhK-HP-uhx" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" id="tZh-XA-tEJ"/>
+                                            <constraint firstItem="cJo-kR-Yxr" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" id="x3a-N7-OSU"/>
                                         </constraints>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWw-oh-ZeM" userLabel="Add Item Button">
-                                        <rect key="frame" x="0.0" y="410" width="374" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="AZt-RR-NbH"/>
-                                        </constraints>
-                                        <state key="normal" title="Button"/>
-                                    </button>
                                 </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="RhK-HP-uhx" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="0a5-TO-dHg"/>
-                                    <constraint firstItem="Fdx-qn-n74" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="ENQ-Pm-LZT"/>
-                                    <constraint firstItem="2kD-pm-Hbc" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="I4O-RP-6PU"/>
-                                    <constraint firstItem="zWw-oh-ZeM" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="U7t-LA-dhN"/>
-                                    <constraint firstAttribute="height" constant="450" id="slZ-T0-RFx"/>
+                                    <constraint firstItem="f8z-Ee-fuD" firstAttribute="leading" secondItem="na8-Rv-aAi" secondAttribute="leading" constant="10" id="05P-72-5lW"/>
+                                    <constraint firstItem="91b-Ui-eMD" firstAttribute="leading" secondItem="na8-Rv-aAi" secondAttribute="leading" id="9Tp-GA-pIF"/>
+                                    <constraint firstAttribute="bottom" secondItem="f8z-Ee-fuD" secondAttribute="bottom" constant="10" id="KFa-ga-1sl"/>
+                                    <constraint firstItem="f8z-Ee-fuD" firstAttribute="centerX" secondItem="na8-Rv-aAi" secondAttribute="centerX" id="KbJ-X8-FKM"/>
+                                    <constraint firstAttribute="width" constant="350" id="PGY-IA-FU9"/>
+                                    <constraint firstItem="91b-Ui-eMD" firstAttribute="top" secondItem="na8-Rv-aAi" secondAttribute="top" id="XzN-PV-Xja"/>
+                                    <constraint firstAttribute="height" constant="450" id="gVn-er-TLm"/>
+                                    <constraint firstAttribute="trailing" secondItem="f8z-Ee-fuD" secondAttribute="trailing" constant="10" id="llf-u8-rQX"/>
+                                    <constraint firstAttribute="trailing" secondItem="91b-Ui-eMD" secondAttribute="trailing" id="pzy-Kb-H1s"/>
+                                    <constraint firstItem="f8z-Ee-fuD" firstAttribute="top" secondItem="91b-Ui-eMD" secondAttribute="bottom" constant="10" id="vE3-Su-Nvj"/>
                                 </constraints>
-                            </stackView>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="lgh-T8-6mY" firstAttribute="trailing" secondItem="f8z-Ee-fuD" secondAttribute="trailing" constant="20" id="44W-o8-C7k"/>
-                            <constraint firstItem="f8z-Ee-fuD" firstAttribute="top" secondItem="1Zb-4P-Gs3" secondAttribute="bottom" constant="20" id="Cva-n5-8Ux"/>
-                            <constraint firstItem="f8z-Ee-fuD" firstAttribute="leading" secondItem="lgh-T8-6mY" secondAttribute="leading" constant="20" id="QqO-Jb-aR2"/>
-                            <constraint firstItem="1Zb-4P-Gs3" firstAttribute="leading" secondItem="d8I-dG-TKc" secondAttribute="leading" id="Zy6-3a-zq1"/>
-                            <constraint firstAttribute="trailing" secondItem="1Zb-4P-Gs3" secondAttribute="trailing" id="awh-Sr-vfZ"/>
-                            <constraint firstItem="1Zb-4P-Gs3" firstAttribute="top" secondItem="lgh-T8-6mY" secondAttribute="top" id="xiZ-um-VZa"/>
+                            <constraint firstItem="na8-Rv-aAi" firstAttribute="centerX" secondItem="d8I-dG-TKc" secondAttribute="centerX" id="QUI-3I-j47"/>
+                            <constraint firstItem="na8-Rv-aAi" firstAttribute="centerY" secondItem="d8I-dG-TKc" secondAttribute="centerY" id="dOW-pc-RlT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="lgh-T8-6mY"/>
                     </view>
                     <connections>
                         <outlet property="addItemButton" destination="zWw-oh-ZeM" id="CEi-Xk-Ekj"/>
-                        <outlet property="addItemStackViewHeight" destination="slZ-T0-RFx" id="tBf-FG-y4D"/>
+                        <outlet property="backButton" destination="GCR-GH-ngS" id="XCa-AP-WJg"/>
+                        <outlet property="dimView" destination="d8I-dG-TKc" id="gdS-ew-tDY"/>
+                        <outlet property="floatingView" destination="na8-Rv-aAi" id="p4B-x1-uMm"/>
+                        <outlet property="floatingViewHeight" destination="gVn-er-TLm" id="NGG-gp-rLT"/>
+                        <outlet property="floatingViewWidth" destination="PGY-IA-FU9" id="nOI-JJ-mD0"/>
+                        <outlet property="floatingViewYConstraint" destination="dOW-pc-RlT" id="3Mk-PC-mKA"/>
                         <outlet property="itemNameTextField" destination="RhK-HP-uhx" id="Yu7-7g-6eT"/>
                         <outlet property="locationLabel" destination="uxn-xS-e9r" id="Ztj-2U-d74"/>
                         <outlet property="locationSegmentedDisplay" destination="N6J-hK-3x1" id="K55-p8-8cQ"/>
-                        <outlet property="mapView" destination="lnQ-Vb-pLW" id="mmm-Bu-msU"/>
-                        <outlet property="mapViewHeight" destination="W6K-yc-l1f" id="4CQ-Iy-ohz"/>
+                        <outlet property="mapView" destination="zur-Qh-UIR" id="IwC-cQ-oe3"/>
+                        <outlet property="mapViewHeight" destination="a7c-kJ-4iQ" id="Qhm-Q3-bnJ"/>
                         <outlet property="movementLabel" destination="9pZ-NX-464" id="kxy-w0-Gfp"/>
                         <outlet property="movementSegmentedDisplay" destination="cJo-kR-Yxr" id="FCr-vX-1Bj"/>
+                        <outlet property="navigationBar" destination="91b-Ui-eMD" id="JoA-bj-xBS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uAZ-Rg-FF0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="4o0-Ne-P1r">
+                    <connections>
+                        <action selector="mapViewHeld:" destination="MLH-9B-2yx" id="ng7-pM-Zc7"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-1842" y="1061"/>
         </scene>

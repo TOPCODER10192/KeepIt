@@ -25,6 +25,9 @@ class ItemCollectionViewCell: UICollectionViewCell {
         self.layer.masksToBounds = false
         self.layer.cornerRadius  = Constants.GENERAL_CORNER_RADIUS
         
+        // Setup the itemLabel
+        itemLabel.adjustsFontSizeToFitWidth = true
+        
         
     }
 }

@@ -142,12 +142,16 @@ extension LoginViewController {
     
     @IBAction func loginTapped(_ sender: UIButton) {
         
+        // Disable the button
+        loginButton.isEnabled = false
+        
         // Grab the email and password from the text fields
         let email = emailTextField.text?.trimmingCharacters(in: .whitespaces)
         let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
         
         // Check that the email
         guard email != nil && email!.count > 0 && password != nil && password!.count > 0 else {
+            loginButton.isEnabled = true
             presentErrorMessage(text: "Text fields are empty")
             return
         }
@@ -158,6 +162,7 @@ extension LoginViewController {
             
             // Check to see if any errors occured
             guard error == nil && user != nil else {
+                self.loginButton.isEnabled = true
                 self.handleErrors(error: error! as NSError)
                 return
             }
@@ -212,7 +217,38 @@ extension LoginViewController {
             // Store the data
             Shared.userProfile = UserInfo(firstName: firstName, lastName: lastName, email: email, userID: userID)
             
-            closure()
+            // Get a reference to the users items
+            userDocRef.collection(Constants.ITEMS_KEY).getDocuments(completion: { (query, error) in
+                
+                // Read the result of the query to check if documents were read
+                if query == nil || query!.count == 0 || error != nil { closure() }
+                
+                // Get the documents
+                let documents = query?.documents
+                
+                // Create a counter
+                var count = 0
+                
+                for document in documents! {
+                    
+                    let itemData = document.data()
+                    
+                    let itemName = itemData[Constants.ITEM_NAME_KEY] as! String?
+                    let isMovedOften = itemData[Constants.ITEM_MOVEMENT_KEY] as! Bool?
+                    let itemLocation = itemData[Constants.ITEM_LOCATION_KEY] as! [Double]?
+                    
+                    Shared.userItems.append(Item(name: itemName, mostRecentLocation: itemLocation, isMovedOften: isMovedOften))
+                    
+                    count += 1
+                    
+                    // If all the documents have been read, then execute the closure
+                    if count == documents!.count {
+                        closure()
+                    }
+                    
+                }
+                
+            })
             
         }
         

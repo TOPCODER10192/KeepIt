@@ -11,9 +11,8 @@ import Foundation
 struct Item {
     
     // MARK: - Item Properties
-    var name: String
-    var mostRecentLocation: [Double]
-    var type: String
-    var lost: Bool
+    var name: String?
+    var mostRecentLocation: [Double]?
+    var isMovedOften: Bool?
     
 }

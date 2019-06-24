@@ -18,17 +18,49 @@ class MapViewController: UIViewController {
     // MARK: - AddItemViewController Properties
     let locationManager = CLLocationManager()
     
+    // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Setup the mapView
         mapViewBottomConstraint.constant = self.tabBarController!.tabBar.frame.height
+        mapView.delegate = self
+        
+        for item in Shared.userItems {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate.latitude = item.mostRecentLocation![0] as CLLocationDegrees
+            annotation.coordinate.longitude = item.mostRecentLocation![1] as CLLocationDegrees
+            annotation.title = item.name!
+            mapView.addAnnotation(annotation)
+        }
     
 
         // Check the user's location services
         checkLocationServices()
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
+    // MARK: - IBAction Methods:
+    @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
+        
+        // Instantiate a view controller and check that it isn't nil
+        let addItemVC = storyboard?.instantiateViewController(withIdentifier: Constants.ADD_ITEM_VCID) as? AddItemViewController
+        guard addItemVC != nil else { return }
+        
+        // Set self as delegate
+        addItemVC?.delegate = self
+        
+        // Set the presentation style and present
+        addItemVC!.modalPresentationStyle = .overCurrentContext
+        present(addItemVC!, animated: false, completion: nil)
+        
+    }
+    
     
 }
 
@@ -63,6 +95,7 @@ extension MapViewController {
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
     }
     
     func checkLocationServices() {
@@ -109,6 +142,43 @@ extension MapViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorization()
+    }
+    
+}
+
+// MARK: - Methods that conform to MKMapViewDelegate
+extension MapViewController: MKMapViewDelegate {
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "AnnotationView")
+        
+        guard annotation.title != "My Location" else { return annotationView }
+        
+        if annotationView == nil {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "AnnotationView")
+        }
+        
+        annotationView?.image          = UIImage(named: "ItemAnnotation")
+        annotationView?.isDraggable    = false
+        annotationView?.canShowCallout = true
+        
+        return annotationView
+        
+    }
+    
+}
+
+extension MapViewController: AddItemProtocol {
+    
+    func itemAdded(item: Item) {
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate.latitude  = item.mostRecentLocation![0] as CLLocationDegrees
+        annotation.coordinate.longitude = item.mostRecentLocation![1] as CLLocationDegrees
+        annotation.title                = item.name!
+        mapView.addAnnotation(annotation)
+        
     }
     
 }
