@@ -71,12 +71,14 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
+        // Return the number of items that the user has stored
         return Shared.userItems.count
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        // Create the cell and set the label accordingly
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.ITEM_CELL_ID, for: indexPath) as! ItemCollectionViewCell
         
         cell.itemLabel.text = Shared.userItems[indexPath.row].name!

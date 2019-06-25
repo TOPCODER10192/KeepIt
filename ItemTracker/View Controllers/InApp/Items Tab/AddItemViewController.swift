@@ -31,6 +31,7 @@ class AddItemViewController: UIViewController {
     @IBOutlet weak var backButton: UIBarButtonItem!
     
     @IBOutlet weak var itemNameTextField: UITextField!
+    @IBOutlet weak var addImageButton: UIButton!
     
     @IBOutlet weak var movementLabel: UILabel!
     @IBOutlet weak var movementSegmentedDisplay: UISegmentedControl!
@@ -70,6 +71,11 @@ class AddItemViewController: UIViewController {
         
         // Setup the itemNameTextField
         itemNameTextField.delegate = self
+        
+        // Setup the addImageButton
+        addImageButton.layer.cornerRadius = addImageButton.frame.width / 2
+        addImageButton.layer.borderColor  = UIColor.black.cgColor
+        addImageButton.layer.borderWidth  = 1
 
         // Setup the mapView
         mapViewHeight.constant    = 0
@@ -104,26 +110,56 @@ class AddItemViewController: UIViewController {
         retrieveItemInfo()
     }
     
+    @IBAction func addItemImageTapped(_ sender: UIButton) {
+        
+        let actionSheet = UIAlertController(title: "Add Item Image", message: nil, preferredStyle: .actionSheet)
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action) in
+                self.showImagePicker(type: .camera)
+            }))
+        }
+        
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            actionSheet.addAction(UIAlertAction(title: "Camera Roll", style: .default, handler: { (action) in
+                self.showImagePicker(type: .photoLibrary)
+            }))
+        }
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(actionSheet, animated: true, completion: nil)
+        
+    }
+    
     @IBAction func locationSegmentChanged(_ sender: UISegmentedControl) {
         
         // Lower the keyboard
         itemNameTextField.resignFirstResponder()
         
+        // If the segmentSelected is 0 then don't show the map
         if locationSegmentedDisplay.selectedSegmentIndex == 0 {
             
             UIView.animate(withDuration: 0.3) {
+                
+                // Decrease the view height by 200, set map height to 0
                 self.floatingViewHeight.constant -= 200
                 self.mapViewHeight.constant = 0
                 self.view.layoutIfNeeded()
+                
             }
             
         }
+            // If the segmentSelected is 1 then show the map
         else {
             
             UIView.animate(withDuration: 0.3) {
+                
+                // Increase the view height by 200, set map height to 200
                 self.floatingViewHeight.constant += 200
                 self.mapViewHeight.constant = 200
                 self.view.layoutIfNeeded()
+                
             }
             
         }
@@ -245,6 +281,15 @@ extension AddItemViewController {
 
 // MARK: - Helper Methods
 extension AddItemViewController {
+    
+    func showImagePicker(type: UIImagePickerController.SourceType) {
+        
+        let imagePicker        = UIImagePickerController()
+        imagePicker.sourceType = type
+        imagePicker.delegate   = self
+        present(imagePicker, animated: true, completion: nil)
+        
+    }
     
     func checkLocationAuthorization() {
         
@@ -426,4 +471,23 @@ extension AddItemViewController: UITextFieldDelegate {
         return true
         
     }
+}
+
+extension AddItemViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        
+        picker.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            
+            
+        }
+        
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
 }

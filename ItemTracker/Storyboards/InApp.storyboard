@@ -210,20 +210,41 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="f8z-Ee-fuD" userLabel="Add Item Stack View">
                                         <rect key="frame" x="10" y="50" width="330" height="390"/>
                                         <subviews>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Item Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RhK-HP-uhx" userLabel="Item Name Text Field">
-                                                <rect key="frame" x="0.0" y="0.0" width="330" height="35"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ERE-cP-o5Y" userLabel="Name and Image Stack View">
+                                                <rect key="frame" x="0.0" y="0.0" width="330" height="60"/>
+                                                <subviews>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Item Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RhK-HP-uhx" userLabel="Item Name Text Field">
+                                                        <rect key="frame" x="0.0" y="12.5" width="247.5" height="35"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="35" id="XY4-rB-L4Q"/>
+                                                        </constraints>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                        <connections>
+                                                            <action selector="itemNameTextFieldEditing:" destination="MLH-9B-2yx" eventType="editingChanged" id="ipf-ab-GKk"/>
+                                                        </connections>
+                                                    </textField>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6xD-wk-r6E" userLabel="Add Image Button">
+                                                        <rect key="frame" x="270" y="0.0" width="60" height="60"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="60" id="KBk-l8-37T"/>
+                                                            <constraint firstAttribute="height" constant="60" id="VAm-Wg-ATk"/>
+                                                        </constraints>
+                                                        <state key="normal" backgroundImage="Camera"/>
+                                                        <connections>
+                                                            <action selector="addItemImageTapped:" destination="MLH-9B-2yx" eventType="touchUpInside" id="l64-mC-EFl"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="35" id="XY4-rB-L4Q"/>
+                                                    <constraint firstItem="RhK-HP-uhx" firstAttribute="width" secondItem="ERE-cP-o5Y" secondAttribute="width" multiplier="0.75" id="D6Z-Rt-vRb"/>
+                                                    <constraint firstAttribute="height" constant="60" id="fLt-FW-dCS"/>
+                                                    <constraint firstItem="RhK-HP-uhx" firstAttribute="centerY" secondItem="ERE-cP-o5Y" secondAttribute="centerY" id="iIH-f3-NwW"/>
                                                 </constraints>
-                                                <nil key="textColor"/>
-                                                <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                                <connections>
-                                                    <action selector="itemNameTextFieldEditing:" destination="MLH-9B-2yx" eventType="editingChanged" id="ipf-ab-GKk"/>
-                                                </connections>
-                                            </textField>
+                                            </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="2kD-pm-Hbc" userLabel="Item Movement Stack View">
-                                                <rect key="frame" x="0.0" y="46.5" width="330" height="61"/>
+                                                <rect key="frame" x="0.0" y="63" width="330" height="61"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is this item frequently moved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pZ-NX-464" userLabel="Movement Label">
                                                         <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
@@ -255,10 +276,10 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Fdx-qn-n74" userLabel="Item Location Stack View">
-                                                <rect key="frame" x="0.0" y="118.5" width="330" height="220"/>
+                                                <rect key="frame" x="0.0" y="127" width="330" height="220"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is this item right now" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxn-xS-e9r" userLabel="Location Label">
-                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="237" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="T4a-vI-kwB"/>
                                                         </constraints>
@@ -294,7 +315,6 @@
                                                 <constraints>
                                                     <constraint firstItem="zur-Qh-UIR" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="awd-c8-JGQ"/>
                                                     <constraint firstItem="N6J-hK-3x1" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="gLE-DB-0Uu"/>
-                                                    <constraint firstItem="uxn-xS-e9r" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="yFz-bQ-k7c"/>
                                                 </constraints>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWw-oh-ZeM" userLabel="Add Item Button">
@@ -315,13 +335,12 @@
                                         <constraints>
                                             <constraint firstItem="N6J-hK-3x1" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" id="ZLY-lE-GyJ"/>
                                             <constraint firstItem="Fdx-qn-n74" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="bWe-rH-wU5"/>
-                                            <constraint firstItem="RhK-HP-uhx" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="iA0-tU-JYd"/>
                                             <constraint firstItem="zWw-oh-ZeM" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" multiplier="0.6" id="jkm-Yk-Kzk"/>
                                             <constraint firstItem="zur-Qh-UIR" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" id="osH-gE-QDe"/>
                                             <constraint firstItem="zWw-oh-ZeM" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="qsh-qh-KxQ"/>
                                             <constraint firstItem="2kD-pm-Hbc" firstAttribute="centerX" secondItem="f8z-Ee-fuD" secondAttribute="centerX" id="rgg-dW-Alp"/>
-                                            <constraint firstItem="RhK-HP-uhx" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" id="tZh-XA-tEJ"/>
                                             <constraint firstItem="cJo-kR-Yxr" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" id="x3a-N7-OSU"/>
+                                            <constraint firstItem="ERE-cP-o5Y" firstAttribute="width" secondItem="f8z-Ee-fuD" secondAttribute="width" id="zBd-ju-Kth"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -349,6 +368,7 @@
                         <viewLayoutGuide key="safeArea" id="lgh-T8-6mY"/>
                     </view>
                     <connections>
+                        <outlet property="addImageButton" destination="6xD-wk-r6E" id="NWt-IN-7ew"/>
                         <outlet property="addItemButton" destination="zWw-oh-ZeM" id="CEi-Xk-Ekj"/>
                         <outlet property="backButton" destination="GCR-GH-ngS" id="XCa-AP-WJg"/>
                         <outlet property="dimView" destination="d8I-dG-TKc" id="gdS-ew-tDY"/>
@@ -377,6 +397,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Camera" width="100" height="100"/>
         <image name="Key Icon" width="28" height="28"/>
         <image name="Map Icon" width="36.5" height="35"/>
         <image name="Wallet" width="100" height="100"/>
