@@ -40,7 +40,7 @@ class ItemsViewController: UIViewController {
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
         // Instantiate a view controller and check that it isn't nil
-        let addItemVC = self.storyboard?.instantiateViewController(withIdentifier: Constants.ADD_ITEM_VCID) as? AddItemViewController
+        let addItemVC = self.storyboard?.instantiateViewController(withIdentifier: Constants.ID.VC.addItem) as? AddItemViewController
         guard addItemVC != nil else { return }
         
         // Set self as delegate
@@ -72,16 +72,16 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         // Return the number of items that the user has stored
-        return Shared.userItems.count
+        return Stored.userItems.count
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         // Create the cell and set the label accordingly
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.ITEM_CELL_ID, for: indexPath) as! ItemCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.ID.Cell.item, for: indexPath) as! ItemCollectionViewCell
         
-        cell.itemLabel.text = Shared.userItems[indexPath.row].name!
+        cell.itemLabel.text = Stored.userItems[indexPath.row].name
         
         return cell
         

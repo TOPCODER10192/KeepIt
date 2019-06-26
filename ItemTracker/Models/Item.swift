@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import UIKit
 
 struct Item {
     
     // MARK: - Item Properties
-    var name: String?
-    var mostRecentLocation: [Double]?
-    var isMovedOften: Bool?
+    var name: String
+    var mostRecentLocation: [Double]
+    var isMovedOften: Bool
+    var image: UIImage?
     
 }

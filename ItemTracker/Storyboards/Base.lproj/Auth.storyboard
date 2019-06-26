@@ -21,7 +21,7 @@
         <!--Background View Controller-->
         <scene sceneID="U4g-ip-lTh">
             <objects>
-                <viewController id="Hf6-fy-qbI" customClass="BackgroundViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BackgroundAuthVC" id="Hf6-fy-qbI" customClass="BackgroundViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dE5-vK-AFe">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -47,7 +47,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="133-kp-FWd" userLabel="Login Stack View">
                                         <rect key="frame" x="10" y="10" width="330" height="220"/>
                                         <subviews>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tu9-WJ-d7y" userLabel="Email Text Field">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tu9-WJ-d7y" userLabel="Email Text Field">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="35"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
@@ -56,7 +56,7 @@
                                                     <action selector="emailIsEditing:" destination="iR7-Nl-SyO" eventType="editingChanged" id="YDw-gg-ZSn"/>
                                                 </connections>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Qi-TE-7AF" userLabel="Password Text Field">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Qi-TE-7AF" userLabel="Password Text Field">
                                                 <rect key="frame" x="0.0" y="46" width="330" height="35"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
@@ -123,10 +123,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qmL-Hs-wRZ" userLabel="Error View">
-                                <rect key="frame" x="98" y="602" width="218.5" height="30"/>
+                                <rect key="frame" x="88.5" y="602" width="237" height="30"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email is not registered" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="did-at-7MJ">
-                                        <rect key="frame" x="20" y="4.5" width="178.5" height="21"/>
+                                        <rect key="frame" x="20" y="4.5" width="197" height="21.5"/>
                                         <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -191,7 +191,7 @@
                                                 <barButtonItem key="leftBarButtonItem" title="Back" id="Cgv-mp-RSu" userLabel="Back Button">
                                                     <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
-                                                        <action selector="backTapped:" destination="Sng-kg-CmN" id="1uU-io-obQ"/>
+                                                        <action selector="backButtonTapped:" destination="Sng-kg-CmN" id="pE9-eL-Xsr"/>
                                                     </connections>
                                                 </barButtonItem>
                                             </navigationItem>
@@ -209,7 +209,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZhT-cJ-NFO" userLabel="Top Text Field">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ZhT-cJ-NFO" userLabel="Top Text Field">
                                                 <rect key="frame" x="0.0" y="40" width="330" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="F6d-JQ-RZe"/>
@@ -221,7 +221,7 @@
                                                     <action selector="topTextFieldEditing:" destination="Sng-kg-CmN" eventType="editingChanged" id="atn-zy-sx7"/>
                                                 </connections>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Lp-Jb-DPF" userLabel="Bottom Text Field">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Lp-Jb-DPF" userLabel="Bottom Text Field">
                                                 <rect key="frame" x="0.0" y="85" width="330" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="Rti-iE-8us"/>
@@ -244,7 +244,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="buttonTapped:" destination="Sng-kg-CmN" eventType="touchUpInside" id="6xn-FH-X6N"/>
+                                                    <action selector="bottomButtonTapped:" destination="Sng-kg-CmN" eventType="touchUpInside" id="gzL-zd-s6l"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -264,10 +264,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4mZ-8v-6Ro" userLabel="Error View">
-                                <rect key="frame" x="82" y="602" width="250.5" height="30"/>
+                                <rect key="frame" x="70.5" y="602" width="273.5" height="30"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email is already registered" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qhr-J1-o6N" userLabel="Error Label">
-                                        <rect key="frame" x="20" y="4.5" width="210.5" height="21"/>
+                                        <rect key="frame" x="20" y="4.5" width="233.5" height="21.5"/>
                                         <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -293,8 +293,8 @@
                     </view>
                     <connections>
                         <outlet property="backButton" destination="Cgv-mp-RSu" id="19g-GK-cqw"/>
+                        <outlet property="bottomButton" destination="2Nm-NN-IEJ" id="oiQ-4s-TxQ"/>
                         <outlet property="bottomTextField" destination="2Lp-Jb-DPF" id="0sw-TB-rtR"/>
-                        <outlet property="button" destination="2Nm-NN-IEJ" id="F4k-mr-u8O"/>
                         <outlet property="createAccountView" destination="XgA-1T-qG1" id="nes-m6-jFW"/>
                         <outlet property="createAccountViewHeight" destination="1Ml-h1-pxP" id="bMP-vZ-JIs"/>
                         <outlet property="createAccountViewWidth" destination="9FN-XN-VJY" id="ZCA-Af-ckU"/>
@@ -322,7 +322,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vsb-o7-OrD" userLabel="Forgot Password View">
-                                <rect key="frame" x="32" y="404.5" width="350" height="192.5"/>
+                                <rect key="frame" x="32" y="403.5" width="350" height="193.5"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="me3-WO-Axa">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="40"/>
@@ -334,23 +334,23 @@
                                                 <barButtonItem key="leftBarButtonItem" title="Back" id="czV-Bu-66H" userLabel="Back Button">
                                                     <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
-                                                        <action selector="backTapped:" destination="2J2-lv-M4y" id="PPO-Dh-5Ww"/>
+                                                        <action selector="backButtonTapped:" destination="2J2-lv-M4y" id="bPT-bM-7Hl"/>
                                                     </connections>
                                                 </barButtonItem>
                                             </navigationItem>
                                         </items>
                                     </navigationBar>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="ECd-9J-iUm" userLabel="Info Stack View">
-                                        <rect key="frame" x="10" y="50" width="330" height="132.5"/>
+                                        <rect key="frame" x="10" y="50" width="330" height="133.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your email below and we'll send a link to reset your password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1g6-EH-BAc" userLabel="Prompt Label">
-                                                <rect key="frame" x="0.0" y="0.0" width="330" height="37.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="330" height="38.5"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TiY-Qy-pfg" userLabel="Email Text Field">
-                                                <rect key="frame" x="0.0" y="47.5" width="330" height="35"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TiY-Qy-pfg" userLabel="Email Text Field">
+                                                <rect key="frame" x="0.0" y="48.5" width="330" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="Wo2-cN-ZGC"/>
                                                 </constraints>
@@ -362,7 +362,7 @@
                                                 </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YhG-9d-sAk" userLabel="Reset Password Button">
-                                                <rect key="frame" x="0.0" y="92.5" width="330" height="40"/>
+                                                <rect key="frame" x="0.0" y="93.5" width="330" height="40"/>
                                                 <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="zkW-6N-7Om"/>
@@ -372,7 +372,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="resetPasswordTapped:" destination="2J2-lv-M4y" eventType="touchUpInside" id="EGg-RO-jUi"/>
+                                                    <action selector="resetPasswordButtonTapped:" destination="2J2-lv-M4y" eventType="touchUpInside" id="ACt-Oa-cJy"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -392,10 +392,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JHd-gi-BEa" userLabel="Error View">
-                                <rect key="frame" x="98" y="602" width="218.5" height="30"/>
+                                <rect key="frame" x="88.5" y="602" width="237" height="30"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email is not registered" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G4z-Df-7j5" userLabel="Error Label">
-                                        <rect key="frame" x="20" y="4.5" width="178.5" height="21"/>
+                                        <rect key="frame" x="20" y="4.5" width="197" height="21.5"/>
                                         <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -449,6 +449,6 @@
         <image name="Separation Line" width="289" height="1"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="rJj-QA-myy"/>
+        <segue reference="LBO-rP-m6s"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -23,7 +23,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
         self.layer.shadowRadius  = 1
         self.layer.shadowOpacity = 0.5
         self.layer.masksToBounds = false
-        self.layer.cornerRadius  = Constants.GENERAL_CORNER_RADIUS
+        self.layer.cornerRadius  = Constants.View.CornerRadius.standard
         
         // Setup the itemLabel
         itemLabel.adjustsFontSizeToFitWidth = true

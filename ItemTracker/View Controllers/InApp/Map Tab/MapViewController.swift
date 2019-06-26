@@ -26,11 +26,11 @@ class MapViewController: UIViewController {
         mapViewBottomConstraint.constant = self.tabBarController!.tabBar.frame.height
         mapView.delegate = self
         
-        for item in Shared.userItems {
+        for item in Stored.userItems {
             let annotation = MKPointAnnotation()
-            annotation.coordinate.latitude = item.mostRecentLocation![0] as CLLocationDegrees
-            annotation.coordinate.longitude = item.mostRecentLocation![1] as CLLocationDegrees
-            annotation.title = item.name!
+            annotation.coordinate.latitude = item.mostRecentLocation[0] as CLLocationDegrees
+            annotation.coordinate.longitude = item.mostRecentLocation[1] as CLLocationDegrees
+            annotation.title = item.name
             mapView.addAnnotation(annotation)
         }
     
@@ -49,7 +49,7 @@ class MapViewController: UIViewController {
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
         // Instantiate a view controller and check that it isn't nil
-        let addItemVC = storyboard?.instantiateViewController(withIdentifier: Constants.ADD_ITEM_VCID) as? AddItemViewController
+        let addItemVC = storyboard?.instantiateViewController(withIdentifier: Constants.ID.VC.addItem) as? AddItemViewController
         guard addItemVC != nil else { return }
         
         // Set self as delegate
@@ -114,8 +114,8 @@ extension MapViewController {
         
         if let location = locationManager.location?.coordinate {
             let region = MKCoordinateRegion.init(center: location,
-                                                 latitudinalMeters: Constants.REGION_IN_METERS,
-                                                 longitudinalMeters: Constants.REGION_IN_METERS)
+                                                 latitudinalMeters: 10000,
+                                                 longitudinalMeters: 10000)
             mapView.setRegion(region, animated: false)
         }
         
@@ -174,9 +174,9 @@ extension MapViewController: AddItemProtocol {
     func itemAdded(item: Item) {
         
         let annotation = MKPointAnnotation()
-        annotation.coordinate.latitude  = item.mostRecentLocation![0] as CLLocationDegrees
-        annotation.coordinate.longitude = item.mostRecentLocation![1] as CLLocationDegrees
-        annotation.title                = item.name!
+        annotation.coordinate.latitude  = item.mostRecentLocation[0] as CLLocationDegrees
+        annotation.coordinate.longitude = item.mostRecentLocation[1] as CLLocationDegrees
+        annotation.title                = item.name
         mapView.addAnnotation(annotation)
         
     }

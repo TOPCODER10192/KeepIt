@@ -21,7 +21,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="SnW-Rq-B4C">
             <objects>
-                <tabBarController id="YWy-u4-6rb" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarVC" id="YWy-u4-6rb" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="AkM-YO-Zjj">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -32,6 +32,7 @@
                     <connections>
                         <segue destination="nfB-OK-GR7" kind="relationship" relationship="viewControllers" id="7Hb-iU-M1s"/>
                         <segue destination="i6Y-8G-RJl" kind="relationship" relationship="viewControllers" id="ADd-89-Quk"/>
+                        <segue destination="iQj-yr-dbn" kind="relationship" relationship="viewControllers" id="wUu-iy-pxm"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uoy-eH-ydS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -88,6 +89,32 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3k4-VD-fx8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1075.3623188405797" y="403.79464285714283"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="ce6-eA-umC">
+            <objects>
+                <viewController id="iQj-yr-dbn" customClass="SettingsViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hYE-qx-DYu">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FAG-0X-6jc">
+                                <rect key="frame" x="177" y="433" width="60" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Sign Out"/>
+                                <connections>
+                                    <action selector="signOutButtonTapped:" destination="iQj-yr-dbn" eventType="touchUpInside" id="6pZ-b4-6j8"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="N0F-bM-IAe"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Settings" image="Settings Icon" id="GEr-sd-y5i"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="z2W-vI-uSC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-290" y="404"/>
         </scene>
         <!--Items-->
         <scene sceneID="YRM-Yk-p3y">
@@ -190,7 +217,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="na8-Rv-aAi" userLabel="Floating View">
-                                <rect key="frame" x="32" y="223" width="350" height="450"/>
+                                <rect key="frame" x="32" y="208" width="350" height="480"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="91b-Ui-eMD">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="40"/>
@@ -198,7 +225,7 @@
                                             <constraint firstAttribute="height" constant="40" id="ypx-mM-rbp"/>
                                         </constraints>
                                         <items>
-                                            <navigationItem title="Title" id="kbA-hI-5UZ">
+                                            <navigationItem title="Add an Item" id="kbA-hI-5UZ">
                                                 <barButtonItem key="leftBarButtonItem" title="Back" id="GCR-GH-ngS">
                                                     <connections>
                                                         <action selector="backButtonTapped:" destination="MLH-9B-2yx" id="ygi-at-Ffl"/>
@@ -208,12 +235,12 @@
                                         </items>
                                     </navigationBar>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="f8z-Ee-fuD" userLabel="Add Item Stack View">
-                                        <rect key="frame" x="10" y="50" width="330" height="390"/>
+                                        <rect key="frame" x="10" y="50" width="330" height="420"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ERE-cP-o5Y" userLabel="Name and Image Stack View">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="60"/>
                                                 <subviews>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Item Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RhK-HP-uhx" userLabel="Item Name Text Field">
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Item Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RhK-HP-uhx" userLabel="Item Name Text Field">
                                                         <rect key="frame" x="0.0" y="12.5" width="247.5" height="35"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="35" id="XY4-rB-L4Q"/>
@@ -225,7 +252,7 @@
                                                             <action selector="itemNameTextFieldEditing:" destination="MLH-9B-2yx" eventType="editingChanged" id="ipf-ab-GKk"/>
                                                         </connections>
                                                     </textField>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6xD-wk-r6E" userLabel="Add Image Button">
+                                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6xD-wk-r6E" userLabel="Add Image Button">
                                                         <rect key="frame" x="270" y="0.0" width="60" height="60"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="60" id="KBk-l8-37T"/>
@@ -244,9 +271,9 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="2kD-pm-Hbc" userLabel="Item Movement Stack View">
-                                                <rect key="frame" x="0.0" y="63" width="330" height="61"/>
+                                                <rect key="frame" x="0.0" y="73" width="330" height="61"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is this item frequently moved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pZ-NX-464" userLabel="Movement Label">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is this item frequently moved?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pZ-NX-464" userLabel="Movement Label">
                                                         <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="cy6-lt-zwM"/>
@@ -276,10 +303,10 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Fdx-qn-n74" userLabel="Item Location Stack View">
-                                                <rect key="frame" x="0.0" y="127" width="330" height="220"/>
+                                                <rect key="frame" x="0.0" y="147" width="330" height="220"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is this item right now" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxn-xS-e9r" userLabel="Location Label">
-                                                        <rect key="frame" x="0.0" y="0.0" width="237" height="20"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is this item right now?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxn-xS-e9r" userLabel="Location Label">
+                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="T4a-vI-kwB"/>
                                                         </constraints>
@@ -314,11 +341,12 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="zur-Qh-UIR" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="awd-c8-JGQ"/>
+                                                    <constraint firstItem="uxn-xS-e9r" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="bwc-Io-Yxy"/>
                                                     <constraint firstItem="N6J-hK-3x1" firstAttribute="centerX" secondItem="Fdx-qn-n74" secondAttribute="centerX" id="gLE-DB-0Uu"/>
                                                 </constraints>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWw-oh-ZeM" userLabel="Add Item Button">
-                                                <rect key="frame" x="66" y="350" width="198" height="40"/>
+                                                <rect key="frame" x="66" y="380" width="198" height="40"/>
                                                 <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="AZt-RR-NbH"/>
@@ -352,7 +380,7 @@
                                     <constraint firstItem="f8z-Ee-fuD" firstAttribute="centerX" secondItem="na8-Rv-aAi" secondAttribute="centerX" id="KbJ-X8-FKM"/>
                                     <constraint firstAttribute="width" constant="350" id="PGY-IA-FU9"/>
                                     <constraint firstItem="91b-Ui-eMD" firstAttribute="top" secondItem="na8-Rv-aAi" secondAttribute="top" id="XzN-PV-Xja"/>
-                                    <constraint firstAttribute="height" constant="450" id="gVn-er-TLm"/>
+                                    <constraint firstAttribute="height" constant="480" id="gVn-er-TLm"/>
                                     <constraint firstAttribute="trailing" secondItem="f8z-Ee-fuD" secondAttribute="trailing" constant="10" id="llf-u8-rQX"/>
                                     <constraint firstAttribute="trailing" secondItem="91b-Ui-eMD" secondAttribute="trailing" id="pzy-Kb-H1s"/>
                                     <constraint firstItem="f8z-Ee-fuD" firstAttribute="top" secondItem="91b-Ui-eMD" secondAttribute="bottom" constant="10" id="vE3-Su-Nvj"/>
@@ -400,6 +428,7 @@
         <image name="Camera" width="100" height="100"/>
         <image name="Key Icon" width="28" height="28"/>
         <image name="Map Icon" width="36.5" height="35"/>
+        <image name="Settings Icon" width="30" height="30"/>
         <image name="Wallet" width="100" height="100"/>
     </resources>
     <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>

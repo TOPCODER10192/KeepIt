@@ -7,15 +7,18 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseAuth
 
+// MARK: - Forgot Password Protocol
 protocol ForgotPasswordProtocol {
+    
     func goBackToLogin()
+    
 }
 
 class ForgotPasswordViewController: UIViewController {
     
-    // MARK:- IBOutlet Properties
+    // MARK: - IBOutlet Properties
     @IBOutlet weak var forgotPasswordView: UIView!
     @IBOutlet weak var forgotPasswordViewWidth: NSLayoutConstraint!
     @IBOutlet weak var forgotPasswordViewX: NSLayoutConstraint!
@@ -33,36 +36,37 @@ class ForgotPasswordViewController: UIViewController {
     // MARK: - ForgotPasswordViewController Properties
     var delegate: ForgotPasswordProtocol?
     
+    var email: String?
+    
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Setup the forgotPasswordVIew
-        forgotPasswordView.backgroundColor    = Constants.FLOATING_VIEW_COLOR
-        forgotPasswordView.layer.cornerRadius = Constants.GENERAL_CORNER_RADIUS
-        forgotPasswordViewWidth.constant      = Constants.FORGOT_PASSWORD_VIEW_WIDTH
+        forgotPasswordView.backgroundColor    = Constants.Color.floatingView
+        forgotPasswordView.layer.cornerRadius = Constants.View.CornerRadius.standard
+        forgotPasswordViewWidth.constant      = Constants.View.Width.standard
         forgotPasswordViewX.constant          = UIScreen.main.bounds.width
         
         // Setup the navigation bar
-        backButton.tintColor = Constants.PRIMARY_COLOR
-        navigationBar.layer.cornerRadius = Constants.GENERAL_CORNER_RADIUS
-        navigationBar.clipsToBounds = true
+        backButton.tintColor             = Constants.Color.primary
+        navigationBar.layer.cornerRadius = Constants.View.CornerRadius.standard
+        navigationBar.clipsToBounds      = true
         
         // Setup the text field
-        emailTextField.keyboardType = .emailAddress
-        emailTextField.placeholder = "Email Address"
+        emailTextField.keyboardType    = .emailAddress
         emailTextField.textContentType = .emailAddress
+        emailTextField.placeholder     = "Email Address"
         
         // Setup the button
-        resetPasswordButton.backgroundColor = Constants.PRIMARY_COLOR
-        resetPasswordButton.layer.cornerRadius = Constants.BUTTON_CORNER_RADIUS
-        activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
+        resetPasswordButton.layer.cornerRadius = Constants.View.CornerRadius.button
+        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Setup the error view
         errorView.alpha = 0
-        errorView.layer.cornerRadius = Constants.GENERAL_CORNER_RADIUS
-        errorView.backgroundColor = Constants.ERROR_COLOR
-        errorViewY.constant = Constants.ERROR_VIEW_Y
+        errorView.layer.cornerRadius = Constants.View.CornerRadius.standard
+        errorView.backgroundColor = Constants.Color.error
+        errorViewY.constant = Constants.View.Y.error
         
         // Create a listener for the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -77,7 +81,7 @@ class ForgotPasswordViewController: UIViewController {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             
-            // If the keyboard height is too low then dont adjust the view
+            // If the keyboard height is too low then don't adjust the view
             guard keyboardHeight > UIScreen.main.bounds.height * 0.2 else { return }
             
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut, animations: {
@@ -97,12 +101,8 @@ class ForgotPasswordViewController: UIViewController {
         
     }
 
-}
-
-// MARK:- IBAction Methods
-extension ForgotPasswordViewController {
-    
-    @IBAction func backTapped(_ sender: UIBarButtonItem) {
+    // MARK: - IBAction Methods
+    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         
         // Slide the view out to the right
         slideViewOut {
@@ -117,20 +117,17 @@ extension ForgotPasswordViewController {
     
     @IBAction func emailTextFieldEditing(_ sender: UITextField) {
         
-        // Check if the button should be activated
-        if emailTextField.text != nil && emailTextField.text!.trimmingCharacters(in: .whitespaces).count > 0 {
-            activateButton(isActivated: true, color: Constants.PRIMARY_COLOR)
-        }
-        else {
-            activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
-        }
+        // Store the email textfields text
+        email = emailTextField.text?.trimmingCharacters(in: .whitespaces)
+        
+        checkToActivateButton()
         
     }
     
-    @IBAction func resetPasswordTapped(_ sender: UIButton) {
+    @IBAction func resetPasswordButtonTapped(_ sender: UIButton) {
         
         // Send the password reset email
-        Auth.auth().sendPasswordReset(withEmail: emailTextField.text!) { error in
+        Auth.auth().sendPasswordReset(withEmail: email!) { error in
             
             // If there is an error, print an appropriate error message
             guard error == nil else {
@@ -139,7 +136,7 @@ extension ForgotPasswordViewController {
             }
             
             // The email was successful so the email should be sent
-            self.presentErrorMessage(text: "Email sent to reset password", color: Constants.PRIMARY_COLOR)
+            self.presentErrorMessage(text: "Email sent to reset password", color: Constants.Color.success)
             self.emailTextField.resignFirstResponder()
             
         }
@@ -148,28 +145,19 @@ extension ForgotPasswordViewController {
     
 }
 
-// MARK:- Methods relating to animation
+// MARK: - Helper Methods
 extension ForgotPasswordViewController {
     
-    func slideViewIn() {
+    func checkToActivateButton() {
         
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            self.forgotPasswordViewX.constant = 0
-            self.view.layoutIfNeeded()
-        }, completion: nil)
-        
-    }
-    
-    func slideViewOut(completion: @escaping () -> Void) {
-        
-        errorView.alpha = 0
-        
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
-            self.forgotPasswordViewX.constant = UIScreen.main.bounds.width
-            self.view.layoutIfNeeded()
-        }) { (true) in
-            completion()
+        // If the text field is empty, deactivate the button
+        guard email != nil && email!.count > 0 else {
+            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            return
         }
+        
+        // Otherwise, activate it
+        activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     
@@ -183,7 +171,40 @@ extension ForgotPasswordViewController {
     
 }
 
-// MARK:- Methods relating to error handling
+// MARK: - Methods relating to animation
+extension ForgotPasswordViewController {
+    
+    func slideViewIn() {
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            
+            self.forgotPasswordViewX.constant = 0
+            self.view.layoutIfNeeded()
+            
+        }, completion: nil)
+        
+    }
+    
+    func slideViewOut(completion: @escaping () -> Void) {
+        
+        errorView.alpha = 0
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
+            
+            self.forgotPasswordViewX.constant = UIScreen.main.bounds.width
+            self.view.layoutIfNeeded()
+            
+        }) { (true) in
+            
+            completion()
+            
+        }
+        
+    }
+    
+}
+
+// MARK: - Methods relating to error handling
 extension ForgotPasswordViewController {
     
     func presentErrorMessage(text: String, color: UIColor) {
@@ -195,7 +216,9 @@ extension ForgotPasswordViewController {
         
         // Fade in the error bar
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+            
             self.errorView.alpha = 1
+            
         }, completion: nil)
         
     }
@@ -207,19 +230,19 @@ extension ForgotPasswordViewController {
             switch errorCode {
                 
             case .invalidEmail:
-                presentErrorMessage(text: Constants.INVALID_EMAIL, color: Constants.ERROR_COLOR)
+                presentErrorMessage(text: Constants.ErrorMessage.invalidEmail, color: Constants.Color.error)
                 
             case .userNotFound:
-                presentErrorMessage(text: Constants.EMAIL_NOT_REGISTERED, color: Constants.ERROR_COLOR)
+                presentErrorMessage(text: Constants.ErrorMessage.emailNotRegistered, color: Constants.Color.error)
                 
             case .missingEmail:
-                presentErrorMessage(text: Constants.EMAIL_MISSING, color: Constants.ERROR_COLOR)
+                presentErrorMessage(text: Constants.ErrorMessage.emailMissing, color: Constants.Color.error)
                 
             case .networkError:
-                presentErrorMessage(text: Constants.NETWORK_ERROR, color: Constants.ERROR_COLOR)
+                presentErrorMessage(text: Constants.ErrorMessage.networkError, color: Constants.Color.error)
                 
             default:
-                presentErrorMessage(text: "Unable to send email", color: Constants.ERROR_COLOR)
+                presentErrorMessage(text: "Unable to send email", color: Constants.Color.error)
             }
         }
     }

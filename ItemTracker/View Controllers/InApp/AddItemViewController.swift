@@ -47,9 +47,12 @@ class AddItemViewController: UIViewController {
     // MARK: - AddItemViewController Properties
     let db = Firestore.firestore()
     let locationManager = CLLocationManager()
-    var newItem = Item()
-    var itemCoordinates: [Double]?
     var delegate: AddItemProtocol?
+    
+    var itemName: String?
+    var itemCoordinates: [Double]?
+    var itemMoves: Bool = true
+    var itemImage: UIImage?
     
     // MARK: - View Methods
     override func viewDidLoad() {
@@ -59,35 +62,37 @@ class AddItemViewController: UIViewController {
         dimView.backgroundColor = UIColor.clear
         
         // Setup the FloatingView
-        floatingView.backgroundColor     = Constants.FLOATING_VIEW_COLOR
-        floatingView.layer.cornerRadius  = Constants.GENERAL_CORNER_RADIUS
-        floatingViewWidth.constant       = Constants.ADD_ITEM_VIEW_WIDTH
-        floatingViewHeight.constant      = Constants.ADD_ITEM_VIEW_HEIGHT
+        floatingView.backgroundColor     = Constants.Color.floatingView
+        floatingView.layer.cornerRadius  = Constants.View.CornerRadius.standard
+        floatingViewWidth.constant       = Constants.View.Width.standard
+        floatingViewHeight.constant      = Constants.View.Height.addItem
         floatingViewYConstraint.constant = UIScreen.main.bounds.height
         
         // Setup the navigationBar
-        navigationBar.layer.cornerRadius = Constants.GENERAL_CORNER_RADIUS
+        navigationBar.layer.cornerRadius = Constants.View.CornerRadius.standard
         navigationBar.clipsToBounds      = true
         
         // Setup the itemNameTextField
         itemNameTextField.delegate = self
         
         // Setup the addImageButton
+        addImageButton.clipsToBounds      = true
         addImageButton.layer.cornerRadius = addImageButton.frame.width / 2
-        addImageButton.layer.borderColor  = UIColor.black.cgColor
+        addImageButton.layer.borderColor  = Constants.Color.primary.cgColor
         addImageButton.layer.borderWidth  = 1
 
         // Setup the mapView
         mapViewHeight.constant    = 0
-        mapView.layer.borderColor = Constants.PRIMARY_COLOR.cgColor
+        mapView.layer.borderColor = Constants.Color.primary.cgColor
         mapView.layer.borderWidth = 1
         mapView.delegate          = self
         checkLocationServices()
+        readUserCoordinates()
         
         // Setup the button
-        addItemButton.layer.cornerRadius = Constants.BUTTON_CORNER_RADIUS
-        addItemButton.backgroundColor    = Constants.PRIMARY_COLOR
-        activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
+        addItemButton.layer.cornerRadius = Constants.View.CornerRadius.button
+        addItemButton.backgroundColor    = Constants.Color.primary
+        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         
     }
@@ -101,13 +106,20 @@ class AddItemViewController: UIViewController {
     }
     
     // MARK: - IBAction Properties
-    @IBAction func movementSegmentChanged(_ sender: UISegmentedControl) {
+    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         
-        // Lower the keyboard
-        itemNameTextField.resignFirstResponder()
+        // Make the dimViewClear and then dismiss the view
+        slideViewOut()
         
-        // Retrieve the item info
-        retrieveItemInfo()
+    }
+    
+    @IBAction func itemNameTextFieldEditing(_ sender: UITextField) {
+        
+        // Get the text in the field
+        itemName = itemNameTextField.text?.trimmingCharacters(in: .whitespaces)
+        
+        checkToActivateButton()
+        
     }
     
     @IBAction func addItemImageTapped(_ sender: UIButton) {
@@ -132,14 +144,29 @@ class AddItemViewController: UIViewController {
         
     }
     
-    @IBAction func locationSegmentChanged(_ sender: UISegmentedControl) {
+    @IBAction func movementSegmentChanged(_ sender: UISegmentedControl) {
         
         // Lower the keyboard
         itemNameTextField.resignFirstResponder()
         
-        // If the segmentSelected is 0 then don't show the map
+        // Set the value based on the segment that is selected
+        if movementSegmentedDisplay.selectedSegmentIndex == 0 {
+            itemMoves = true
+        }
+        else if movementSegmentedDisplay.selectedSegmentIndex == 1 {
+            itemMoves = false
+        }
+        
+    }
+    
+    @IBAction func locationSegmentChanged(_ sender: UISegmentedControl) {
+        
+        // Lower the keyboard
+        itemNameTextField.resignFirstResponder()
+
         if locationSegmentedDisplay.selectedSegmentIndex == 0 {
             
+            // Animate the mapView to dissapear
             UIView.animate(withDuration: 0.3) {
                 
                 // Decrease the view height by 200, set map height to 0
@@ -149,9 +176,12 @@ class AddItemViewController: UIViewController {
                 
             }
             
+            // Read the users coordinates
+            readUserCoordinates()
+            
         }
             // If the segmentSelected is 1 then show the map
-        else {
+        else if locationSegmentedDisplay.selectedSegmentIndex == 1 {
             
             UIView.animate(withDuration: 0.3) {
                 
@@ -164,39 +194,33 @@ class AddItemViewController: UIViewController {
             
         }
         
-        // Pull the users information
-        retrieveItemInfo()
-        
-    }
-    
-    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
-        
-        // Make the dimViewClear and then dismiss the view
-        slideViewOut()
-        
-    }
-    
-    @IBAction func itemNameTextFieldEditing(_ sender: UITextField) {
-        
-        // Check to see if the button should be activated
-        retrieveItemInfo()
+        checkToActivateButton()
         
     }
     
     @IBAction func addItemButtonTapped(_ sender: UIButton) {
+        let item = Item(name: itemName!,
+                        mostRecentLocation: itemCoordinates!,
+                        isMovedOften: itemMoves,
+                        image: itemImage)
         
-        let item = Item(name: newItem.name!,
-                        mostRecentLocation: newItem.mostRecentLocation!,
-                        isMovedOften: newItem.isMovedOften!)
+        // Append the item the usersItems array and locally store it
+        Stored.userItems.append(item)
+        LocalStorageService.saveUserItem(item: item)
         
-        // Append the item the usersItems array
-        Shared.userItems.append(item)
+        // Generate a random key
+        let itemID = UUID.init().uuidString
         
         // Get a reference to the users items
-        db.collection(Constants.USERS_KEY).document(Auth.auth().currentUser!.email!).collection(Constants.ITEMS_KEY).addDocument(data:
-            [Constants.ITEM_NAME_KEY: newItem.name!,
-             Constants.ITEM_MOVEMENT_KEY: newItem.isMovedOften!,
-             Constants.ITEM_LOCATION_KEY: newItem.mostRecentLocation!])
+        let itemRef = db.collection(Constants.Key.User.users).document(Auth.auth().currentUser!.email!).collection(Constants.Key.Item.items).document(itemID)
+        
+        itemRef.setData([Constants.Key.Item.name: item.name,
+                         Constants.Key.Item.movement: item.isMovedOften,
+                         Constants.Key.Item.location: item.mostRecentLocation])
+        
+        if item.image != nil {
+            ImageService.storeImage(image: item.image!, itemRef: itemRef)
+        }
         
         // Tell the delegate that an item was added
         delegate?.itemAdded(item: item)
@@ -214,19 +238,18 @@ class AddItemViewController: UIViewController {
         // Get the location of the touch in the mapView and convert it to a coordinate
         let location = sender.location(in: mapView)
         let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+        itemCoordinates = [coordinate.latitude, coordinate.longitude] as [Double]?
         
         // Create an annotation
         let annotation        = MKPointAnnotation()
         annotation.coordinate = coordinate
         annotation.title      = "Item"
         
-        // Remova all previous annotations
+        // Remove all previous annotations
         mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotation(annotation)
-        itemCoordinates = [annotation.coordinate.latitude, annotation.coordinate.longitude] as [Double]?
         
-        // Check to see if the button should be activated
-        retrieveItemInfo()
+        checkToActivateButton()
     }
 }
 
@@ -281,6 +304,26 @@ extension AddItemViewController {
 
 // MARK: - Helper Methods
 extension AddItemViewController {
+    
+    func checkToActivateButton() {
+        
+        // Check that the itemName isn't nil
+        guard itemName != nil && itemName!.count > 0  else {
+            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            return
+        }
+        
+        // Check that the user has entered coordinates
+        guard itemCoordinates != nil else {
+            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            return
+        }
+        
+        // Activate button
+        activateButton(isActivated: true, color: Constants.Color.primary)
+        
+        
+    }
     
     func showImagePicker(type: UIImagePickerController.SourceType) {
         
@@ -339,8 +382,8 @@ extension AddItemViewController {
         
         if let location = locationManager.location?.coordinate {
             let region = MKCoordinateRegion.init(center: location,
-                                                 latitudinalMeters: Constants.REGION_IN_METERS / 10,
-                                                 longitudinalMeters: Constants.REGION_IN_METERS / 10)
+                                                 latitudinalMeters: 1000,
+                                                 longitudinalMeters: 1000)
             mapView.setRegion(region, animated: false)
         }
         
@@ -353,56 +396,20 @@ extension AddItemViewController {
         
     }
     
-    func retrieveItemInfo() {
+    func readUserCoordinates() {
         
-        // Pull the items information
-        newItem.name = itemNameTextField.text?.trimmingCharacters(in: .whitespaces)
-        
-        // Check that the text field isn't empty
-        guard newItem.name != nil && newItem.name!.count > 0 else {
-            activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
-            return
-        }
-        
-        if locationSegmentedDisplay.selectedSegmentIndex == 0 {
-            
-            // Check that location services are on
-            guard CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
-                CLLocationManager.authorizationStatus() == .authorizedAlways else {
-                    
-                    // TODO: Show a message saying that the user must activate location services
-                    
-                    activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
-                    return
-            }
-            
-            // Check the users location
-            newItem.mostRecentLocation = [locationManager.location!.coordinate.latitude,
-                                          locationManager.location!.coordinate.longitude] as [Double]?
-            
-        }
-        else {
-            
-            // Check that the user has placed an annotation
-            guard itemCoordinates != nil else {
-                activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
+        // Check that location services are on
+        guard CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() == .authorizedAlways else {
+                
+                activateButton(isActivated: false, color: Constants.Color.inactiveButton)
                 return
-            }
-            
-            // Get the coordinate of an annotation that the user placed
-            newItem.mostRecentLocation = itemCoordinates
-            
+                
         }
         
-        // Get information about how often the item is moved
-        if movementSegmentedDisplay.selectedSegmentIndex == 0 {
-            newItem.isMovedOften = true
-        }
-        else {
-            newItem.isMovedOften = false
-        }
-        
-        activateButton(isActivated: true, color: Constants.PRIMARY_COLOR)
+        // Check the users location
+        itemCoordinates = [locationManager.location!.coordinate.latitude,
+                           locationManager.location!.coordinate.longitude] as [Double]?
         
     }
     
@@ -482,10 +489,12 @@ extension AddItemViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+        
+        itemImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        
+        guard itemImage != nil else { return }
             
-            
-        }
+        addImageButton.setBackgroundImage(itemImage!, for: .normal)
         
         picker.dismiss(animated: true, completion: nil)
     }

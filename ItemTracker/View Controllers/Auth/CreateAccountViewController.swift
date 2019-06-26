@@ -7,15 +7,18 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseAuth
 
+// MARK: - Create Account Protocol
 protocol CreateAccountProtocol {
+    
     func goBackToLogin()
+    
 }
 
 class CreateAccountViewController: UIViewController {
     
-    // MARK:- IBOutlet Properties
+    // MARK: - IBOutlet Properties
     @IBOutlet weak var createAccountView: UIView!
     @IBOutlet weak var createAccountViewWidth: NSLayoutConstraint!
     @IBOutlet weak var createAccountViewHeight: NSLayoutConstraint!
@@ -28,34 +31,35 @@ class CreateAccountViewController: UIViewController {
     @IBOutlet weak var promptLabel: UILabel!
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
-    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var bottomButton: UIButton!
     
     @IBOutlet weak var errorView: UIView!
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var errorViewY: NSLayoutConstraint!
     
     // MARK: - CreateAccountViewController Properties
-    var userInfo = UserInfo()
-    var formIndex = 0
+    var formIndex: Int = 0
     var delegate: CreateAccountProtocol?
     
-    var docRef: DocumentReference!
-    
+    var firstName: String?
+    var lastName: String?
+    var email: String?
+    var password: String?
     
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Setup the createAccountView
-        createAccountView.backgroundColor    = Constants.FLOATING_VIEW_COLOR
-        createAccountView.layer.cornerRadius = Constants.GENERAL_CORNER_RADIUS
-        createAccountViewWidth.constant      = Constants.CREATE_ACCOUNT_VIEW_WIDTH
-        createAccountViewHeight.constant     = Constants.CREATE_ACCOUNT_VIEW_HEIGHT
+        createAccountView.backgroundColor    = Constants.Color.floatingView
+        createAccountView.layer.cornerRadius = Constants.View.CornerRadius.standard
+        createAccountViewWidth.constant      = Constants.View.Width.standard
+        createAccountViewHeight.constant     = Constants.View.Height.createAccount
         createAccountViewX.constant          = UIScreen.main.bounds.width
         
         // Setup the navigationBar
-        backButton.tintColor             = Constants.PRIMARY_COLOR
-        navigationBar.layer.cornerRadius = Constants.GENERAL_CORNER_RADIUS
+        backButton.tintColor             = Constants.Color.primary
+        navigationBar.layer.cornerRadius = Constants.View.CornerRadius.standard
         navigationBar.clipsToBounds      = true
         navigationBarTitle.title         = "Step 1 of 2"
         
@@ -71,14 +75,13 @@ class CreateAccountViewController: UIViewController {
         bottomTextField.delegate    = self
         
         // Setup the button
-        button.layer.cornerRadius = Constants.BUTTON_CORNER_RADIUS
-        button.backgroundColor    = Constants.INACTIVE_BUTTON_COLOR
-        
+        bottomButton.layer.cornerRadius = Constants.View.CornerRadius.button
+        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Setup the errorView
         errorView.alpha              = 0
-        errorView.backgroundColor    = Constants.ERROR_COLOR
-        errorView.layer.cornerRadius = Constants.GENERAL_CORNER_RADIUS
+        errorView.backgroundColor    = Constants.Color.error
+        errorView.layer.cornerRadius = Constants.View.CornerRadius.standard
         errorViewY.constant          = UIScreen.main.bounds.height * 0.3
         
         // Create a listener for the keyboard
@@ -113,13 +116,9 @@ class CreateAccountViewController: UIViewController {
             }, completion: nil)
         }
     }
-    
-}
 
-// MARK:- IBAction Methods
-extension CreateAccountViewController {
-    
-    @IBAction func backTapped(_ sender: Any) {
+    // MARK: - IBAction Methods
+    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         
         formIndex -= 1
         
@@ -143,6 +142,16 @@ extension CreateAccountViewController {
     
     @IBAction func topTextFieldEditing(_ sender: UITextField) {
         
+        // Retrieve the contents of the top text field and store it
+        if formIndex == 0 {
+            // First form, so store in firstName
+            firstName = topTextField.text?.trimmingCharacters(in: .whitespaces)
+        }
+        else if formIndex == 1 {
+            // Second form, so store in email
+            email = topTextField.text?.trimmingCharacters(in: .whitespaces)
+        }
+        
         // Check if the bottom button should be activated
         checkToActivateButton()
         
@@ -150,55 +159,61 @@ extension CreateAccountViewController {
     
     @IBAction func bottomTextFieldEditing(_ sender: UITextField) {
         
+        // Retrieve the contents of the bottom text field and store it
+        if formIndex == 0 {
+            // First form, so store in lastName
+            lastName = bottomTextField.text?.trimmingCharacters(in: .whitespaces)
+        }
+        else if formIndex == 1 {
+            // Second form, so store in password
+            password = bottomTextField.text?.trimmingCharacters(in: .whitespaces)
+        }
+        
         // Check if the bottom button should be activated
         checkToActivateButton()
         
     }
     
-    @IBAction func buttonTapped(_ sender: UIButton) {
+    @IBAction func bottomButtonTapped(_ sender: UIButton) {
         
         if formIndex == 0 {
-            // Get the first name and last name
-            userInfo.firstName = topTextField.text!
-            userInfo.lastName = bottomTextField.text!
             
             // Go to the next form
             formIndex += 1
             reloadForm()
+            
         }
         else if formIndex == 1 {
-            // Get the email that was entered
-            userInfo.email = topTextField.text!
             
             // Attempt to create an account
-            Auth.auth().createUser(withEmail: userInfo.email!, password: bottomTextField.text!) { authResult, error in
+            Auth.auth().createUser(withEmail: email!, password: password!) { authResult, error in
                 
-                if error != nil {
+                // Check if the account was created successfully
+                guard error == nil else {
                     self.handleErrors(error: error! as NSError)
                     return
                 }
                 
-                // Otherwise the account is valid
-                print("\(self.userInfo.email!) added to authentication page")
+                // Store the users information
+                let user = UserInfo(firstName: self.firstName!, lastName: self.lastName!, email: self.email!)
                 
-                // Get the user ID
-                self.userInfo.userID = authResult?.user.uid
+                // Store the users information in the database and store it locally
+                UserService.writeUserProfile(user: user, items: [])
+                LocalStorageService.saveCurrentUser(user: user, items: [])
                 
-                // Register the users information in the database
-                UserService.createUserProfile(profile: self.userInfo)
-                
-                // Slide the view out and bring in the welcome view
+                // Go into the main app
                 self.slideViewOut(finalX: -UIScreen.main.bounds.width, completion: {
-                    self.performSegue(withIdentifier: Constants.ACCOUNT_CREATED_SEGUE_ID, sender: true)
+                    self.performSegue(withIdentifier: Constants.ID.Segue.accountCreated, sender: true)
                 })
                 
             }
         }
         
     }
+    
 } 
 
-// MARK:- Methods related to switching between the 2 forms
+// MARK: - Methods related to switching between the 2 forms
 extension CreateAccountViewController {
     
     func reloadForm() {
@@ -210,14 +225,18 @@ extension CreateAccountViewController {
         // Slide the form out
         if formIndex == 0 {
             slideViewOut(finalX: UIScreen.main.bounds.width) {
+                
                 // Load the first form
                 self.loadFirstForm()
+                
             }
         }
         else if formIndex == 1 {
             slideViewOut(finalX: -UIScreen.main.bounds.width) {
+                
                 // Load the second form
                 self.loadSecondForm()
+                
             }
         }
     
@@ -225,20 +244,20 @@ extension CreateAccountViewController {
     
     func loadFirstForm() {
         
-        // Set the text fields to nil
+        // Set the text fields text to nil
         self.topTextField.text = nil
         self.bottomTextField.text = nil
         
-        // Reset the view labels and placeholder
+        // Reset the view labels and placeholder texts
         self.navigationBarTitle.title = "Step 1 of 2"
         self.promptLabel.text = "What is your name?"
         self.topTextField.placeholder = "First Name"
         self.bottomTextField.placeholder = "Last Name"
-        self.button.setTitle("Next", for: .normal)
-        self.button.setTitle("Next", for: .disabled)
+        self.bottomButton.setTitle("Next", for: .normal)
+        self.bottomButton.setTitle("Next", for: .disabled)
         
         // Deactivate the button
-        self.activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
+        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Adjust the text fields
         self.topTextField.textContentType = .givenName
@@ -259,20 +278,20 @@ extension CreateAccountViewController {
     
     func loadSecondForm() {
         
-        // Set the text fields to nil
-        topTextField.text = nil
-        bottomTextField.text = nil
+        // Set the text fields text to nil
+        self.topTextField.text = nil
+        self.bottomTextField.text = nil
         
         // Reset the view labels and placeholder
         navigationBarTitle.title = "Step 2 of 2"
         promptLabel.text = "Email and Password"
         topTextField.placeholder = "Email Address"
         bottomTextField.placeholder = "Password (At least 6 characters)"
-        self.button.setTitle("Create Account", for: .normal)
-        self.button.setTitle("Create Account", for: .disabled)
+        self.bottomButton.setTitle("Create Account", for: .normal)
+        self.bottomButton.setTitle("Create Account", for: .disabled)
         
         // Deactivate the button
-        activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
+        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Adjust the text fields
         topTextField.textContentType = .emailAddress
@@ -293,7 +312,7 @@ extension CreateAccountViewController {
     }
 }
 
-// MARK:- Methods related to animations
+// MARK: - Methods related to animations
 extension CreateAccountViewController {
     
     func checkToActivateButton() {
@@ -301,21 +320,21 @@ extension CreateAccountViewController {
         // Check that both text fields are not nil and that they have at least one character
         guard topTextField.text != nil && bottomTextField != nil && topTextField.text!.trimmingCharacters(in: .whitespaces).count != 0 && bottomTextField.text!.trimmingCharacters(in: .whitespaces).count != 0 else {
             
-            activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
+            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
             return
             
         }
         
         // Otherwise, activate the button
-        activateButton(isActivated: true, color: Constants.PRIMARY_COLOR)
+        activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     
     func activateButton(isActivated: Bool, color: UIColor) {
         
         // Disables or Enables the button and sets the button background color
-        button.isEnabled = isActivated
-        button.backgroundColor = color
+        bottomButton.isEnabled = isActivated
+        bottomButton.backgroundColor = color
         
     }
     
@@ -353,7 +372,7 @@ extension CreateAccountViewController {
     
 }
 
-// MARK:- Methods related to error handling
+// MARK: - Methods related to error handling
 extension CreateAccountViewController {
     
     func handleErrors(error: NSError) {
@@ -363,19 +382,19 @@ extension CreateAccountViewController {
             switch errorCode {
                 
             case .emailAlreadyInUse:
-                presentErrorMessage(text: Constants.EMAIL_ALREADY_REGISTERED)
+                presentErrorMessage(text: Constants.ErrorMessage.emailAlreadyRegistered)
                 
             case .invalidEmail:
-                presentErrorMessage(text: Constants.INVALID_EMAIL)
+                presentErrorMessage(text: Constants.ErrorMessage.invalidEmail)
                 
             case .missingEmail:
-                presentErrorMessage(text: Constants.EMAIL_MISSING)
+                presentErrorMessage(text: Constants.ErrorMessage.emailMissing)
                 
             case .networkError:
-                presentErrorMessage(text: Constants.NETWORK_ERROR)
+                presentErrorMessage(text: Constants.ErrorMessage.networkError)
                 
             case .weakPassword:
-                presentErrorMessage(text: Constants.WEAK_PASSWORD)
+                presentErrorMessage(text: Constants.ErrorMessage.weakPassword)
                 
             default:
                 presentErrorMessage(text: "Unable to create account")
@@ -398,7 +417,7 @@ extension CreateAccountViewController {
     
 }
 
-// MARK:- Methods that conform to UITextFieldDelegate
+// MARK: - Methods that conform to UITextFieldDelegate
 extension CreateAccountViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -7,16 +7,19 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseAuth
 
+// MARK: - LoginProtocol
 protocol LoginProtocol {
+    
     func goToCreateAccount()
     func goToForgotPassword()
+    
 }
 
 class LoginViewController: UIViewController {
     
-    // MARK:- IBOutlet Properties
+    // MARK: - IBOutlet Properties
     @IBOutlet weak var loginView: UIView!
     @IBOutlet weak var loginViewX: NSLayoutConstraint!
     @IBOutlet weak var loginViewWidth: NSLayoutConstraint!
@@ -33,21 +36,25 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var errorViewY: NSLayoutConstraint!
     @IBOutlet weak var errorLabel: UILabel!
     
-    // MARK:- LoginViewController Properties
+    // MARK: - LoginViewController Properties
     var delegate: LoginProtocol?
     var firstTimeSeeingView: Bool?
-    let db = Firestore.firestore()
+    
+    var email: String?
+    var password: String?
 
+    // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Setup the loginView
-        loginView.backgroundColor    = Constants.FLOATING_VIEW_COLOR
-        loginView.layer.cornerRadius = Constants.GENERAL_CORNER_RADIUS
-        loginViewWidth.constant      = Constants.LOGIN_VIEW_WIDTH
-        loginViewHeight.constant     = Constants.LOGIN_VIEW_HEIGHT
+        loginView.backgroundColor    = Constants.Color.floatingView
+        loginView.layer.cornerRadius = Constants.View.CornerRadius.standard
+        loginViewWidth.constant      = Constants.View.Width.standard
+        loginViewHeight.constant     = Constants.View.Height.login
         loginViewX.constant          = -UIScreen.main.bounds.width
         
+        // If first time seeing the view then slide in from the right
         if firstTimeSeeingView == true {
             loginViewX.constant *= -1
         }
@@ -59,21 +66,20 @@ class LoginViewController: UIViewController {
         passwordTextField.delegate = self
         
         // Setup the forgotpasswordButton
-        forgotPasswordButton.setTitleColor(Constants.PRIMARY_COLOR, for: .normal)
+        forgotPasswordButton.setTitleColor(Constants.Color.primary, for: .normal)
         
         // Setup the loginButton
-        loginButton.layer.cornerRadius = Constants.BUTTON_CORNER_RADIUS
-        loginButton.backgroundColor    = Constants.PRIMARY_COLOR
-        activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
+        loginButton.layer.cornerRadius = Constants.View.CornerRadius.button
+        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Setup the createAccountButton
-        createAccountButton.setTitleColor(Constants.PRIMARY_COLOR, for: .normal)
+        createAccountButton.setTitleColor(Constants.Color.primary, for: .normal)
         
         // Setup the error view
         errorView.alpha              = 0
-        errorView.layer.cornerRadius = Constants.GENERAL_CORNER_RADIUS
-        errorView.backgroundColor    = Constants.ERROR_COLOR
-        errorViewY.constant          = Constants.ERROR_VIEW_Y
+        errorView.layer.cornerRadius = Constants.View.CornerRadius.standard
+        errorView.backgroundColor    = Constants.Color.error
+        errorViewY.constant          = Constants.View.Y.error
         
         // Create a listener for the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -108,12 +114,12 @@ class LoginViewController: UIViewController {
             }, completion: nil)
         }
     }
-}
-
-// MARK:- IBAction Methods
-extension LoginViewController {
-   
+    
+    // MARK: - IBAction Methods
     @IBAction func emailIsEditing(_ sender: UITextField) {
+        
+        // Store the email thats in the text field
+        email = emailTextField.text?.trimmingCharacters(in: .whitespaces)
         
         // Check to see if the loginButton should be activated
         checkToActivateButton()
@@ -121,6 +127,9 @@ extension LoginViewController {
     }
     
     @IBAction func passwordIsEditing(_ sender: UITextField) {
+        
+        // Store the password thats in the text field
+        password = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
         
         // Check to see if the loginButton should be activated
         checkToActivateButton()
@@ -135,46 +144,29 @@ extension LoginViewController {
                 self.delegate?.goToForgotPassword()
             })
         }
-        
-        
+
     }
-    
     
     @IBAction func loginTapped(_ sender: UIButton) {
         
         // Disable the button
         loginButton.isEnabled = false
         
-        // Grab the email and password from the text fields
-        let email = emailTextField.text?.trimmingCharacters(in: .whitespaces)
-        let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
-        
-        // Check that the email
-        guard email != nil && email!.count > 0 && password != nil && password!.count > 0 else {
-            loginButton.isEnabled = true
-            presentErrorMessage(text: "Text fields are empty")
-            return
-        }
-        
         // Attempt to login the user
-        Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) { [weak self] user, error in
+        Auth.auth().signIn(withEmail: email!, password: password!) { [weak self] user, error in
             guard let self = self else { return }
             
             // Check to see if any errors occured
-            guard error == nil && user != nil else {
+            guard user != nil && error == nil else {
                 self.loginButton.isEnabled = true
                 self.handleErrors(error: error! as NSError)
                 return
             }
             
             // Collect all the users information
-            self.collectUserInformation(closure: {
-                
-                // Segue to the inapp storyboard
-                self.performSegue(withIdentifier: Constants.LOGGED_IN_SEGUE_ID, sender: true)
-                
+            UserService.readUserProfile(email: self.email!, completion: {
+                self.performSegue(withIdentifier: Constants.ID.Segue.loggedIn, sender: sender)
             })
-
             
         }
         
@@ -196,72 +188,35 @@ extension LoginViewController {
 // MARK: - Helper Methods
 extension LoginViewController {
     
-    func collectUserInformation(closure: @escaping () -> Void) {
+    func checkToActivateButton() {
         
-        let userDocRef = db.collection(Constants.USERS_KEY).document(emailTextField.text!)
-        userDocRef.getDocument { (userDocument, error) in
-            
-            // Check that the document isnt nil
-            guard userDocument != nil && error == nil else { return }
-            
-            // Get the data and check that it isn't nil
-            let userData = userDocument?.data()
-            guard userData != nil else { return }
-            
-            // Pull the data
-            let firstName = userData![Constants.FIRST_NAME_KEY]! as? String
-            let lastName  = userData![Constants.LAST_NAME_KEY]! as? String
-            let email     = self.emailTextField.text!
-            let userID    = userData![Constants.USER_ID_KEY] as? String
-            
-            // Store the data
-            Shared.userProfile = UserInfo(firstName: firstName, lastName: lastName, email: email, userID: userID)
-            
-            // Get a reference to the users items
-            userDocRef.collection(Constants.ITEMS_KEY).getDocuments(completion: { (query, error) in
-                
-                // Read the result of the query to check if documents were read
-                if query == nil || query!.count == 0 || error != nil { closure() }
-                
-                // Get the documents
-                let documents = query?.documents
-                
-                // Create a counter
-                var count = 0
-                
-                for document in documents! {
-                    
-                    let itemData = document.data()
-                    
-                    let itemName = itemData[Constants.ITEM_NAME_KEY] as! String?
-                    let isMovedOften = itemData[Constants.ITEM_MOVEMENT_KEY] as! Bool?
-                    let itemLocation = itemData[Constants.ITEM_LOCATION_KEY] as! [Double]?
-                    
-                    Shared.userItems.append(Item(name: itemName, mostRecentLocation: itemLocation, isMovedOften: isMovedOften))
-                    
-                    count += 1
-                    
-                    // If all the documents have been read, then execute the closure
-                    if count == documents!.count {
-                        closure()
-                    }
-                    
-                }
-                
-            })
-            
+        // Check that both text fields are not nil and that they have at least one character
+        guard email != nil && password != nil && email!.count > 0 && password!.count > 0 else {
+            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            return
         }
+        
+        // Activate the button
+        activateButton(isActivated: true, color: Constants.Color.primary)
+        
+    }
+    
+    func activateButton(isActivated: Bool, color: UIColor) {
+        
+        // Disables or Enables the button and sets the button background color
+        loginButton.isEnabled = isActivated
+        loginButton.backgroundColor = color
         
     }
     
 }
     
-// MARK:- Animation Methods
+// MARK: - Animation Methods
 extension LoginViewController {
 
     func slideViewIn() {
         
-        // Slide the view in from the left
+        // Slide the view in to the center
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             
             self.loginViewX.constant = 0
@@ -278,40 +233,21 @@ extension LoginViewController {
         
         // Animate the view off screen to the left
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
+            
             self.loginViewX.constant = -UIScreen.main.bounds.width
             self.view.layoutIfNeeded()
+            
         }) { (true) in
+            
+            // Execute the completion handler
             completion()
-        }
-    }
-    
-    
-    func checkToActivateButton() {
-        
-        // Check that both text fields are not nil and that they have at least one character
-        guard emailTextField.text != nil && passwordTextField != nil && emailTextField.text!.trimmingCharacters(in: .whitespaces).count != 0 && passwordTextField.text!.trimmingCharacters(in: .whitespaces).count != 0 else {
-            
-            activateButton(isActivated: false, color: Constants.INACTIVE_BUTTON_COLOR)
-            return
             
         }
-        
-        // Otherwise, activate the button
-        activateButton(isActivated: true, color: Constants.PRIMARY_COLOR)
-        
-    }
-    
-    func activateButton(isActivated: Bool, color: UIColor) {
-        
-        // Disables or Enables the button and sets the button background color
-        loginButton.isEnabled = isActivated
-        loginButton.backgroundColor = color
-        
     }
     
 }
 
-// MARK:- Error handling methods
+// MARK: - Error handling methods
 extension LoginViewController {
     
     func presentErrorMessage(text: String) {
@@ -322,7 +258,9 @@ extension LoginViewController {
         
         // Fade in the error bar
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+            
             self.errorView.alpha = 1
+            
         }, completion: nil)
         
     }
@@ -334,30 +272,32 @@ extension LoginViewController {
             switch errorCode {
                 
             case .wrongPassword:
-                presentErrorMessage(text: Constants.WRONG_PASSWORD)
+                presentErrorMessage(text: Constants.ErrorMessage.wrongPassword)
                 
             case .invalidEmail:
-                presentErrorMessage(text: Constants.INVALID_EMAIL)
+                presentErrorMessage(text: Constants.ErrorMessage.invalidEmail)
                 
             case .userNotFound:
-                presentErrorMessage(text: Constants.EMAIL_NOT_REGISTERED)
+                presentErrorMessage(text: Constants.ErrorMessage.emailNotRegistered)
                 
             case .missingEmail:
-                presentErrorMessage(text: Constants.EMAIL_MISSING)
+                presentErrorMessage(text: Constants.ErrorMessage.emailMissing)
                 
             case .networkError:
-                presentErrorMessage(text: Constants.NETWORK_ERROR)
+                presentErrorMessage(text: Constants.ErrorMessage.networkError)
                 
             case .userDisabled:
-                presentErrorMessage(text: Constants.ACCOUNT_DISABLED)
+                presentErrorMessage(text: Constants.ErrorMessage.accountDisabled)
             default:
                 presentErrorMessage(text: "Unable to sign in")
             }
         }
+        
     }
+    
 }
 
-// MARK:- Functions that conform to the UITextFieldDelegate
+// MARK: - Functions that conform to the UITextFieldDelegate
 extension LoginViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -372,6 +312,7 @@ extension LoginViewController: UITextFieldDelegate {
         }
         
         return true
+        
     }
     
 }

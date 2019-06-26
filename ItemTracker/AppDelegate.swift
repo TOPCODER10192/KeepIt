@@ -17,6 +17,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        
+        // Attempt to load the current user
+        LocalStorageService.loadCurrentUser()
+        
+        if Stored.user != nil {
+            
+            let tabBarVC = UIStoryboard(name: "InApp", bundle: .main).instantiateViewController(withIdentifier: Constants.ID.VC.tabBar)
+            
+            window?.rootViewController = tabBarVC
+            window?.makeKeyAndVisible()
+            
+        }
+        
         return true
     }
 
