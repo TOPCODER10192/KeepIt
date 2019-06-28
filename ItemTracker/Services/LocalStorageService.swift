@@ -24,18 +24,22 @@ class LocalStorageService {
         var itemNames = [String]()
         var itemLocations = [[Double]]()
         var itemMovements = [Bool]()
+        var itemImageURLs = [String?]()
         
         // Fill the arrays
         for item in items {
             itemNames.append(item.name)
             itemLocations.append(item.mostRecentLocation)
             itemMovements.append(item.isMovedOften)
+            itemImageURLs.append(item.imageURL)
+            
         }
         
         // Locally store the arrays
         defaults.set(itemNames, forKey: Constants.Key.Item.name)
         defaults.set(itemLocations, forKey: Constants.Key.Item.location)
         defaults.set(itemMovements, forKey: Constants.Key.Item.movement)
+        defaults.set(itemImageURLs, forKey: Constants.Key.Item.imageURL)
         
     }
     
@@ -48,16 +52,19 @@ class LocalStorageService {
         var itemNames     = defaults.value(forKey: Constants.Key.Item.name) as! [String]
         var itemLocations = defaults.value(forKey: Constants.Key.Item.location) as! [[Double]]
         var itemMovements = defaults.value(forKey: Constants.Key.Item.movement) as! [Bool]
+        var itemImageURLs = defaults.value(forKey: Constants.Key.Item.imageURL) as! [String]
         
         // Append the new items propeties to the arrays
         itemNames.append(item.name)
         itemLocations.append(item.mostRecentLocation)
         itemMovements.append(item.isMovedOften)
+        itemImageURLs.append(item.imageURL)
         
         // Locally store the arrays
         defaults.set(itemNames, forKey: Constants.Key.Item.name)
         defaults.set(itemLocations, forKey: Constants.Key.Item.location)
         defaults.set(itemMovements, forKey: Constants.Key.Item.movement)
+        defaults.set(itemImageURLs, forKey: Constants.Key.Item.imageURL)
         
     }
     
@@ -81,6 +88,7 @@ class LocalStorageService {
         let itemNames     = defaults.value(forKey: Constants.Key.Item.name) as! [String]
         let itemLocations = defaults.value(forKey: Constants.Key.Item.location) as! [[Double]]
         let itemMovements = defaults.value(forKey: Constants.Key.Item.movement) as! [Bool]
+        let itemImageURLs = defaults.value(forKey: Constants.Key.Item.imageURL) as! [String]
         
         // Initialize an array for items
         var items = [Item]()
@@ -90,9 +98,10 @@ class LocalStorageService {
             let name         = itemNames[i]
             let location     = itemLocations[i]
             let isMovedOften = itemMovements[i]
+            let imageURL     = itemImageURLs[i]
             
             // Create the item and append it to the array of userItems
-            let item = Item(name: name, mostRecentLocation: location, isMovedOften: isMovedOften, image: nil)
+            let item = Item.init(withName: name, withLocation: location, withMovement: isMovedOften, withImageURL: imageURL)
             items.append(item)
             
         }
@@ -113,10 +122,11 @@ class LocalStorageService {
         defaults.set(nil, forKey: Constants.Key.User.lastName)
         defaults.set(nil, forKey: Constants.Key.User.email)
         
-        // Locally store the arrays
+        // Locally clear the item arrays
         defaults.set(nil, forKey: Constants.Key.Item.name)
         defaults.set(nil, forKey: Constants.Key.Item.location)
         defaults.set(nil, forKey: Constants.Key.Item.movement)
+        defaults.set(nil, forKey: Constants.Key.Item.imageURL)
         
     }
 }

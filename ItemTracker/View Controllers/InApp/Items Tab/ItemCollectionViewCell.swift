@@ -7,13 +7,17 @@
 //
 
 import UIKit
+import SDWebImage
+import UICircularProgressRing
 
 class ItemCollectionViewCell: UICollectionViewCell {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var itemLabel: UILabel!
+    @IBOutlet weak var itemImage: UIImageView!
+    @IBOutlet weak var circularProgressRing: UIView!
     
-    // MARK: - ItemCOllectionViewCell Properties
+    // MARK: - ItemCollectionViewCell Properties
     
     override func awakeFromNib() {
         
@@ -28,6 +32,19 @@ class ItemCollectionViewCell: UICollectionViewCell {
         // Setup the itemLabel
         itemLabel.adjustsFontSizeToFitWidth = true
         
+    }
+    
+    func setPhoto(url: URL, index: Int) {
+        
+        
+        itemImage.sd_setImage(with: url) { (image, error, cacheType, url) in
+            
+            self.itemImage.image = image
+            Stored.userItems[index].image = image
+            
+            
+        }
         
     }
+    
 }

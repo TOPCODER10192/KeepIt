@@ -9,7 +9,7 @@
 import UIKit
 import FirebaseAuth
 
-// MARK: - LoginProtocol
+// MARK: - Login Protocol
 protocol LoginProtocol {
     
     func goToCreateAccount()

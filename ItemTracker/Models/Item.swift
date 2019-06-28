@@ -15,6 +15,18 @@ struct Item {
     var name: String
     var mostRecentLocation: [Double]
     var isMovedOften: Bool
+    var imageURL: String
     var image: UIImage?
+    
+    init(withName: String, withLocation: [Double], withMovement: Bool, withImageURL: String, withImage: UIImage? = nil) {
+        
+        name               = withName
+        mostRecentLocation = withLocation
+        isMovedOften       = withMovement
+        imageURL           = withImageURL
+        image              = withImage
+        
+    }
+    
     
 }

@@ -53,7 +53,8 @@ struct Constants {
         
         // MARK: - Width
         struct Width {
-            static let standard: CGFloat          = min(400, UIScreen.main.bounds.width - 20)
+            static let standard: CGFloat   = min(400, UIScreen.main.bounds.width - 20)
+            static let annotation: CGFloat = 40
         }
         
         // MARK: - Height
@@ -61,6 +62,7 @@ struct Constants {
             static let login: CGFloat         = min(240, UIScreen.main.bounds.height - 350)
             static let createAccount: CGFloat = min(230, UIScreen.main.bounds.height - 350)
             static let addItem: CGFloat       = min(340, UIScreen.main.bounds.height - 220)
+            static let annotation: CGFloat    = 40
         }
         
         // MARK: - Y

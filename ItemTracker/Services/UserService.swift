@@ -47,9 +47,10 @@ class UserService {
                     let name     = itemData[Constants.Key.Item.name]     as! String
                     let location = itemData[Constants.Key.Item.location] as! [Double]
                     let movement = itemData[Constants.Key.Item.movement] as! Bool
-                    let url      = itemData[Constants.Key.Item.imageURL] as? String
+                    let url      = itemData[Constants.Key.Item.imageURL] as! String
                     
-                    let item = Item(name: name, mostRecentLocation: location, isMovedOften: movement, image: nil)
+                    let item = Item.init(withName: name, withLocation: location, withMovement: movement, withImageURL: url)
+                    
                     items.append(item)
                     
                 }
@@ -97,11 +98,13 @@ class UserService {
     
     static func writeItem(item: Item, ref: DocumentReference) {
         
+        let name         = item.name
         let location     = item.mostRecentLocation
         let isMovedOften = item.isMovedOften
-        let url          = item.image
+        let url          = item.imageURL
         
-        ref.setData([Constants.Key.Item.location: location,
+        ref.setData([Constants.Key.Item.name    : name,
+                     Constants.Key.Item.location: location,
                      Constants.Key.Item.movement: isMovedOften,
                      Constants.Key.Item.imageURL: url])
         

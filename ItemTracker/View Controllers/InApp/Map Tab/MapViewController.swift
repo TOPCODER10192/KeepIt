@@ -21,6 +21,14 @@ class MapViewController: UIViewController {
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Check the user's location services
+        checkLocationServices()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         // Setup the mapView
         mapViewBottomConstraint.constant = self.tabBarController!.tabBar.frame.height
@@ -33,15 +41,6 @@ class MapViewController: UIViewController {
             annotation.title = item.name
             mapView.addAnnotation(annotation)
         }
-    
-
-        // Check the user's location services
-        checkLocationServices()
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
     }
     
@@ -158,10 +157,50 @@ extension MapViewController: MKMapViewDelegate {
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "AnnotationView")
         }
+    
+        for item in Stored.userItems {
+            
+            if annotation.title == item.name {
+                
+                let frame = CGRect(x: -Constants.View.Width.annotation / 2,
+                                   y: -Constants.View.Width.annotation / 2,
+                                   width: Constants.View.Width.annotation,
+                                   height: Constants.View.Height.annotation)
+                
+                if item.image != nil {
+                    let imageView = UIImageView(frame: frame)
+                    imageView.image = item.image
+                    imageView.layer.cornerRadius = imageView.layer.frame.size.width / 2
+                    imageView.layer.borderWidth = 2
+                    imageView.layer.borderColor = Constants.Color.primary.cgColor
+                    imageView.layer.masksToBounds = true
+                    imageView.contentMode = .scaleAspectFill
+                    annotationView!.addSubview(imageView)
+                }
+                else {
+                    let basicView = UIView(frame: frame)
+                    basicView.backgroundColor = UIColor.white
+                    basicView.layer.cornerRadius = basicView.layer.frame.size.width / 2
+                    basicView.layer.borderWidth = 10
+                    basicView.layer.borderColor = Constants.Color.primary.cgColor
+                    basicView.layer.masksToBounds = true
+                    annotationView!.addSubview(basicView)
+                    
+                }
+                
+            }
+            
+        }
         
-        annotationView?.image          = UIImage(named: "ItemAnnotation")
-        annotationView?.isDraggable    = false
-        annotationView?.canShowCallout = true
+        annotationView!.canShowCallout = true
+        
+    
+        //view.calloutOffset = CGPoint(x:  16, y: 16)
+        //view.layer.anchorPoint = CGPointMake(16 , 16)
+       // view.rightCalloutAccessoryView = UIButton.buttonWithType(.DetailDisclosure) as! UIView
+        
+        annotationView?.isDraggable        = false
+        annotationView?.canShowCallout     = true
         
         return annotationView
         

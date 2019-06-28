@@ -39,8 +39,11 @@ class AddItemViewController: UIViewController {
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var locationSegmentedDisplay: UISegmentedControl!
 
+    
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var mapSearchBar: UISearchBar!
+    
     
     @IBOutlet weak var addItemButton: UIButton!
     
@@ -81,8 +84,13 @@ class AddItemViewController: UIViewController {
         addImageButton.layer.borderColor  = Constants.Color.primary.cgColor
         addImageButton.layer.borderWidth  = 1
 
+        // Setup the searchBar
+        mapSearchBar.alpha = 0
+        mapSearchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        mapSearchBar.delegate = self
+        
         // Setup the mapView
-        mapViewHeight.constant    = 0
+        mapViewHeight.constant = 0
         mapView.layer.borderColor = Constants.Color.primary.cgColor
         mapView.layer.borderWidth = 1
         mapView.delegate          = self
@@ -123,6 +131,9 @@ class AddItemViewController: UIViewController {
     }
     
     @IBAction func addItemImageTapped(_ sender: UIButton) {
+        
+        // Lower the keyboard
+        itemNameTextField.resignFirstResponder()
         
         let actionSheet = UIAlertController(title: "Add Item Image", message: nil, preferredStyle: .actionSheet)
         
@@ -172,6 +183,7 @@ class AddItemViewController: UIViewController {
                 // Decrease the view height by 200, set map height to 0
                 self.floatingViewHeight.constant -= 200
                 self.mapViewHeight.constant = 0
+                self.mapSearchBar.alpha = 0
                 self.view.layoutIfNeeded()
                 
             }
@@ -188,6 +200,7 @@ class AddItemViewController: UIViewController {
                 // Increase the view height by 200, set map height to 200
                 self.floatingViewHeight.constant += 200
                 self.mapViewHeight.constant = 200
+                self.mapSearchBar.alpha = 1
                 self.view.layoutIfNeeded()
                 
             }
@@ -199,34 +212,59 @@ class AddItemViewController: UIViewController {
     }
     
     @IBAction func addItemButtonTapped(_ sender: UIButton) {
-        let item = Item(name: itemName!,
-                        mostRecentLocation: itemCoordinates!,
-                        isMovedOften: itemMoves,
-                        image: itemImage)
         
-        // Append the item the usersItems array and locally store it
-        Stored.userItems.append(item)
-        LocalStorageService.saveUserItem(item: item)
+        // Disable the button
+        addItemButton.isEnabled = false
         
         // Generate a random key
         let itemID = UUID.init().uuidString
         
         // Get a reference to the users items
-        let itemRef = db.collection(Constants.Key.User.users).document(Auth.auth().currentUser!.email!).collection(Constants.Key.Item.items).document(itemID)
+        let itemRef = db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items).document(itemID)
         
-        itemRef.setData([Constants.Key.Item.name: item.name,
-                         Constants.Key.Item.movement: item.isMovedOften,
-                         Constants.Key.Item.location: item.mostRecentLocation])
+        // Initialize the item
+        var item = Item.init(withName: self.itemName!,
+                             withLocation: self.itemCoordinates!,
+                             withMovement: self.itemMoves,
+                             withImageURL: "")
+    
         
-        if item.image != nil {
-            ImageService.storeImage(image: item.image!, itemRef: itemRef)
+        if itemImage != nil {
+            ImageService.storeImage(image: itemImage!) { (url) in
+                
+                item = Item.init(withName: self.itemName!,
+                                 withLocation: self.itemCoordinates!,
+                                 withMovement: self.itemMoves,
+                                 withImageURL: url.absoluteString,
+                                 withImage: self.itemImage!)
+                
+                // Append the item the usersItems array and locally store it
+                Stored.userItems.append(item)
+                LocalStorageService.saveUserItem(item: item)
+                UserService.writeItem(item: item, ref: itemRef)
+                
+                // Tell the delegate that an item was added
+                self.delegate?.itemAdded(item: item)
+                
+                // Slide out the FloatingView
+                self.slideViewOut()
+                
+            }
         }
-        
-        // Tell the delegate that an item was added
-        delegate?.itemAdded(item: item)
-        
-        // Slide out the FloatingView
-        slideViewOut()
+        else {
+            
+            // Append the item the usersItems array and locally store it
+            Stored.userItems.append(item)
+            LocalStorageService.saveUserItem(item: item)
+            UserService.writeItem(item: item, ref: itemRef)
+            
+            // Tell the delegate that an item was added
+            delegate?.itemAdded(item: item)
+            
+            // Slide out the FloatingView
+            slideViewOut()
+            
+        }
         
     }
     
@@ -250,7 +288,12 @@ class AddItemViewController: UIViewController {
         mapView.addAnnotation(annotation)
         
         checkToActivateButton()
+        
     }
+    
+    
+    
+    
 }
 
 // MARK: - Animation Methods
@@ -438,6 +481,7 @@ extension AddItemViewController: CLLocationManagerDelegate {
     
 }
 
+// MARK: - MKMapViewDelegateMethods
 extension AddItemViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -469,6 +513,7 @@ extension AddItemViewController: MKMapViewDelegate {
     
 }
 
+// MARK: - UITextFieldDelegate Methods
 extension AddItemViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -480,6 +525,56 @@ extension AddItemViewController: UITextFieldDelegate {
     }
 }
 
+// MARK: - UISearchBarDelegate Methods
+extension AddItemViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        // Lower the keyboard
+        searchBar.resignFirstResponder()
+        
+        // Create the search request
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = searchBar.text
+        
+        // Create an active search based off the search request and start the search
+        let activeSearch = MKLocalSearch(request: searchRequest)
+        activeSearch.start { (response, error) in
+            
+            // If the search was unsuccessful then present an error message
+            guard response != nil && error == nil else { return }
+            
+            // Remove annotations on map
+            self.mapView.removeAnnotations(self.mapView.annotations)
+            
+            // Get the coordinates of the location searched
+            let latitude = response?.boundingRegion.center.latitude
+            let longitude = response?.boundingRegion.center.longitude
+            
+            // Check that the coordinates are not nil
+            guard latitude != nil && longitude != nil else { return }
+            
+            // Create an annotation for the coordinates found and add it
+            let annotation = MKPointAnnotation()
+            let coordinates = CLLocationCoordinate2DMake(latitude!, longitude!)
+            annotation.coordinate = CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude)
+            self.mapView.addAnnotation(annotation)
+            
+            // Set the items coordinates to match the annotation coordinates
+            self.itemCoordinates = [coordinates.latitude, coordinates.longitude] as [Double]
+            
+            // Get the region based off the coordinates and set the map
+            let region = MKCoordinateRegion.init(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+            self.mapView.setRegion(region, animated: true)
+            
+        }
+        
+        
+    }
+    
+}
+
+// MARK: - UIImagePickerControllerDelegate Methods
 extension AddItemViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

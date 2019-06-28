@@ -9,17 +9,10 @@
 import Foundation
 import FirebaseStorage
 import FirebaseFirestore
-import FirebaseAuth
-
-protocol ImageServiceProtocol {
-
-    func urlRetrieved()
-    
-}
 
 class ImageService {
     
-    static func storeImage(image: UIImage, itemRef: DocumentReference) {
+    static func storeImage(image: UIImage, completion: @escaping (URL) -> Void) {
         
         // Generate a random image id
         let imageID = UUID.init().uuidString
@@ -29,7 +22,7 @@ class ImageService {
         let uploadRef = Storage.storage().reference().child(userEmail).child(imageID)
         
         // Get Data Representation of the image
-        guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
+        guard let imageData = image.jpegData(compressionQuality: 0.1) else { return }
         
         let uploadMetaData = StorageMetadata.init()
         uploadMetaData.contentType = "image/jpg"
@@ -41,24 +34,20 @@ class ImageService {
                 print("There was an error uploading the image")
             }
             else {
-                createImageDatabseEntry(ref: uploadRef, itemRef: itemRef)
+                
+                // Get a download url for the photo
+                uploadRef.downloadURL { (url , error) in
+                    
+                    // Check if the download was successful
+                    guard url != nil && error == nil else { return }
+                    
+                    // Store the url in the database and locally
+                    completion(url!)
+                }
+                
             }
             
         }
-        
-    }
-    
-    private static func createImageDatabseEntry(ref: StorageReference, itemRef: DocumentReference) {
-        
-        // Get a download url for the photo
-        ref.downloadURL { (url , error) in
-            
-            // Check if the download was successful
-            guard url != nil && error == nil else { return }
-            
-            itemRef.updateData([Constants.Key.Item.imageURL: url!.absoluteString])
-        }
-        
         
     }
     

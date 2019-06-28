@@ -26,6 +26,8 @@ class ItemsViewController: UIViewController {
         itemsCollectionView.layer.masksToBounds = false
         itemsCollectionView.clipsToBounds       = true
         
+        addRefreshControl()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,6 +51,26 @@ class ItemsViewController: UIViewController {
         // Set the presentation style and present
         addItemVC!.modalPresentationStyle = .overCurrentContext
         self.present(addItemVC!, animated: false, completion: nil)
+        
+    }
+    
+}
+
+// MARK: - Helper Methods
+extension ItemsViewController {
+    
+    func addRefreshControl() {
+        
+        let refreshControl = UIRefreshControl()
+        itemsCollectionView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(refreshInitiated(refreshControl:)), for: .valueChanged)
+        
+    }
+    
+    @objc func refreshInitiated(refreshControl: UIRefreshControl) {
+        
+        itemsCollectionView.reloadData()
+        refreshControl.endRefreshing()
         
     }
     
@@ -83,6 +105,16 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         
         cell.itemLabel.text = Stored.userItems[indexPath.row].name
         
+        let cellWidth  = itemsCollectionView.bounds.width * 0.45
+        let imageWidth = cellWidth * 0.65
+        cell.itemImage.layer.cornerRadius = imageWidth / 2
+        cell.itemImage.layer.borderColor = Constants.Color.primary.cgColor
+        cell.itemImage.layer.borderWidth = 2
+        
+        if let url = URL(string: Stored.userItems[indexPath.row].imageURL) {
+            cell.setPhoto(url: url, index: indexPath.row)
+        }
+            
         return cell
         
     }
