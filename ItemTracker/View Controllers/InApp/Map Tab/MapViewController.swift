@@ -8,8 +8,9 @@
 
 import UIKit
 import MapKit
+import SDWebImage
 
-class MapViewController: UIViewController {
+final class MapViewController: UIViewController {
 
     // MARK: - IBOutlet Properties
     @IBOutlet weak var mapView: MKMapView!
@@ -150,72 +151,98 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "AnnotationView")
+        // Chack that the annotation is an MKPointAnnotation
+        guard annotation is MKPointAnnotation else { return nil }
         
-        guard annotation.title != "My Location" else { return annotationView }
+        // Deque an annotation view for an item
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constants.ID.Annotation.item)
         
+        // Create an annotation view for the item if none exist
         if annotationView == nil {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "AnnotationView")
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: Constants.ID.Annotation.item)
         }
-    
+        
+        // Set the frame for the annotation view
+        let annotationFrame = CGRect(x: -Constants.View.Width.annotation / 2, y: -Constants.View.Height.annotation / 2,
+                                     width: Constants.View.Width.annotation, height: Constants.View.Height.annotation)
+        
+        // Iterate through all the items
         for item in Stored.userItems {
             
+            // If the annotation title matches the item name then set the image
             if annotation.title == item.name {
                 
-                let frame = CGRect(x: -Constants.View.Width.annotation / 2,
-                                   y: -Constants.View.Width.annotation / 2,
-                                   width: Constants.View.Width.annotation,
-                                   height: Constants.View.Height.annotation)
+                // Initialize an image view
+                let imageView = UIImageView(frame: annotationFrame)
                 
-                if item.image != nil {
-                    let imageView = UIImageView(frame: frame)
-                    imageView.image = item.image
-                    imageView.layer.cornerRadius = imageView.layer.frame.size.width / 2
-                    imageView.layer.borderWidth = 2
-                    imageView.layer.borderColor = Constants.Color.primary.cgColor
-                    imageView.layer.masksToBounds = true
-                    imageView.contentMode = .scaleAspectFill
-                    annotationView!.addSubview(imageView)
-                }
-                else {
-                    let basicView = UIView(frame: frame)
-                    basicView.backgroundColor = UIColor.white
-                    basicView.layer.cornerRadius = basicView.layer.frame.size.width / 2
-                    basicView.layer.borderWidth = 10
-                    basicView.layer.borderColor = Constants.Color.primary.cgColor
-                    basicView.layer.masksToBounds = true
-                    annotationView!.addSubview(basicView)
+                // Set properties of the image view
+                imageView.contentMode = .scaleAspectFill
+                imageView.layer.cornerRadius  = Constants.View.Width.annotation / 2
+                imageView.layer.borderColor   = Constants.Color.primary.cgColor
+                imageView.layer.borderWidth   = 2
+                imageView.layer.masksToBounds = true
+                
+                // If the item has a URL but the image hasn't been downloaded
+                if let url = URL(string: item.imageURL) {
+                    
+                    // Download the image
+                    imageView.sd_setImage(with: url) { (image, error, cacheType, url) in
+                        
+                        // Set the image
+                        imageView.image = image
+                        
+                    }
                     
                 }
+                // Otherwise use a default image
+                else {
+                    imageView.image = UIImage(named: "Key Icon")
+                }
+                
+                // Add the subview to the annotation view
+                annotationView?.addSubview(imageView)
                 
             }
             
         }
         
-        annotationView!.canShowCallout = true
+        // Allow the annotationView to show a callout if tapped
+        annotationView?.canShowCallout = true
         
-    
-        //view.calloutOffset = CGPoint(x:  16, y: 16)
-        //view.layer.anchorPoint = CGPointMake(16 , 16)
-       // view.rightCalloutAccessoryView = UIButton.buttonWithType(.DetailDisclosure) as! UIView
-        
-        annotationView?.isDraggable        = false
-        annotationView?.canShowCallout     = true
-        
+        // Return the annotationView
         return annotationView
+            
         
+    }
+    
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        
+        // Iterate through all the annotation views
+        for annotationView in views {
+            
+            // If the annotation is of type MKUserLocation then disable the callout
+            if annotationView.annotation is MKUserLocation {
+                annotationView.canShowCallout = false
+            }
+        }
     }
     
 }
 
+// MARK: - AddItemProtocol Methods
 extension MapViewController: AddItemProtocol {
     
     func itemAdded(item: Item) {
         
+        // Initialize an annotation
         let annotation = MKPointAnnotation()
+        
+        // Setup the annotation
         annotation.coordinate.latitude  = item.mostRecentLocation[0] as CLLocationDegrees
         annotation.coordinate.longitude = item.mostRecentLocation[1] as CLLocationDegrees
         annotation.title                = item.name
+        
+        // Add the annotation to the map
         mapView.addAnnotation(annotation)
         
     }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BackgroundViewController: UIViewController {
+final class BackgroundViewController: UIViewController {
     
     // MARK: - BackgroundViewController Properties
     var justLaunched = true
@@ -64,7 +64,17 @@ extension BackgroundViewController {
 }
 
 // MARK:- Methods that conform to the LoginProtocol
-extension BackgroundViewController: LoginProtocol {
+extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, ForgotPasswordProtocol {
+    
+    func goToInApp() {
+        
+        let tabBarVC = UIStoryboard(name: "InApp", bundle: .main).instantiateViewController(withIdentifier: Constants.ID.VC.tabBar)
+        
+        view.window?.rootViewController = tabBarVC
+        view.window?.makeKeyAndVisible()
+        
+    }
+    
     
     func goToCreateAccount() {
         
@@ -79,11 +89,6 @@ extension BackgroundViewController: LoginProtocol {
         presentVC(id: Constants.ID.VC.forgotPassword, extraInfo: nil)
         
     }
-    
-}
-
-// MARK:- Methods that conform to the CreateAccountProtocol and ForgotPasswordProtocol
-extension BackgroundViewController: CreateAccountProtocol, ForgotPasswordProtocol {
     
     func goBackToLogin() {
         

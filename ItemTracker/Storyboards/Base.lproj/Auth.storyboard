@@ -163,7 +163,6 @@
                         <outlet property="loginViewWidth" destination="aDB-Rq-fhF" id="ICz-Dm-ONU"/>
                         <outlet property="loginViewX" destination="buW-uH-Xt7" id="hPB-6g-1rQ"/>
                         <outlet property="passwordTextField" destination="2Qi-TE-7AF" id="hJH-2d-FpC"/>
-                        <segue destination="bND-F8-qDM" kind="show" identifier="LoggedIn" id="rJj-QA-myy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d0n-Vu-xIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -306,7 +305,6 @@
                         <outlet property="navigationBarTitle" destination="9Z0-Sb-rYQ" id="Bw8-hA-MM5"/>
                         <outlet property="promptLabel" destination="XXY-zv-ZkZ" id="GHz-q8-JRD"/>
                         <outlet property="topTextField" destination="ZhT-cJ-NFO" id="GHg-ob-PnF"/>
-                        <segue destination="bND-F8-qDM" kind="show" identifier="AccountCreated" id="LBO-rP-m6s"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rZD-1m-kZd" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -436,19 +434,8 @@
             </objects>
             <point key="canvasLocation" x="-162" y="542"/>
         </scene>
-        <!--InApp-->
-        <scene sceneID="3g5-Tv-fSE">
-            <objects>
-                <viewControllerPlaceholder storyboardName="InApp" id="bND-F8-qDM" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KRc-ML-zjv" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1271" y="960"/>
-        </scene>
     </scenes>
     <resources>
         <image name="Separation Line" width="289" height="1"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="LBO-rP-m6s"/>
-    </inferredMetricsTieBreakers>
 </document>

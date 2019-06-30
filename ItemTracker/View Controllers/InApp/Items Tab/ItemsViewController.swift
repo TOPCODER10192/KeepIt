@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ItemsViewController: UIViewController {
+final class ItemsViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var itemsCollectionView: UICollectionView!
@@ -112,7 +112,7 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         cell.itemImage.layer.borderWidth = 2
         
         if let url = URL(string: Stored.userItems[indexPath.row].imageURL) {
-            cell.setPhoto(url: url, index: indexPath.row)
+            cell.setPhoto(url: url)
         }
             
         return cell

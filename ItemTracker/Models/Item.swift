@@ -7,24 +7,23 @@
 //
 
 import Foundation
-import UIKit
 
 struct Item {
     
     // MARK: - Item Properties
     var name: String
     var mostRecentLocation: [Double]
+    var lastUpdateDate: String
     var isMovedOften: Bool
     var imageURL: String
-    var image: UIImage?
-    
-    init(withName: String, withLocation: [Double], withMovement: Bool, withImageURL: String, withImage: UIImage? = nil) {
+
+    init(withName: String, withLocation: [Double], withLastUpdateDate: String, withMovement: Bool, withImageURL: String) {
         
         name               = withName
         mostRecentLocation = withLocation
+        lastUpdateDate     = withLastUpdateDate
         isMovedOften       = withMovement
         imageURL           = withImageURL
-        image              = withImage
         
     }
     

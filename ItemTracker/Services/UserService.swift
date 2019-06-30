@@ -9,12 +9,14 @@
 import Foundation
 import Firebase
 
-class UserService {
+final class UserService {
+    
+    private static let db = Firestore.firestore()
     
     static func readUserProfile(email: String, completion: @escaping ()  -> Void) {
         
         // Get a reference to the users information
-        let userDocRef = Firestore.firestore().collection(Constants.Key.User.users).document(email)
+        let userDocRef = db.collection(Constants.Key.User.users).document(email)
         
         // Fetch the document
         userDocRef.getDocument { (document, error) in
@@ -44,12 +46,17 @@ class UserService {
                     // Get the data from the document
                     let itemData = document.data()
                     
-                    let name     = itemData[Constants.Key.Item.name]     as! String
-                    let location = itemData[Constants.Key.Item.location] as! [Double]
-                    let movement = itemData[Constants.Key.Item.movement] as! Bool
-                    let url      = itemData[Constants.Key.Item.imageURL] as! String
+                    let name           = itemData[Constants.Key.Item.name]           as! String
+                    let location       = itemData[Constants.Key.Item.location]       as! [Double]
+                    let lastUpdateDate = itemData[Constants.Key.Item.lastUpdateDate] as! String
+                    let movement       = itemData[Constants.Key.Item.movement]       as! Bool
+                    let url            = itemData[Constants.Key.Item.imageURL]       as! String
                     
-                    let item = Item.init(withName: name, withLocation: location, withMovement: movement, withImageURL: url)
+                    let item = Item.init(withName: name,
+                                         withLocation: location,
+                                         withLastUpdateDate: lastUpdateDate,
+                                         withMovement: movement,
+                                         withImageURL: url)
                     
                     items.append(item)
                     
@@ -72,7 +79,7 @@ class UserService {
     static func writeUserProfile(user: UserInfo, items: [Item]) {
         
         // Get a reference to the document containing the users info
-        let userInfoRef  = Firestore.firestore().collection(Constants.Key.User.users).document(user.email)
+        let userInfoRef  = db.collection(Constants.Key.User.users).document(user.email)
         
         // Collect the data that will be stored
         let dataToSave: [String: Any] = [Constants.Key.User.firstName: user.firstName,
@@ -98,15 +105,17 @@ class UserService {
     
     static func writeItem(item: Item, ref: DocumentReference) {
         
-        let name         = item.name
-        let location     = item.mostRecentLocation
-        let isMovedOften = item.isMovedOften
-        let url          = item.imageURL
+        let name            = item.name
+        let location        = item.mostRecentLocation
+        let isMovedOften    = item.isMovedOften
+        let url             = item.imageURL
+        let lastTimeUpdated = item.lastUpdateDate
         
         ref.setData([Constants.Key.Item.name    : name,
                      Constants.Key.Item.location: location,
                      Constants.Key.Item.movement: isMovedOften,
-                     Constants.Key.Item.imageURL: url])
+                     Constants.Key.Item.imageURL: url,
+                     Constants.Key.Item.lastUpdateDate: lastTimeUpdated])
         
     }
     

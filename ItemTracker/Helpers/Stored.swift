@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Stored {
+final class Stored {
 
     static var user: UserInfo?
     static var userItems = [Item]()

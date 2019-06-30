@@ -16,7 +16,7 @@ protocol ForgotPasswordProtocol {
     
 }
 
-class ForgotPasswordViewController: UIViewController {
+final class ForgotPasswordViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var forgotPasswordView: UIView!
@@ -126,8 +126,15 @@ class ForgotPasswordViewController: UIViewController {
     
     @IBAction func resetPasswordButtonTapped(_ sender: UIButton) {
         
+        // Temporarily disable the button and lower the keyboard
+        resetPasswordButton.isEnabled = false
+        emailTextField.resignFirstResponder()
+        
         // Send the password reset email
         Auth.auth().sendPasswordReset(withEmail: email!) { error in
+            
+            // Reactivate the button
+            self.resetPasswordButton.isEnabled = true
             
             // If there is an error, print an appropriate error message
             guard error == nil else {
@@ -137,7 +144,6 @@ class ForgotPasswordViewController: UIViewController {
             
             // The email was successful so the email should be sent
             self.presentErrorMessage(text: "Email sent to reset password", color: Constants.Color.success)
-            self.emailTextField.resignFirstResponder()
             
         }
         

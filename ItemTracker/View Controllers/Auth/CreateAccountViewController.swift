@@ -13,10 +13,11 @@ import FirebaseAuth
 protocol CreateAccountProtocol {
     
     func goBackToLogin()
+    func goToInApp()
     
 }
 
-class CreateAccountViewController: UIViewController {
+final class CreateAccountViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var createAccountView: UIView!
@@ -120,6 +121,12 @@ class CreateAccountViewController: UIViewController {
     // MARK: - IBAction Methods
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         
+        // Lower the keyboard
+        lowerKeyboard()
+        
+        // Disable the button
+        bottomButton.isEnabled = false
+        
         formIndex -= 1
         
         // Slide the view out of the screen
@@ -176,6 +183,12 @@ class CreateAccountViewController: UIViewController {
     
     @IBAction func bottomButtonTapped(_ sender: UIButton) {
         
+        // Lower the keyboard
+        lowerKeyboard()
+        
+        // Disable the button
+        bottomButton.isEnabled = false
+        
         if formIndex == 0 {
             
             // Go to the next form
@@ -202,8 +215,10 @@ class CreateAccountViewController: UIViewController {
                 LocalStorageService.saveCurrentUser(user: user, items: [])
                 
                 // Go into the main app
-                self.slideViewOut(finalX: -UIScreen.main.bounds.width, completion: {
-                    self.performSegue(withIdentifier: Constants.ID.Segue.accountCreated, sender: true)
+                self.dismiss(animated: true, completion: {
+                    
+                    self.delegate?.goToInApp()
+                    
                 })
                 
             }
@@ -211,7 +226,21 @@ class CreateAccountViewController: UIViewController {
         
     }
     
-} 
+}
+
+// MARK: - Helper Methods
+extension CreateAccountViewController {
+    
+    func lowerKeyboard() {
+        
+        // Resign first responder from either keyboard
+        topTextField.resignFirstResponder()
+        bottomTextField.resignFirstResponder()
+        
+    }
+    
+    
+}
 
 // MARK: - Methods related to switching between the 2 forms
 extension CreateAccountViewController {
@@ -256,9 +285,6 @@ extension CreateAccountViewController {
         self.bottomButton.setTitle("Next", for: .normal)
         self.bottomButton.setTitle("Next", for: .disabled)
         
-        // Deactivate the button
-        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
-        
         // Adjust the text fields
         self.topTextField.textContentType = .givenName
         self.topTextField.keyboardType = .default
@@ -289,9 +315,6 @@ extension CreateAccountViewController {
         bottomTextField.placeholder = "Password (At least 6 characters)"
         self.bottomButton.setTitle("Create Account", for: .normal)
         self.bottomButton.setTitle("Create Account", for: .disabled)
-        
-        // Deactivate the button
-        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Adjust the text fields
         topTextField.textContentType = .emailAddress

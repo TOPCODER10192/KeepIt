@@ -10,7 +10,7 @@ import Foundation
 import FirebaseStorage
 import FirebaseFirestore
 
-class ImageService {
+final class ImageService {
     
     static func storeImage(image: UIImage, completion: @escaping (URL) -> Void) {
         
@@ -22,7 +22,7 @@ class ImageService {
         let uploadRef = Storage.storage().reference().child(userEmail).child(imageID)
         
         // Get Data Representation of the image
-        guard let imageData = image.jpegData(compressionQuality: 0.1) else { return }
+        guard let imageData = image.jpegData(compressionQuality: 0.01) else { return }
         
         let uploadMetaData = StorageMetadata.init()
         uploadMetaData.contentType = "image/jpg"

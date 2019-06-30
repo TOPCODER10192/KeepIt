@@ -14,10 +14,11 @@ protocol LoginProtocol {
     
     func goToCreateAccount()
     func goToForgotPassword()
+    func goToInApp()
     
 }
 
-class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var loginView: UIView!
@@ -149,6 +150,9 @@ class LoginViewController: UIViewController {
     
     @IBAction func loginTapped(_ sender: UIButton) {
         
+        // Lower the keyboard
+        lowerKeyboard()
+        
         // Disable the button
         loginButton.isEnabled = false
         
@@ -163,9 +167,15 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            // Collect all the users information
             UserService.readUserProfile(email: self.email!, completion: {
-                self.performSegue(withIdentifier: Constants.ID.Segue.loggedIn, sender: sender)
+                
+                // Collect all the users information
+                self.dismiss(animated: true, completion: {
+                    
+                    self.delegate?.goToInApp()
+                    
+                })
+                
             })
             
         }
@@ -187,6 +197,14 @@ class LoginViewController: UIViewController {
 
 // MARK: - Helper Methods
 extension LoginViewController {
+    
+    func lowerKeyboard() {
+        
+        // Resign first responder from either text field
+        emailTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        
+    }
     
     func checkToActivateButton() {
         

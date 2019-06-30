@@ -9,7 +9,7 @@
 import UIKit
 import FirebaseAuth
 
-class SettingsViewController: UIViewController {
+final class SettingsViewController: UIViewController {
     
     let firebaseAuth = Auth.auth()
 

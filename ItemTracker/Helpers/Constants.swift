@@ -15,8 +15,7 @@ struct Constants {
         
         // MARK: - Storyboard VCIDs
         struct VC {
-            
-            // Storyboard Identifiers
+
             static let backgroundAuth = "BackgroundAuthVC"
             static let login          = "LoginVC"
             static let createAccount  = "CreateAccountVC"
@@ -26,18 +25,20 @@ struct Constants {
             
         }
         
-        // MARK: - Segue IDs
-        struct Segue {
+        // MARK: - Cell ID's
+        struct Cell {
             
-            static let loggedIn       = "LoggedIn"
-            static let accountCreated = "AccountCreated"
+            static let item     = "ItemCell"
+            static let addItem  = "AddItemCell"
             
         }
         
-        // MARK: - Cell ID's
-        struct Cell {
-            static let item     = "ItemCell"
-            static let addItem  = "AddItemCell"
+        // MARK: - Annotation Reuse ID's
+        struct Annotation {
+            
+            static let item = "ItemAnnotation"
+            static let user = "UserAnnotation"
+            
         }
         
     }
@@ -61,8 +62,9 @@ struct Constants {
         struct Height {
             static let login: CGFloat         = min(240, UIScreen.main.bounds.height - 350)
             static let createAccount: CGFloat = min(230, UIScreen.main.bounds.height - 350)
-            static let addItem: CGFloat       = min(340, UIScreen.main.bounds.height - 220)
+            static let addItem: CGFloat       = min(320, UIScreen.main.bounds.height - 220)
             static let annotation: CGFloat    = 40
+            static let smallMap: CGFloat      = 200
         }
         
         // MARK: - Y
@@ -113,11 +115,12 @@ struct Constants {
         
         struct Item {
             
-            static let items         = "Items"
-            static let name      = "Item Name"
-            static let movement  = "Is Moved Often"
-            static let location  = "Location"
-            static let imageURL  = "Image URL"
+            static let items          = "Items"
+            static let name           = "Item Name"
+            static let movement       = "Is Moved Often"
+            static let lastUpdateDate = "Last Updated"
+            static let location       = "Location"
+            static let imageURL       = "Image URL"
             
         }
     

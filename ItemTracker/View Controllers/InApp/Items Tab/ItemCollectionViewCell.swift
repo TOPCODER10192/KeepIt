@@ -8,9 +8,8 @@
 
 import UIKit
 import SDWebImage
-import UICircularProgressRing
 
-class ItemCollectionViewCell: UICollectionViewCell {
+final class ItemCollectionViewCell: UICollectionViewCell {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var itemLabel: UILabel!
@@ -34,14 +33,12 @@ class ItemCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func setPhoto(url: URL, index: Int) {
+    func setPhoto(url: URL) {
         
-        
+        // Set and cache the image
         itemImage.sd_setImage(with: url) { (image, error, cacheType, url) in
             
             self.itemImage.image = image
-            Stored.userItems[index].image = image
-            
             
         }
         
