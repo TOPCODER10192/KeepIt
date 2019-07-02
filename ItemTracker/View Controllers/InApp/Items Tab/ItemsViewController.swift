@@ -38,19 +38,20 @@ final class ItemsViewController: UIViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // If the user has no items then bring up the Add Item VC
+        if Stored.userItems.count == 0 {
+            loadAddItemVC()
+        }
+        
+    }
+    
     // MARK: - IBAction Methods
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
-        // Instantiate a view controller and check that it isn't nil
-        let addItemVC = self.storyboard?.instantiateViewController(withIdentifier: Constants.ID.VC.addItem) as? AddItemViewController
-        guard addItemVC != nil else { return }
-        
-        // Set self as delegate
-        addItemVC?.delegate = self
-        
-        // Set the presentation style and present
-        addItemVC!.modalPresentationStyle = .overCurrentContext
-        self.present(addItemVC!, animated: false, completion: nil)
+        loadAddItemVC()
         
     }
     
@@ -128,5 +129,64 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        var cell: UICollectionReusableView!
+        
+        if kind == UICollectionView.elementKindSectionHeader {
+            
+            cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                   withReuseIdentifier: Constants.ID.Cell.itemHeader,
+                                                                   for: indexPath)
+            
+        }
+        else  {
+            
+            cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                   withReuseIdentifier: Constants.ID.Cell.itemFooter,
+                                                                   for: indexPath)
+            
+            if let cell = cell as? AddItemCollectionReusableView {
+                cell.delegate = self
+            }
+            
+        }
+        
+        return cell
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        
+        // If the user has items then don't show the header
+        if Stored.userItems.count != 0 {
+            return CGSize(width: 0, height: 0)
+        }
+        // Otherwise, show the view
+        else {
+            return CGSize(width: collectionView.bounds.width, height: Constants.View.Height.itemHeader)
+        }
+        
+    }
+    
+}
+
+extension ItemsViewController: AddItemReusableViewProtocol {
+    
+    func loadAddItemVC() {
+        
+        // Instantiate a view controller and check that it isn't nil
+        let addItemVC = self.storyboard?.instantiateViewController(withIdentifier: Constants.ID.VC.addItem) as? AddItemViewController
+        guard addItemVC != nil else { return }
+        
+        // Set self as delegate
+        addItemVC?.delegate = self
+        
+        // Set the presentation style and present
+        addItemVC!.modalPresentationStyle = .overCurrentContext
+        self.present(addItemVC!, animated: false, completion: nil)
+        
+    }
+
 }
 

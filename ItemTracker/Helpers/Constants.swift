@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import MapKit
 
 struct Constants {
     
@@ -28,8 +29,10 @@ struct Constants {
         // MARK: - Cell ID's
         struct Cell {
             
-            static let item     = "ItemCell"
-            static let addItem  = "AddItemCell"
+            static let item       = "ItemCell"
+            static let addItem    = "AddItemCell"
+            static let itemHeader = "ItemHeaderCell"
+            static let itemFooter = "ItemFooterCell"
             
         }
         
@@ -65,6 +68,7 @@ struct Constants {
             static let addItem: CGFloat       = min(320, UIScreen.main.bounds.height - 220)
             static let annotation: CGFloat    = 40
             static let smallMap: CGFloat      = 200
+            static let itemHeader: CGFloat    = 200
         }
         
         // MARK: - Y
@@ -83,6 +87,8 @@ struct Constants {
         
         static let success         = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 255/255)
         static let error           = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 255/255)
+        
+        static let softError           = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 140/255)
     
     }
     
@@ -124,6 +130,12 @@ struct Constants {
             
         }
     
+    }
+    
+    struct Map {
+    
+        static let regionInMeters: CLLocationDistance = 5000
+        
     }
     
 }

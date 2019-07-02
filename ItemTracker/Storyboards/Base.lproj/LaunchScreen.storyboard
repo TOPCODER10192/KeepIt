@@ -17,7 +17,31 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FrS-l1-2Z8">
+                                <rect key="frame" x="0.0" y="44" width="414" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="gLh-71-e3e"/>
+                                </constraints>
+                                <items>
+                                    <navigationItem id="Uy7-2G-FEc"/>
+                                </items>
+                            </navigationBar>
+                            <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n9w-RC-xNg">
+                                <rect key="frame" x="0.0" y="779" width="414" height="83"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <items/>
+                            </tabBar>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="n9w-RC-xNg" secondAttribute="bottom" id="94i-fA-BDd"/>
+                            <constraint firstItem="n9w-RC-xNg" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Cu0-gC-T2O"/>
+                            <constraint firstItem="n9w-RC-xNg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="OP4-sU-BKC"/>
+                            <constraint firstItem="FrS-l1-2Z8" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="VZ2-N4-hW5"/>
+                            <constraint firstItem="FrS-l1-2Z8" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ZaF-NP-mtA"/>
+                            <constraint firstItem="FrS-l1-2Z8" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="iK6-RD-8Al"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>

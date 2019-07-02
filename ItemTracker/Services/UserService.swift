@@ -46,7 +46,7 @@ final class UserService {
                     // Get the data from the document
                     let itemData = document.data()
                     
-                    let name           = itemData[Constants.Key.Item.name]           as! String
+                    let name           = document.documentID
                     let location       = itemData[Constants.Key.Item.location]       as! [Double]
                     let lastUpdateDate = itemData[Constants.Key.Item.lastUpdateDate] as! String
                     let movement       = itemData[Constants.Key.Item.movement]       as! Bool
@@ -105,14 +105,12 @@ final class UserService {
     
     static func writeItem(item: Item, ref: DocumentReference) {
         
-        let name            = item.name
         let location        = item.mostRecentLocation
         let isMovedOften    = item.isMovedOften
         let url             = item.imageURL
         let lastTimeUpdated = item.lastUpdateDate
         
-        ref.setData([Constants.Key.Item.name    : name,
-                     Constants.Key.Item.location: location,
+        ref.setData([Constants.Key.Item.location: location,
                      Constants.Key.Item.movement: isMovedOften,
                      Constants.Key.Item.imageURL: url,
                      Constants.Key.Item.lastUpdateDate: lastTimeUpdated])

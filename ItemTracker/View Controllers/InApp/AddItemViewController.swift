@@ -50,6 +50,7 @@ final class AddItemViewController: UIViewController {
     let db = Firestore.firestore()
     let locationManager = CLLocationManager()
     var delegate: AddItemProtocol?
+    var sameNameError: Bool = false
     
     var itemName: String?
     var itemCoordinates: [Double]?
@@ -121,6 +122,21 @@ final class AddItemViewController: UIViewController {
         
         // Make the dimViewClear and then dismiss the view
         slideViewOut()
+        
+    }
+    
+    @IBAction func itemNameTextFieldBeganEditing(_ sender: UITextField) {
+        
+        if sameNameError == true {
+            
+            // Reset the error to false
+            sameNameError = false
+            
+            // Change the text field back to its default state
+            itemNameTextField.backgroundColor = UIColor.white
+            itemNameTextField.text            = ""
+            
+        }
         
     }
     
@@ -264,14 +280,31 @@ final class AddItemViewController: UIViewController {
         // Disable the button
         addItemButton.isEnabled = false
         
+        // Check that this item hasn't already been created
+        for item in Stored.userItems {
+            
+            guard itemName!.uppercased() != item.name.uppercased() else {
+                
+                // Reactivate the button
+                addItemButton.isEnabled = true
+                
+                // Set the same name error to true
+                sameNameError = true
+                
+                // Give the user a reason for the error
+                itemNameTextField.backgroundColor = Constants.Color.softError
+                itemNameTextField.text            = "\(itemName!) already exists!"
+        
+                return
+            }
+            
+        }
+        
         // Get a string for the date
         getTheDate()
         
-        // Generate a random key
-        let itemID = UUID.init().uuidString
-        
         // Get a reference to the users items
-        let itemRef = db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items).document(itemID)
+        let itemRef = db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items).document(itemName!)
         
         // Initialize the item
         var item = Item.init(withName: self.itemName!,
