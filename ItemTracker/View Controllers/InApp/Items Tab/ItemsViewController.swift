@@ -122,6 +122,7 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
+        // Set the width and height 
         let width = itemsCollectionView.bounds.width * 0.45
         let height = width
         
@@ -131,28 +132,36 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
+        // Create a cell
         var cell: UICollectionReusableView!
         
+        // Check what kind of cell it is
         if kind == UICollectionView.elementKindSectionHeader {
-            
+            // Create a header cell
             cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                    withReuseIdentifier: Constants.ID.Cell.itemHeader,
                                                                    for: indexPath)
-            
         }
         else  {
-            
+            // Create a footer cell
             cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                    withReuseIdentifier: Constants.ID.Cell.itemFooter,
                                                                    for: indexPath)
             
+            // Cast the cell as a custom type so the delegate can be set
             if let cell = cell as? AddItemCollectionReusableView {
                 cell.delegate = self
             }
-            
         }
         
+        // Return the cell
         return cell
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+
         
     }
     
@@ -166,6 +175,15 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         else {
             return CGSize(width: collectionView.bounds.width, height: Constants.View.Height.itemHeader)
         }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        
+        let width = collectionView.bounds.width * 0.2
+        let height = width / 1.5
+        
+        return CGSize(width: width, height: height)
         
     }
     

@@ -44,7 +44,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgK-cE-3pH" userLabel="Login View">
                                 <rect key="frame" x="32" y="357" width="350" height="240"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="133-kp-FWd" userLabel="Login Stack View">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="133-kp-FWd" userLabel="Login Stack View">
                                         <rect key="frame" x="10" y="10" width="330" height="220"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tu9-WJ-d7y" userLabel="Email Text Field">
@@ -66,7 +66,7 @@
                                                 </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="09K-PI-TGP" userLabel="Forgot Password Button">
-                                                <rect key="frame" x="0.0" y="91.5" width="330" height="25"/>
+                                                <rect key="frame" x="5" y="91.5" width="320" height="25"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
                                                 <state key="normal" title="Forgot Password?">
                                                     <color key="titleColor" red="0.68627450980392157" green="0.32156862745098036" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
@@ -93,7 +93,7 @@
                                                 </constraints>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T4C-7A-YCZ" userLabel="Create Account Button">
-                                                <rect key="frame" x="0.0" y="190" width="330" height="30"/>
+                                                <rect key="frame" x="39" y="190" width="252" height="30"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
                                                 <state key="normal" title="New user? Create an Account">
                                                     <color key="titleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -104,11 +104,16 @@
                                             </button>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="inp-vv-6hS" firstAttribute="width" secondItem="133-kp-FWd" secondAttribute="width" id="2zl-AX-we9"/>
+                                            <constraint firstItem="jrd-5t-gBB" firstAttribute="width" secondItem="133-kp-FWd" secondAttribute="width" id="CBE-HC-koe"/>
                                             <constraint firstItem="09K-PI-TGP" firstAttribute="height" secondItem="133-kp-FWd" secondAttribute="height" multiplier="0.113636" id="GMc-of-nki"/>
+                                            <constraint firstAttribute="trailing" secondItem="09K-PI-TGP" secondAttribute="trailing" constant="5" id="QgB-3e-gFR"/>
                                             <constraint firstItem="jrd-5t-gBB" firstAttribute="height" secondItem="133-kp-FWd" secondAttribute="height" multiplier="0.181818" id="YiD-2C-cYC"/>
+                                            <constraint firstItem="tu9-WJ-d7y" firstAttribute="width" secondItem="133-kp-FWd" secondAttribute="width" id="bde-eb-stE"/>
                                             <constraint firstItem="T4C-7A-YCZ" firstAttribute="height" secondItem="133-kp-FWd" secondAttribute="height" multiplier="0.13636" id="dtG-eP-4zu"/>
                                             <constraint firstItem="2Qi-TE-7AF" firstAttribute="height" secondItem="133-kp-FWd" secondAttribute="height" multiplier="0.15909" id="e71-fV-uwN"/>
                                             <constraint firstItem="tu9-WJ-d7y" firstAttribute="height" secondItem="133-kp-FWd" secondAttribute="height" multiplier="0.15909" id="mUt-pd-8Nr"/>
+                                            <constraint firstItem="2Qi-TE-7AF" firstAttribute="width" secondItem="133-kp-FWd" secondAttribute="width" id="rZQ-lC-99H"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>

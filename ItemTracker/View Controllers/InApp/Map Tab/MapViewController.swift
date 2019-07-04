@@ -14,6 +14,7 @@ final class MapViewController: UIViewController {
 
     // MARK: - IBOutlet Properties
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapSuperview: UIView!
     @IBOutlet weak var mapViewBottomConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var mapSearchBar: UISearchBar!
@@ -30,6 +31,10 @@ final class MapViewController: UIViewController {
 
         // Check the user's location services
         checkLocationServices()
+        
+        // Setup the map superview
+        mapSuperview.layer.borderColor = Constants.Color.primary.cgColor
+        mapSuperview.layer.borderWidth = 1
         
         // Setup the map search bar
         mapSearchBar.layer.borderWidth = 1
@@ -101,12 +106,6 @@ final class MapViewController: UIViewController {
             return
         }
         
-        // If only 1 item then center over it
-        guard Stored.userItems.count != 1 || mapView.selectedAnnotations.count != 1 else {
-            centerMapOnItem(annotation: <#T##MKAnnotation#>)
-            return
-        }
-        
         // Decrement the item index
         itemIndex -= 1
         
@@ -128,7 +127,7 @@ final class MapViewController: UIViewController {
     @IBAction func nextButtonTapped(_ sender: UIButton) {
         
         // If only one item and its selected or 0 items, then return
-        guard (Stored.userItems.count != 1 || mapView.selectedAnnotations.count != 1) && Stored.userItems.count != 0 else {
+        guard Stored.userItems.count != 0 else {
             return
         }
         
@@ -154,9 +153,7 @@ extension MapViewController {
     func centerMapOnItem(annotation: MKAnnotation) {
         
         // Get the region
-        let region = MKCoordinateRegion.init(center: annotation.coordinate,
-                                             latitudinalMeters: Constants.Map.regionInMeters,
-                                             longitudinalMeters: Constants.Map.regionInMeters)
+        let region = MKCoordinateRegion.init(center: annotation.coordinate, span: mapView.region.span)
         
         // Set the region
         mapView.setRegion(region, animated: true)
@@ -185,10 +182,38 @@ extension MapViewController {
         // Case if no authorization
         case .restricted, .denied:
             mapView.showsUserLocation = false
+            centerViewOverAllItems()
             
         @unknown default:
             break
         }
+        
+    }
+    
+    func centerViewOverAllItems() {
+        
+        var mostNorth: CLLocationDegrees?
+        var mostSouth: CLLocationDegrees?
+        var mostWest: CLLocationDegrees?
+        var mostEast: CLLocationDegrees?
+        
+        for item in Stored.userItems {
+            
+            if mostNorth == nil || item.mostRecentLocation[0] > mostNorth! { mostNorth = item.mostRecentLocation[0] }
+            if mostSouth == nil || item.mostRecentLocation[0] < mostSouth! { mostSouth = item.mostRecentLocation[0] }
+            if mostEast  == nil || item.mostRecentLocation[1] > mostEast!  { mostEast  = item.mostRecentLocation[1] }
+            if mostWest  == nil || item.mostRecentLocation[1] < mostWest!  { mostWest  = item.mostRecentLocation[1] }
+            
+        }
+        
+        let center = CLLocationCoordinate2D(latitude: (mostNorth! + mostSouth!) / 2,
+                                            longitude: (mostWest! + mostEast!)  / 2)
+        
+        let span = MKCoordinateSpan.init(latitudeDelta: (mostNorth! - mostSouth!) + 0.005, longitudeDelta: (mostEast! - mostWest!) + 0.005)
+        
+        let region = MKCoordinateRegion.init(center: center, span: span)
+        
+        mapView.setRegion(region, animated: true)
         
     }
     
@@ -244,7 +269,10 @@ extension MapViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        // Check the location authorization
         checkLocationAuthorization()
+        
     }
     
 }
@@ -372,8 +400,9 @@ extension MapViewController: AddItemProtocol {
         annotation.title                = item.name
         annotation.subtitle             = item.lastUpdateDate
         
-        // Add the annotation to the map
+        // Add the annotation to the map and center over it
         mapView.addAnnotation(annotation)
+        centerMapOnItem(annotation: annotation)
         
     }
     

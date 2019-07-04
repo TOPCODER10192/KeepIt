@@ -57,7 +57,7 @@ struct Constants {
         
         // MARK: - Width
         struct Width {
-            static let standard: CGFloat   = min(400, UIScreen.main.bounds.width - 20)
+            static let standard: CGFloat   = min(420, UIScreen.main.bounds.width - 20)
             static let annotation: CGFloat = 40
         }
         
