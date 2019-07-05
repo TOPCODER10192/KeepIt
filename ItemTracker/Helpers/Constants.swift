@@ -14,7 +14,13 @@ struct Constants {
     
     struct ID {
         
-        // MARK: - Storyboard VCIDs
+        struct Storyboard {
+            
+            static let auth   = "Auth"
+            static let inApp  = "InApp"
+            static let popups = "Popups"
+        }
+        
         struct VC {
 
             static let backgroundAuth = "BackgroundAuthVC"
@@ -22,21 +28,22 @@ struct Constants {
             static let createAccount  = "CreateAccountVC"
             static let forgotPassword = "ForgotPasswordVC"
             static let addItem        = "AddItemVC"
+            static let updateLocation = "UpdateLocationVC"
+            static let noLocation     = "LocationReminderVC"
             static let tabBar         = "TabBarVC"
             
         }
         
-        // MARK: - Cell ID's
         struct Cell {
             
-            static let item       = "ItemCell"
-            static let addItem    = "AddItemCell"
-            static let itemHeader = "ItemHeaderCell"
-            static let itemFooter = "ItemFooterCell"
+            static let item           = "ItemCell"
+            static let addItem        = "AddItemCell"
+            static let itemHeader     = "ItemHeaderCell"
+            static let itemFooter     = "ItemFooterCell"
+            static let updateLocation = "UpdateLocationCell"
             
         }
         
-        // MARK: - Annotation Reuse ID's
         struct Annotation {
             
             static let item = "ItemAnnotation"
@@ -51,29 +58,38 @@ struct Constants {
         
         // MARK: - Corner Radius
         struct CornerRadius {
+            
             static let standard: CGFloat = 15
             static let button: CGFloat   = 10
+            
         }
         
         // MARK: - Width
         struct Width {
+            
             static let standard: CGFloat   = min(420, UIScreen.main.bounds.width - 20)
             static let annotation: CGFloat = 40
+            
         }
         
         // MARK: - Height
         struct Height {
-            static let login: CGFloat         = min(240, UIScreen.main.bounds.height - 350)
-            static let createAccount: CGFloat = min(230, UIScreen.main.bounds.height - 350)
-            static let addItem: CGFloat       = min(320, UIScreen.main.bounds.height - 220)
-            static let annotation: CGFloat    = 40
-            static let smallMap: CGFloat      = 200
-            static let itemHeader: CGFloat    = 200
+            
+            static let login: CGFloat          = min(240, UIScreen.main.bounds.height - 350)
+            static let createAccount: CGFloat  = min(230, UIScreen.main.bounds.height - 350)
+            static let addItem: CGFloat        = min(320, UIScreen.main.bounds.height - 220)
+            static let annotation: CGFloat     = 40
+            static let smallMap: CGFloat       = 200
+            static let updateLocation: CGFloat = 150
+            static let itemHeader: CGFloat     = 200
+            
         }
         
         // MARK: - Y
         struct Y {
+            
             static let error: CGFloat = UIScreen.main.bounds.height * 0.3
+            
         }
         
     }
@@ -81,7 +97,7 @@ struct Constants {
     // MARK: - Color
     struct Color {
         
-        static let floatingView   = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 204/255)
+        static let floatingView   = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 240/255)
         static let primary         = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 255/255)
         static let inactiveButton = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 120/255)
         

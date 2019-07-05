@@ -14,7 +14,6 @@ final class ItemCollectionViewCell: UICollectionViewCell {
     // MARK: - IBOutlet Properties
     @IBOutlet weak var itemLabel: UILabel!
     @IBOutlet weak var itemImage: UIImageView!
-    @IBOutlet weak var circularProgressRing: UIView!
     
     // MARK: - ItemCollectionViewCell Properties
     
@@ -35,7 +34,10 @@ final class ItemCollectionViewCell: UICollectionViewCell {
     
     func setPhoto(url: URL) {
         
-        // Set and cache the image
+        // Create a loading indicator
+        itemImage.sd_imageIndicator = SDWebImageActivityIndicator.gray
+        
+        // Set the image for the item
         itemImage.sd_setImage(with: url) { (image, error, cacheType, url) in
             
             self.itemImage.image = image

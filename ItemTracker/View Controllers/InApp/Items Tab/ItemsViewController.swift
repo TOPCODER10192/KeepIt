@@ -43,7 +43,7 @@ final class ItemsViewController: UIViewController {
         
         // If the user has no items then bring up the Add Item VC
         if Stored.userItems.count == 0 {
-            loadAddItemVC()
+            loadFloatingVC(ID: Constants.ID.VC.addItem)
         }
         
     }
@@ -51,10 +51,15 @@ final class ItemsViewController: UIViewController {
     // MARK: - IBAction Methods
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
-        loadAddItemVC()
+        loadFloatingVC(ID: Constants.ID.VC.addItem)
         
     }
     
+    @IBAction func updateButtonTapped(_ sender: UIBarButtonItem) {
+        
+        loadFloatingVC(ID: Constants.ID.VC.updateLocation)
+        
+    }
 }
 
 // MARK: - Helper Methods
@@ -191,18 +196,22 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
 
 extension ItemsViewController: AddItemReusableViewProtocol {
     
-    func loadAddItemVC() {
+    func loadFloatingVC(ID: String) {
         
-        // Instantiate a view controller and check that it isn't nil
-        let addItemVC = self.storyboard?.instantiateViewController(withIdentifier: Constants.ID.VC.addItem) as? AddItemViewController
-        guard addItemVC != nil else { return }
+        let vc = storyboard?.instantiateViewController(withIdentifier: ID)
         
-        // Set self as delegate
-        addItemVC?.delegate = self
+        if let vc = vc as? AddItemViewController {
+            vc.delegate = self
+        }
+        else if let vc = vc as? UpdateLocationViewController {
+            
+        }
         
-        // Set the presentation style and present
-        addItemVC!.modalPresentationStyle = .overCurrentContext
-        self.present(addItemVC!, animated: false, completion: nil)
+        guard vc != nil else { return }
+        
+        vc?.modalPresentationStyle = .overCurrentContext
+        present(vc!, animated: false, completion: nil)
+        
         
     }
 

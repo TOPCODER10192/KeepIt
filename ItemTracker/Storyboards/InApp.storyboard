@@ -54,12 +54,19 @@
                                 </constraints>
                                 <items>
                                     <navigationItem title="App Name" id="0rk-0l-7mA">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="aV3-TZ-2CI">
-                                            <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="addButtonTapped:" destination="i6Y-8G-RJl" id="NWB-Tq-fHz"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <leftBarButtonItems>
+                                            <barButtonItem systemItem="add" id="aV3-TZ-2CI">
+                                                <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <action selector="addButtonTapped:" destination="i6Y-8G-RJl" id="NWB-Tq-fHz"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem image="UpdateIcon" id="WQ7-N7-8UY">
+                                                <connections>
+                                                    <action selector="updateLocationButtonTapped:" destination="i6Y-8G-RJl" id="fRH-qH-avQ"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </leftBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -144,7 +151,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3k4-VD-fx8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1075.3623188405797" y="403.79464285714283"/>
+            <point key="canvasLocation" x="-1075" y="404"/>
         </scene>
         <!--Settings-->
         <scene sceneID="ce6-eA-umC">
@@ -192,7 +199,154 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z2W-vI-uSC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-290" y="404"/>
+            <point key="canvasLocation" x="104" y="404"/>
+        </scene>
+        <!--Update Location View Controller-->
+        <scene sceneID="r6P-Q4-fdi">
+            <objects>
+                <viewController storyboardIdentifier="UpdateLocationVC" id="Io0-Wa-A72" customClass="UpdateLocationViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nPv-cw-LGp" userLabel="Dim View">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gSe-Dz-nLB" userLabel="Floating View">
+                                <rect key="frame" x="32" y="328" width="350" height="240"/>
+                                <subviews>
+                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AbU-Sl-v0Z">
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="dSn-pn-xCX"/>
+                                        </constraints>
+                                        <items>
+                                            <navigationItem title="Update Locations" id="V7d-6H-sgf">
+                                                <barButtonItem key="leftBarButtonItem" title="Back" id="g0r-yJ-H6l">
+                                                    <connections>
+                                                        <action selector="backButtonTapped:" destination="Io0-Wa-A72" id="TAT-cJ-ZWh"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                            </navigationItem>
+                                        </items>
+                                    </navigationBar>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="AFG-R6-maR">
+                                        <rect key="frame" x="10" y="55" width="330" height="175"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select items that are near you" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yhm-h8-07b" userLabel="Prompt Labe">
+                                                <rect key="frame" x="0.0" y="0.0" width="330" height="24"/>
+                                                <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nWS-mY-FIM">
+                                                <rect key="frame" x="0.0" y="34" width="330" height="91"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <prototypes>
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UpdateLocationCell" id="M2v-fW-wcX" customClass="UpdateLocationTableViewCell" customModule="ItemTracker" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="28" width="330" height="50"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="M2v-fW-wcX" id="Zfz-lz-q3Y">
+                                                            <rect key="frame" x="0.0" y="0.0" width="330" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <subviews>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Wallet" translatesAutoresizingMaskIntoConstraints="NO" id="oUL-Hq-cTA">
+                                                                    <rect key="frame" x="20" y="0.0" width="40" height="40"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="40" id="L8X-DZ-0Ft"/>
+                                                                        <constraint firstAttribute="width" constant="40" id="Rvx-0n-rZc"/>
+                                                                    </constraints>
+                                                                </imageView>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wallet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ffQ-kQ-zka">
+                                                                    <rect key="frame" x="80" y="9.5" width="47.5" height="21"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PyW-sc-cqt">
+                                                                    <rect key="frame" x="270" y="5" width="30" height="30"/>
+                                                                    <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="30" id="9S0-zl-l8n"/>
+                                                                        <constraint firstAttribute="height" constant="30" id="mcG-Xv-IhG"/>
+                                                                    </constraints>
+                                                                    <connections>
+                                                                        <action selector="checkBoxButtonTapped:" destination="M2v-fW-wcX" eventType="touchUpInside" id="oIh-y4-OI7"/>
+                                                                    </connections>
+                                                                </button>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstItem="ffQ-kQ-zka" firstAttribute="leading" secondItem="oUL-Hq-cTA" secondAttribute="trailing" constant="20" id="Bby-hK-e0e"/>
+                                                                <constraint firstItem="PyW-sc-cqt" firstAttribute="centerY" secondItem="oUL-Hq-cTA" secondAttribute="centerY" id="Maz-vZ-M6b"/>
+                                                                <constraint firstItem="oUL-Hq-cTA" firstAttribute="top" secondItem="Zfz-lz-q3Y" secondAttribute="top" id="XDX-Gh-6Uy"/>
+                                                                <constraint firstItem="ffQ-kQ-zka" firstAttribute="centerY" secondItem="oUL-Hq-cTA" secondAttribute="centerY" id="aUg-6c-Myw"/>
+                                                                <constraint firstAttribute="trailingMargin" secondItem="PyW-sc-cqt" secondAttribute="trailing" constant="10" id="ity-P5-jtm"/>
+                                                                <constraint firstItem="oUL-Hq-cTA" firstAttribute="leading" secondItem="Zfz-lz-q3Y" secondAttribute="leading" constant="20" id="xwI-VX-ynP"/>
+                                                            </constraints>
+                                                        </tableViewCellContentView>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <connections>
+                                                            <outlet property="checkBoxButton" destination="PyW-sc-cqt" id="deW-IO-5gn"/>
+                                                            <outlet property="itemImage" destination="oUL-Hq-cTA" id="d9L-Px-jVN"/>
+                                                            <outlet property="itemName" destination="ffQ-kQ-zka" id="F35-EA-BKa"/>
+                                                        </connections>
+                                                    </tableViewCell>
+                                                </prototypes>
+                                            </tableView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uvI-6a-4Mr" userLabel="Update Button">
+                                                <rect key="frame" x="0.0" y="135" width="330" height="40"/>
+                                                <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="abh-ra-aes"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="22"/>
+                                                <state key="normal" title="Update">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="updateButtonTapped:" destination="Io0-Wa-A72" eventType="touchUpInside" id="YIc-hm-XwW"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="yhm-h8-07b" firstAttribute="centerX" secondItem="AFG-R6-maR" secondAttribute="centerX" id="6M5-p4-Jcj"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="AbU-Sl-v0Z" secondAttribute="trailing" id="8Qq-af-xKS"/>
+                                    <constraint firstAttribute="height" constant="240" id="INB-Yr-b9d"/>
+                                    <constraint firstAttribute="bottom" secondItem="AFG-R6-maR" secondAttribute="bottom" constant="10" id="Rb6-il-z23"/>
+                                    <constraint firstAttribute="trailing" secondItem="AFG-R6-maR" secondAttribute="trailing" constant="10" id="ZX0-mJ-J8S"/>
+                                    <constraint firstItem="AbU-Sl-v0Z" firstAttribute="leading" secondItem="gSe-Dz-nLB" secondAttribute="leading" id="b7L-eY-8az"/>
+                                    <constraint firstItem="AFG-R6-maR" firstAttribute="leading" secondItem="gSe-Dz-nLB" secondAttribute="leading" constant="10" id="fEJ-Zr-KEh"/>
+                                    <constraint firstAttribute="width" constant="350" id="jjM-EQ-6fA"/>
+                                    <constraint firstItem="AbU-Sl-v0Z" firstAttribute="top" secondItem="gSe-Dz-nLB" secondAttribute="top" id="uGW-qy-w0U"/>
+                                    <constraint firstItem="AFG-R6-maR" firstAttribute="top" secondItem="AbU-Sl-v0Z" secondAttribute="bottom" constant="10" id="xd7-HL-E9E"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="gSe-Dz-nLB" firstAttribute="centerX" secondItem="nPv-cw-LGp" secondAttribute="centerX" id="FvX-lE-30V"/>
+                            <constraint firstItem="gSe-Dz-nLB" firstAttribute="centerY" secondItem="nPv-cw-LGp" secondAttribute="centerY" id="Squ-eO-Xx3"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ajE-kG-cdi"/>
+                    </view>
+                    <connections>
+                        <outlet property="backButton" destination="g0r-yJ-H6l" id="3XO-td-CzI"/>
+                        <outlet property="dimView" destination="nPv-cw-LGp" id="Tcl-WU-Ns5"/>
+                        <outlet property="floatingView" destination="gSe-Dz-nLB" id="lj6-HY-wwU"/>
+                        <outlet property="floatingViewHeight" destination="INB-Yr-b9d" id="tPI-n5-b4v"/>
+                        <outlet property="floatingViewWidth" destination="jjM-EQ-6fA" id="tOl-bI-8VK"/>
+                        <outlet property="floatingViewYConstraint" destination="Squ-eO-Xx3" id="e3S-u5-iZg"/>
+                        <outlet property="navigationBar" destination="AbU-Sl-v0Z" id="dBM-Rf-b1X"/>
+                        <outlet property="updateButton" destination="uvI-6a-4Mr" id="E91-tk-jyI"/>
+                        <outlet property="updateTableView" destination="nWS-mY-FIM" id="MpR-yc-TPz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FcW-bJ-mwC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2191" y="1100"/>
         </scene>
         <!--Items-->
         <scene sceneID="YRM-Yk-p3y">
@@ -226,7 +380,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cm3-fw-Qhu">
-                                                    <rect key="frame" x="18" y="126" width="124" height="26.5"/>
+                                                    <rect key="frame" x="18" y="126.5" width="124" height="26"/>
                                                     <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="22"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -256,34 +410,34 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ana-Mp-dP1" userLabel="Header Stack View">
-                                            <rect key="frame" x="48.5" y="15" width="877" height="146"/>
+                                            <rect key="frame" x="18" y="15" width="328" height="170"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="It looks like you're not keeping track of any items." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dJh-Wp-iUp">
-                                                    <rect key="frame" x="0.0" y="0.0" width="761.5" height="24"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="267.5" height="48"/>
                                                     <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Examples of what you could track" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ds-eJ-mQO">
-                                                    <rect key="frame" x="0.0" y="34" width="257" height="20.5"/>
+                                                    <rect key="frame" x="0.0" y="58" width="257" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wallet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZh-qG-bAa">
-                                                    <rect key="frame" x="0.0" y="64.5" width="47.5" height="20.5"/>
+                                                    <rect key="frame" x="0.0" y="88.5" width="47.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Car Keys" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1ii-2d-Htf">
-                                                    <rect key="frame" x="0.0" y="95" width="68" height="20.5"/>
+                                                    <rect key="frame" x="0.0" y="119" width="68" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cards" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bFg-Tl-QwY">
-                                                    <rect key="frame" x="0.0" y="125.5" width="45.5" height="20.5"/>
+                                                    <rect key="frame" x="0.0" y="149.5" width="45.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -306,7 +460,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fzh-e5-AeO">
-                                            <rect key="frame" x="407" y="0.0" width="160" height="50"/>
+                                            <rect key="frame" x="102" y="0.0" width="160" height="50"/>
                                             <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="160" id="H7C-Ra-Kwz"/>
@@ -337,12 +491,19 @@
                                 </constraints>
                                 <items>
                                     <navigationItem title="App Name" id="dgG-k4-VP6">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="dcW-kU-yIO">
-                                            <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="addButtonTapped:" destination="nfB-OK-GR7" id="Zzb-n1-9RN"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <leftBarButtonItems>
+                                            <barButtonItem systemItem="add" id="dcW-kU-yIO" userLabel="Add Button">
+                                                <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <action selector="addButtonTapped:" destination="nfB-OK-GR7" id="Zzb-n1-9RN"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem image="UpdateIcon" id="oZD-TE-7Kf" userLabel="Update Button">
+                                                <connections>
+                                                    <action selector="updateButtonTapped:" destination="nfB-OK-GR7" id="mTs-YM-qYk"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </leftBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -366,7 +527,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nrh-FE-Hoo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1842" y="404"/>
+            <point key="canvasLocation" x="-2190" y="404"/>
         </scene>
         <!--Add Item View Controller-->
         <scene sceneID="q7N-JW-PCB">
@@ -380,9 +541,9 @@
                                 <rect key="frame" x="32" y="188" width="350" height="520"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="91b-Ui-eMD">
-                                        <rect key="frame" x="0.0" y="0.0" width="350" height="40"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="ypx-mM-rbp"/>
+                                            <constraint firstAttribute="height" constant="45" id="ypx-mM-rbp"/>
                                         </constraints>
                                         <items>
                                             <navigationItem title="Add an Item" id="kbA-hI-5UZ">
@@ -395,7 +556,7 @@
                                         </items>
                                     </navigationBar>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="f8z-Ee-fuD" userLabel="Add Item Stack View">
-                                        <rect key="frame" x="10" y="50" width="330" height="460"/>
+                                        <rect key="frame" x="10" y="55" width="330" height="455"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ERE-cP-o5Y" userLabel="Name and Image Stack View">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="60"/>
@@ -432,7 +593,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Fdx-qn-n74" userLabel="Item Location Stack View">
-                                                <rect key="frame" x="0.0" y="75" width="330" height="60"/>
+                                                <rect key="frame" x="0.0" y="73.5" width="330" height="60"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where is this item right now?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxn-xS-e9r" userLabel="Location Label">
                                                         <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
@@ -464,7 +625,7 @@
                                                 </constraints>
                                             </stackView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a3Q-yp-aq9" userLabel="Map View">
-                                                <rect key="frame" x="0.0" y="149.5" width="330" height="180"/>
+                                                <rect key="frame" x="0.0" y="147" width="330" height="180"/>
                                                 <subviews>
                                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="tq7-AS-Mhn">
                                                         <rect key="frame" x="0.0" y="0.0" width="330" height="180"/>
@@ -499,7 +660,7 @@
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="2kD-pm-Hbc" userLabel="Item Movement Stack View">
-                                                <rect key="frame" x="0.0" y="344.5" width="330" height="61"/>
+                                                <rect key="frame" x="0.0" y="340.5" width="330" height="61"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is this item frequently moved?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pZ-NX-464" userLabel="Movement Label">
                                                         <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
@@ -531,7 +692,7 @@
                                                 </constraints>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWw-oh-ZeM" userLabel="Add Item Button">
-                                                <rect key="frame" x="66" y="420" width="198" height="40"/>
+                                                <rect key="frame" x="66" y="415" width="198" height="40"/>
                                                 <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="AZt-RR-NbH"/>
@@ -608,7 +769,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-1075" y="1094"/>
+            <point key="canvasLocation" x="-1075" y="1100"/>
         </scene>
     </scenes>
     <resources>
@@ -620,6 +781,7 @@
         <image name="NextButton" width="30" height="50"/>
         <image name="PreviousButton" width="30" height="50"/>
         <image name="Settings Icon" width="30" height="30"/>
+        <image name="UpdateIcon" width="30" height="30"/>
         <image name="Wallet" width="100" height="100"/>
     </resources>
     <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>

@@ -46,7 +46,7 @@ final class LocalStorageService {
         
     }
     
-    static func saveUserItem(item: Item) {
+    static func saveUserItem(item: Item, isNew: Bool, index: Int? = nil) {
         
         // Get standard user defaults
         let defaults = UserDefaults.standard
@@ -59,11 +59,22 @@ final class LocalStorageService {
         var itemImageURLs       = defaults.value(forKey: Constants.Key.Item.imageURL)       as! [String]
         
         // Append the new items propeties to the arrays
-        itemNames.append(item.name)
-        itemLocations.append(item.mostRecentLocation)
-        itemLastUpdateDates.append(item.lastUpdateDate)
-        itemMovements.append(item.isMovedOften)
-        itemImageURLs.append(item.imageURL)
+        if isNew == true {
+            itemNames.append(item.name)
+            itemLocations.append(item.mostRecentLocation)
+            itemLastUpdateDates.append(item.lastUpdateDate)
+            itemMovements.append(item.isMovedOften)
+            itemImageURLs.append(item.imageURL)
+        }
+        else if isNew == false, let i = index {
+            
+            itemNames[i]           = item.name
+            itemLocations[i]       = item.mostRecentLocation
+            itemLastUpdateDates[i] = item.lastUpdateDate
+            itemMovements[i]       = item.isMovedOften
+            itemImageURLs[i]       = item.imageURL
+            
+        }
         
         // Locally store the arrays
         defaults.set(itemNames, forKey: Constants.Key.Item.name)

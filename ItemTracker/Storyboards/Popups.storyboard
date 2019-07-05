@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Text-Regular.otf">
+            <string>SFProText-Regular</string>
+        </array>
+        <array key="SF-Pro-Text-Semibold.otf">
+            <string>SFProText-Semibold</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Turn On Location View Controller-->
+        <scene sceneID="BJi-lt-SAC">
+            <objects>
+                <viewController storyboardIdentifier="LocationReminderVC" id="Jfi-VI-tN0" customClass="TurnOnLocationViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="64P-Mj-8S4">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PqH-DA-Q3Z">
+                                <rect key="frame" x="42" y="358" width="330" height="180"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="C25-mF-Opx">
+                                        <rect key="frame" x="10" y="10" width="310" height="160"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Services Off" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="833-x3-BbD" userLabel="Title Label">
+                                                <rect key="frame" x="49.5" y="0.0" width="211" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="rMM-dV-S8F"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="22"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Go to Settings -&gt; Privacy -&gt; Location Services -&gt; Item Tracker to turn them on" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S0J-ha-bSV" userLabel="Prompt Label">
+                                                <rect key="frame" x="0.0" y="54" width="310" height="37.5"/>
+                                                <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="A9s-C2-z4Q">
+                                                <rect key="frame" x="0.0" y="120" width="310" height="40"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DkT-Uq-N4y">
+                                                        <rect key="frame" x="0.0" y="0.0" width="152" height="40"/>
+                                                        <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="18"/>
+                                                        <state key="normal" title="Go To Settings">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="goToSettingsButtonTapped:" destination="Jfi-VI-tN0" eventType="touchUpInside" id="CZ2-UR-FVU"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="puB-bS-ktX" userLabel="Dismiss Button">
+                                                        <rect key="frame" x="158" y="0.0" width="152" height="40"/>
+                                                        <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="YXv-bZ-ofZ"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
+                                                        <state key="normal" title="Dismiss">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="dismissButtonTapped:" destination="Jfi-VI-tN0" eventType="touchUpInside" id="Fej-zD-LY6"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="puB-bS-ktX" firstAttribute="top" secondItem="A9s-C2-z4Q" secondAttribute="top" id="0pc-yH-PLN"/>
+                                                    <constraint firstAttribute="bottom" secondItem="puB-bS-ktX" secondAttribute="bottom" id="PfM-gJ-Hwq"/>
+                                                    <constraint firstItem="DkT-Uq-N4y" firstAttribute="top" secondItem="A9s-C2-z4Q" secondAttribute="top" id="RKs-GP-3d8"/>
+                                                    <constraint firstAttribute="bottom" secondItem="DkT-Uq-N4y" secondAttribute="bottom" id="TaM-ba-aQe"/>
+                                                    <constraint firstItem="DkT-Uq-N4y" firstAttribute="leading" secondItem="A9s-C2-z4Q" secondAttribute="leading" id="Tuw-Rf-Fty"/>
+                                                    <constraint firstItem="puB-bS-ktX" firstAttribute="width" secondItem="A9s-C2-z4Q" secondAttribute="width" multiplier="0.49" id="Zsq-7g-vXs"/>
+                                                    <constraint firstAttribute="trailing" secondItem="puB-bS-ktX" secondAttribute="trailing" id="o1v-lT-5sG"/>
+                                                    <constraint firstItem="DkT-Uq-N4y" firstAttribute="width" secondItem="A9s-C2-z4Q" secondAttribute="width" multiplier="0.49" id="vVV-u2-DbQ"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="A9s-C2-z4Q" firstAttribute="width" secondItem="C25-mF-Opx" secondAttribute="width" id="QMY-i3-4JS"/>
+                                            <constraint firstItem="S0J-ha-bSV" firstAttribute="width" secondItem="C25-mF-Opx" secondAttribute="width" id="RH6-qM-lh2"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="330" id="0LT-8d-hnP"/>
+                                    <constraint firstAttribute="height" constant="180" id="0V3-dv-fmo"/>
+                                    <constraint firstAttribute="trailing" secondItem="C25-mF-Opx" secondAttribute="trailing" constant="10" id="3qz-xW-3wn"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="8YK-ef-nyf"/>
+                                    <constraint firstAttribute="bottom" secondItem="C25-mF-Opx" secondAttribute="bottom" constant="10" id="cP2-uj-ITm"/>
+                                    <constraint firstItem="C25-mF-Opx" firstAttribute="leading" secondItem="PqH-DA-Q3Z" secondAttribute="leading" constant="10" id="kzU-2a-ID4"/>
+                                    <constraint firstItem="C25-mF-Opx" firstAttribute="top" secondItem="PqH-DA-Q3Z" secondAttribute="top" constant="10" id="qbR-pE-9Er"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="PqH-DA-Q3Z" firstAttribute="centerX" secondItem="64P-Mj-8S4" secondAttribute="centerX" id="Cfp-Hb-gUH"/>
+                            <constraint firstItem="PqH-DA-Q3Z" firstAttribute="centerY" secondItem="64P-Mj-8S4" secondAttribute="centerY" id="LVL-Qq-K5w"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="v9r-tA-qdB"/>
+                    </view>
+                    <connections>
+                        <outlet property="dimView" destination="64P-Mj-8S4" id="MPq-AI-nZa"/>
+                        <outlet property="dismissButton" destination="puB-bS-ktX" id="jdw-CR-HoV"/>
+                        <outlet property="floatingView" destination="PqH-DA-Q3Z" id="dwb-w4-wnQ"/>
+                        <outlet property="floatingViewYConstraint" destination="LVL-Qq-K5w" id="o2s-PW-1lt"/>
+                        <outlet property="goToSettingsButton" destination="DkT-Uq-N4y" id="rlt-SN-4Yf"/>
+                        <outlet property="promptLabel" destination="S0J-ha-bSV" id="t5w-ab-OW5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FyZ-AR-rca" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="20" y="137"/>
+        </scene>
+    </scenes>
+</document>

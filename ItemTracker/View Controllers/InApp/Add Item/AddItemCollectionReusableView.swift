@@ -10,7 +10,7 @@ import UIKit
 
 protocol AddItemReusableViewProtocol {
     
-    func loadAddItemVC()
+    func loadFloatingVC(ID: String)
     
 }
 
@@ -35,7 +35,7 @@ final class AddItemCollectionReusableView: UICollectionReusableView {
     @IBAction func addItemButtonTapped(_ sender: UIButton) {
         
         // Tell the delegate to load the addItemVC
-        delegate?.loadAddItemVC()
+        delegate?.loadFloatingVC(ID: Constants.ID.VC.addItem)
         
     }
     

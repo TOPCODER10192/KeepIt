@@ -324,7 +324,7 @@ final class AddItemViewController: UIViewController {
                 
                 // Append the item the usersItems array and locally store it
                 Stored.userItems.append(item)
-                LocalStorageService.saveUserItem(item: item)
+                LocalStorageService.saveUserItem(item: item, isNew: true)
                 UserService.writeItem(item: item, ref: itemRef)
                 
                 // Tell the delegate that an item was added
@@ -342,7 +342,7 @@ final class AddItemViewController: UIViewController {
             
             // Append the item the usersItems array and locally store it
             Stored.userItems.append(item)
-            LocalStorageService.saveUserItem(item: item)
+            LocalStorageService.saveUserItem(item: item, isNew: true)
             UserService.writeItem(item: item, ref: itemRef)
             
             // Tell the delegate that an item was added
