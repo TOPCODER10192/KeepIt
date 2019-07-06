@@ -19,6 +19,7 @@ struct Constants {
             static let auth   = "Auth"
             static let inApp  = "InApp"
             static let popups = "Popups"
+            static let settings = "Settings"
         }
         
         struct VC {
@@ -27,10 +28,13 @@ struct Constants {
             static let login          = "LoginVC"
             static let createAccount  = "CreateAccountVC"
             static let forgotPassword = "ForgotPasswordVC"
+            
+            static let tabBar         = "TabBarVC"
             static let addItem        = "AddItemVC"
             static let updateLocation = "UpdateLocationVC"
             static let noLocation     = "LocationReminderVC"
-            static let tabBar         = "TabBarVC"
+            
+            static let settings       = "SettingsVC"
             
         }
         
@@ -98,13 +102,15 @@ struct Constants {
     struct Color {
         
         static let floatingView   = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 240/255)
-        static let primary         = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 255/255)
+        static let primary        = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 255/255)
+        static let settings       = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 255/255)
         static let inactiveButton = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 120/255)
         
-        static let success         = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 255/255)
-        static let error           = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 255/255)
         
-        static let softError           = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 140/255)
+        static let success        = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 255/255)
+        static let error          = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 255/255)
+        
+        static let softError      = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 140/255)
     
     }
     
@@ -150,7 +156,7 @@ struct Constants {
     
     struct Map {
     
-        static let regionInMeters: CLLocationDistance = 5000
+        static let defaultSpan: MKCoordinateSpan = MKCoordinateSpan.init(latitudeDelta: 0.01, longitudeDelta: 0.01)
         
     }
     

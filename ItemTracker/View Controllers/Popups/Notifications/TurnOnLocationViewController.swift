@@ -41,7 +41,7 @@ class TurnOnLocationViewController: UIViewController {
         
         // Setup the goToSettingsButton
         goToSettingsButton.layer.cornerRadius = Constants.View.CornerRadius.button
-        goToSettingsButton.backgroundColor    = Constants.Color.primary
+        goToSettingsButton.backgroundColor    = Constants.Color.settings
         
         // Setup the dismissButton
         dismissButton.layer.cornerRadius = Constants.View.CornerRadius.button
@@ -54,7 +54,7 @@ class TurnOnLocationViewController: UIViewController {
             .bold(" \"Go to Settings\" ")
             .normal("button\r")
             .normal("2. Click on ")
-            .bold("\"Location Services\"\r")
+            .bold("\"Location\"\r")
             .normal("3. Allow access to location")
 
         promptLabel.attributedText = formattedString

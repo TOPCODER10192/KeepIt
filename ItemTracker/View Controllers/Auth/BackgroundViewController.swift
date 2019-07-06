@@ -68,7 +68,9 @@ extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, Forgot
     
     func goToInApp() {
         
-        let tabBarVC = UIStoryboard(name: "InApp", bundle: .main).instantiateViewController(withIdentifier: Constants.ID.VC.tabBar)
+        let tabBarVC = UIStoryboard(name: Constants.ID.Storyboard.auth,
+                                    bundle: .main)
+                                    .instantiateViewController(withIdentifier: Constants.ID.VC.tabBar)
         
         view.window?.rootViewController = tabBarVC
         view.window?.makeKeyAndVisible()

@@ -26,6 +26,7 @@ final class ItemsViewController: UIViewController {
         itemsCollectionView.layer.masksToBounds = false
         itemsCollectionView.clipsToBounds       = true
         
+        // Add a refresh control for the collection view
         addRefreshControl()
         
     }
@@ -43,7 +44,9 @@ final class ItemsViewController: UIViewController {
         
         // If the user has no items then bring up the Add Item VC
         if Stored.userItems.count == 0 {
-            loadFloatingVC(ID: Constants.ID.VC.addItem)
+            loadVC(ID: Constants.ID.VC.addItem,
+                   sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                   animated: false)
         }
         
     }
@@ -51,18 +54,34 @@ final class ItemsViewController: UIViewController {
     // MARK: - IBAction Methods
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
-        loadFloatingVC(ID: Constants.ID.VC.addItem)
+        // Load the Add Item VC
+        loadVC(ID: Constants.ID.VC.addItem,
+               sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+               animated: false)
         
     }
     
     @IBAction func updateButtonTapped(_ sender: UIBarButtonItem) {
         
-        loadFloatingVC(ID: Constants.ID.VC.updateLocation)
+        // Load the Update Location VC
+        loadVC(ID: Constants.ID.VC.updateLocation,
+                       sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                       animated: false )
         
     }
+    
+    @IBAction func settingsButtonTapped(_ sender: UIBarButtonItem) {
+        
+        // Load the Settings VC
+        loadVC(ID: Constants.ID.VC.settings,
+               sb: UIStoryboard(name: Constants.ID.Storyboard.settings, bundle: .main),
+               animated: true)
+        
+    }
+    
 }
 
-// MARK: - Helper Methods
+// MARK: - Refresh Control Methods
 extension ItemsViewController {
     
     func addRefreshControl() {
@@ -94,7 +113,7 @@ extension ItemsViewController: AddItemProtocol {
     
 }
 
-// MARK: - Methods that conform to UICollectionView
+// MARK: - Collection View Methods
 extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -134,71 +153,23 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         return CGSize(width: width, height: height)
         
     }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        // Create a cell
-        var cell: UICollectionReusableView!
-        
-        // Check what kind of cell it is
-        if kind == UICollectionView.elementKindSectionHeader {
-            // Create a header cell
-            cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                   withReuseIdentifier: Constants.ID.Cell.itemHeader,
-                                                                   for: indexPath)
-        }
-        else  {
-            // Create a footer cell
-            cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                   withReuseIdentifier: Constants.ID.Cell.itemFooter,
-                                                                   for: indexPath)
-            
-            // Cast the cell as a custom type so the delegate can be set
-            if let cell = cell as? AddItemCollectionReusableView {
-                cell.delegate = self
-            }
-        }
-        
-        // Return the cell
-        return cell
-        
-    }
+
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        // TODO: - CREATE A VIEW CONTROLLER
 
-
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        
-        // If the user has items then don't show the header
-        if Stored.userItems.count != 0 {
-            return CGSize(width: 0, height: 0)
-        }
-        // Otherwise, show the view
-        else {
-            return CGSize(width: collectionView.bounds.width, height: Constants.View.Height.itemHeader)
-        }
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        
-        let width = collectionView.bounds.width * 0.2
-        let height = width / 1.5
-        
-        return CGSize(width: width, height: height)
         
     }
     
 }
 
-extension ItemsViewController: AddItemReusableViewProtocol {
+// MARK: - Helper Functions
+extension ItemsViewController  {
     
-    func loadFloatingVC(ID: String) {
+    func loadVC(ID: String, sb: UIStoryboard, animated: Bool) {
         
-        let vc = storyboard?.instantiateViewController(withIdentifier: ID)
+        let vc = sb.instantiateViewController(withIdentifier: ID)
         
         if let vc = vc as? AddItemViewController {
             vc.delegate = self
@@ -207,10 +178,8 @@ extension ItemsViewController: AddItemReusableViewProtocol {
             
         }
         
-        guard vc != nil else { return }
-        
-        vc?.modalPresentationStyle = .overCurrentContext
-        present(vc!, animated: false, completion: nil)
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: animated, completion: nil)
         
         
     }

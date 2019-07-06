@@ -10,6 +10,12 @@ import UIKit
 import FirebaseFirestore
 import CoreLocation
 
+protocol UpdateLocationProtocol {
+    
+    func reloadAnnotations()
+    
+}
+
 class UpdateLocationViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
@@ -32,6 +38,7 @@ class UpdateLocationViewController: UIViewController {
     
     let locationManager = CLLocationManager()
     let db = Firestore.firestore()
+    var delegate: UpdateLocationProtocol?
     
     // MARK: - View Methods
     override func viewDidLoad() {
@@ -113,6 +120,7 @@ class UpdateLocationViewController: UIViewController {
             
         }
         
+        delegate?.reloadAnnotations()
         slideViewOut()
         
     }

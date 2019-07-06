@@ -28,13 +28,13 @@ final class MapViewController: UIViewController {
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Check the user's location services
         checkLocationServices()
         
-        // Setup the map superview
-        mapSuperview.layer.borderColor          = Constants.Color.primary.cgColor
-        mapSuperview.layer.borderWidth          = 1
+        // Setup the mapView
+        mapViewBottomConstraint.constant        = self.tabBarController!.tabBar.frame.height
+        mapView.delegate                        = self
         
         // Setup the map search bar
         mapSearchBar.layer.borderWidth          = 1
@@ -58,7 +58,7 @@ final class MapViewController: UIViewController {
         super.viewWillAppear(animated)
         
         // Set the maps annotations
-        setAnnotations()
+        reloadAnnotations()
         
     }
     
@@ -66,17 +66,30 @@ final class MapViewController: UIViewController {
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
         // Load the add item vc
-        loadFloatingVC(ID: Constants.ID.VC.addItem, sb: storyboard!)
+        loadVC(ID: Constants.ID.VC.addItem,
+                       sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                       animate:  false)
         
     }
     
     @IBAction func updateLocationButtonTapped(_ sender: UIBarButtonItem) {
         
         // Load the update location vc
-        loadFloatingVC(ID: Constants.ID.VC.updateLocation, sb: storyboard!)
+        loadVC(ID: Constants.ID.VC.updateLocation,
+                       sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                       animate: false)
         
     }
     
+    @IBAction func settingsButtonTapped(_ sender: UIBarButtonItem) {
+        
+        // Load the settings VC
+        loadVC(ID: Constants.ID.VC.settings,
+                       sb: UIStoryboard(name: Constants.ID.Storyboard.settings, bundle: .main),
+                       animate: true)
+        
+        
+    }
     
     @IBAction func prevButtonTapped(_ sender: UIButton) {
         
@@ -99,7 +112,7 @@ final class MapViewController: UIViewController {
         }
         
         // Center the map over the item
-        centerMapOnItem(annotation: mapView.annotations[itemIndex])
+        centerMapOnItem(annotation: mapView.annotations[itemIndex], span: mapView.region.span)
         
     }
     
@@ -119,11 +132,10 @@ final class MapViewController: UIViewController {
         }
         
         // Center the map over the item
-        centerMapOnItem(annotation: mapView.annotations[itemIndex])
+        centerMapOnItem(annotation: mapView.annotations[itemIndex], span: mapView.region.span)
         
     }
-    
-    
+
 }
 
 // MARK: - Map Methods
@@ -142,7 +154,7 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
             
             // If the text matches the annotation, then center the map on that annotation
             if searchBar.text?.uppercased() == annotation.title!?.uppercased() {
-                centerMapOnItem(annotation: annotation)
+                centerMapOnItem(annotation: annotation, span: Constants.Map.defaultSpan)
             }
             
         }
@@ -197,16 +209,31 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
         }
     }
     
-    func centerMapOnItem(annotation: MKAnnotation) {
+    func centerMapOnItem(annotation: MKAnnotation, span: MKCoordinateSpan) {
         
         // Get the region
-        let region = MKCoordinateRegion.init(center: annotation.coordinate, span: mapView.region.span)
+        let region = MKCoordinateRegion.init(center: annotation.coordinate, span: span)
         
         // Set the region
         mapView.setRegion(region, animated: true)
         
         // Select the annotation
         mapView.selectAnnotation(annotation, animated: true)
+        
+    }
+    
+    func centerMapOnUser(span: MKCoordinateSpan) {
+        
+        // Get the users location
+        let location = locationManager.location?.coordinate
+        guard location != nil else { return }
+        
+        // Get the center and the region
+        let center = location!
+        let region = MKCoordinateRegion.init(center: center, span: span)
+        
+        // Set the region
+        mapView.setRegion(region, animated: true)
         
     }
     
@@ -245,14 +272,16 @@ extension MapViewController: CLLocationManagerDelegate {
     
     func checkLocationServices() {
         
+        // If the user has location services enabled then setup the location manager and check authorization
         if CLLocationManager.locationServicesEnabled() {
             setupLocationManager()
             checkLocationAuthorization()
         }
         else {
             // Let the user know that they have to turn location services on
-            loadFloatingVC(ID: Constants.ID.VC.noLocation,
-                           sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main))
+            loadVC(ID: Constants.ID.VC.noLocation,
+                           sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                           animate: false)
         }
         
     }
@@ -265,6 +294,7 @@ extension MapViewController: CLLocationManagerDelegate {
         // Case if its authorized
         case .authorizedAlways, .authorizedWhenInUse:
             mapView.showsUserLocation = true
+            centerMapOnUser(span: Constants.Map.defaultSpan)
             
         // Case if its not determined
         case .notDetermined:
@@ -273,10 +303,15 @@ extension MapViewController: CLLocationManagerDelegate {
         // Case if no authorization
         case .restricted, .denied:
             // Pop up a notification that tells the user how to allow location
-            loadFloatingVC(ID: Constants.ID.VC.noLocation,
-                           sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main))
+            loadVC(ID: Constants.ID.VC.noLocation,
+                           sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                           animate: false)
             
             mapView.showsUserLocation = false
+            
+            // If the user has at least 1 item, center the map over the first one
+            guard Stored.userItems.count > 0 else { return }
+            centerMapOnItem(annotation: mapView.annotations[0], span: Constants.Map.defaultSpan)
             
         @unknown default:
             break
@@ -287,7 +322,7 @@ extension MapViewController: CLLocationManagerDelegate {
 }
 
 // MARK: - Custom Protocol Methods
-extension MapViewController: AddItemProtocol {
+extension MapViewController: AddItemProtocol, UpdateLocationProtocol {
     
     func itemAdded(item: Item) {
         
@@ -302,42 +337,13 @@ extension MapViewController: AddItemProtocol {
         
         // Add the annotation to the map and center over it
         mapView.addAnnotation(annotation)
-        centerMapOnItem(annotation: annotation)
+        centerMapOnItem(annotation: annotation, span: Constants.Map.defaultSpan)
         
     }
     
-}
-
-// MARK: - Helper Methods
-extension MapViewController {
-    
-    func loadFloatingVC(ID: String, sb: UIStoryboard) {
-        
-        let vc = sb.instantiateViewController(withIdentifier: ID)
-        
-        if let vc = vc as? AddItemViewController {
-            vc.delegate = self
-        }
-        else if let vc = vc as? UpdateLocationViewController {
-            
-        }
-        else if let vc = vc as? TurnOnLocationViewController {
-            
-        }
-        
-        vc.modalPresentationStyle = .overCurrentContext
-        present(vc, animated: false, completion: nil)
-        
-        
-    }
-    
-    func setAnnotations() {
+    func reloadAnnotations() {
         // Remove all mapView Annotations
         mapView.removeAnnotations(mapView.annotations)
-        
-        // Setup the mapView
-        mapViewBottomConstraint.constant = self.tabBarController!.tabBar.frame.height
-        mapView.delegate = self
         
         // Iterate through all the items to create annotations
         for item in Stored.userItems {
@@ -354,6 +360,31 @@ extension MapViewController {
             // Add the annotation to the app
             mapView.addAnnotation(annotation)
         }
+    }
+    
+}
+
+// MARK: - Helper Methods
+extension MapViewController {
+    
+    func loadVC(ID: String, sb: UIStoryboard, animate: Bool) {
+        
+        let vc = sb.instantiateViewController(withIdentifier: ID)
+        
+        if let vc = vc as? AddItemViewController {
+            vc.delegate = self
+        }
+        else if let vc = vc as? UpdateLocationViewController {
+            vc.delegate = self
+        }
+        else if let vc = vc as? TurnOnLocationViewController {
+            
+        }
+        
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: animate, completion: nil)
+        
+        
     }
     
 }
