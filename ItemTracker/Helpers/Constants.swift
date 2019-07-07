@@ -20,6 +20,13 @@ struct Constants {
             static let inApp  = "InApp"
             static let popups = "Popups"
             static let settings = "Settings"
+            
+        }
+        
+        struct Segues {
+            
+            static let itemSelected = "ItemSelected"
+            
         }
         
         struct VC {
@@ -30,6 +37,8 @@ struct Constants {
             static let forgotPassword = "ForgotPasswordVC"
             
             static let tabBar         = "TabBarVC"
+            static let selectedItem   = "SelectedItemVC"
+            
             static let addItem        = "AddItemVC"
             static let updateLocation = "UpdateLocationVC"
             static let noLocation     = "LocationReminderVC"
@@ -81,7 +90,7 @@ struct Constants {
             
             static let login: CGFloat          = min(240, UIScreen.main.bounds.height - 350)
             static let createAccount: CGFloat  = min(230, UIScreen.main.bounds.height - 350)
-            static let addItem: CGFloat        = min(320, UIScreen.main.bounds.height - 220)
+            static let addItem: CGFloat        = min(390, UIScreen.main.bounds.height - 240)
             static let annotation: CGFloat     = 40
             static let smallMap: CGFloat       = 200
             static let updateLocation: CGFloat = 150

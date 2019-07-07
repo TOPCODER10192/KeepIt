@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 final class ItemsViewController: UIViewController {
     
@@ -157,8 +158,28 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        // TODO: - CREATE A VIEW CONTROLLER
+        // Perform the segue to the selected item vc
+        performSegue(withIdentifier: Constants.ID.Segues.itemSelected, sender: self)
 
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // Get the selected index path
+        let indexPaths = itemsCollectionView.indexPathsForSelectedItems
+        guard indexPaths != nil else { return }
+        
+        // Get the selected index
+        let index = indexPaths![0].row
+        
+        // If the segue destination can be cast as a Selected Item VC then set its item
+        if let vc = segue.destination as? SelectedItemViewController {
+            
+            vc.item = Stored.userItems[index]
+            
+        }
+        
+        
         
     }
     

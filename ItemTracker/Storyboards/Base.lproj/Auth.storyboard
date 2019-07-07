@@ -186,9 +186,9 @@
                                 <rect key="frame" x="32" y="367" width="350" height="230"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="deE-Pm-7Q7">
-                                        <rect key="frame" x="0.0" y="0.0" width="350" height="40"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="Yxu-At-oEY"/>
+                                            <constraint firstAttribute="height" constant="45" id="Yxu-At-oEY"/>
                                         </constraints>
                                         <items>
                                             <navigationItem title="Step 1 of 2" id="9Z0-Sb-rYQ">
@@ -202,7 +202,7 @@
                                         </items>
                                     </navigationBar>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="Bm9-Fs-C4P" userLabel="Info Stack View">
-                                        <rect key="frame" x="10" y="50" width="330" height="170"/>
+                                        <rect key="frame" x="10" y="55" width="330" height="165"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What is your name?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXY-zv-ZkZ" userLabel="Prompt Label">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="30"/>
@@ -214,7 +214,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ZhT-cJ-NFO" userLabel="Top Text Field">
-                                                <rect key="frame" x="0.0" y="40" width="330" height="35"/>
+                                                <rect key="frame" x="0.0" y="38.5" width="330" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="F6d-JQ-RZe"/>
                                                 </constraints>
@@ -226,7 +226,7 @@
                                                 </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Lp-Jb-DPF" userLabel="Bottom Text Field">
-                                                <rect key="frame" x="0.0" y="85" width="330" height="35"/>
+                                                <rect key="frame" x="0.0" y="81.5" width="330" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="Rti-iE-8us"/>
                                                 </constraints>
@@ -238,7 +238,7 @@
                                                 </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Nm-NN-IEJ">
-                                                <rect key="frame" x="0.0" y="130" width="330" height="40"/>
+                                                <rect key="frame" x="0.0" y="125" width="330" height="40"/>
                                                 <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="YMs-6q-2GJ"/>
@@ -328,9 +328,9 @@
                                 <rect key="frame" x="32" y="403.5" width="350" height="193.5"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="me3-WO-Axa">
-                                        <rect key="frame" x="0.0" y="0.0" width="350" height="40"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="bzo-OL-xbd"/>
+                                            <constraint firstAttribute="height" constant="45" id="bzo-OL-xbd"/>
                                         </constraints>
                                         <items>
                                             <navigationItem title="Forgot Password" id="1vh-hd-Cdi">
@@ -344,7 +344,7 @@
                                         </items>
                                     </navigationBar>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="ECd-9J-iUm" userLabel="Info Stack View">
-                                        <rect key="frame" x="10" y="50" width="330" height="133.5"/>
+                                        <rect key="frame" x="10" y="55" width="330" height="128.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your email below and we'll send a link to reset your password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1g6-EH-BAc" userLabel="Prompt Label">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="38.5"/>
@@ -353,7 +353,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TiY-Qy-pfg" userLabel="Email Text Field">
-                                                <rect key="frame" x="0.0" y="48.5" width="330" height="35"/>
+                                                <rect key="frame" x="0.0" y="46" width="330" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="Wo2-cN-ZGC"/>
                                                 </constraints>
@@ -365,7 +365,7 @@
                                                 </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YhG-9d-sAk" userLabel="Reset Password Button">
-                                                <rect key="frame" x="0.0" y="93.5" width="330" height="40"/>
+                                                <rect key="frame" x="0.0" y="88.5" width="330" height="40"/>
                                                 <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="zkW-6N-7Om"/>

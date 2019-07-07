@@ -14,8 +14,6 @@ final class MapViewController: UIViewController {
 
     // MARK: - IBOutlet Properties
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var mapSuperview: UIView!
-    @IBOutlet weak var mapViewBottomConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var mapSearchBar: UISearchBar!
     @IBOutlet weak var prevAnnotationButton: UIButton!
@@ -33,7 +31,6 @@ final class MapViewController: UIViewController {
         checkLocationServices()
         
         // Setup the mapView
-        mapViewBottomConstraint.constant        = self.tabBarController!.tabBar.frame.height
         mapView.delegate                        = self
         
         // Setup the map search bar

@@ -31,6 +31,8 @@ final class AddItemViewController: UIViewController {
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var backButton: UIBarButtonItem!
     
+    @IBOutlet weak var scrollContentView: UIView!
+    
     @IBOutlet weak var itemNameTextField: UITextField!
     @IBOutlet weak var addImageButton: UIButton!
     
@@ -71,6 +73,9 @@ final class AddItemViewController: UIViewController {
         floatingViewWidth.constant        = Constants.View.Width.standard
         floatingViewHeight.constant       = Constants.View.Height.addItem
         floatingViewYConstraint.constant  = UIScreen.main.bounds.height
+        
+        // Setup the scroll content view
+        scrollContentView.backgroundColor = UIColor.clear
         
         // Setup the navigationBar
         navigationBar.layer.cornerRadius  = Constants.View.CornerRadius.standard
