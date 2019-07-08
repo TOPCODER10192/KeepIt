@@ -24,7 +24,6 @@ final class LocalStorageService {
         var itemNames           = [String]()
         var itemLocations       = [[Double]]()
         var itemLastUpdateDates = [String]()
-        var itemMovements       = [Bool]()
         var itemImageURLs       = [String]()
         
         // Fill the arrays
@@ -32,7 +31,6 @@ final class LocalStorageService {
             itemNames.append(item.name)
             itemLocations.append(item.mostRecentLocation)
             itemLastUpdateDates.append(item.lastUpdateDate)
-            itemMovements.append(item.isMovedOften)
             itemImageURLs.append(item.imageURL)
             
         }
@@ -41,7 +39,6 @@ final class LocalStorageService {
         defaults.set(itemNames, forKey: Constants.Key.Item.name)
         defaults.set(itemLocations, forKey: Constants.Key.Item.location)
         defaults.set(itemLastUpdateDates, forKey: Constants.Key.Item.lastUpdateDate)
-        defaults.set(itemMovements, forKey: Constants.Key.Item.movement)
         defaults.set(itemImageURLs, forKey: Constants.Key.Item.imageURL)
         
     }
@@ -55,7 +52,6 @@ final class LocalStorageService {
         var itemNames           = defaults.value(forKey: Constants.Key.Item.name)           as! [String]
         var itemLocations       = defaults.value(forKey: Constants.Key.Item.location)       as! [[Double]]
         var itemLastUpdateDates = defaults.value(forKey: Constants.Key.Item.lastUpdateDate) as! [String]
-        var itemMovements       = defaults.value(forKey: Constants.Key.Item.movement)       as! [Bool]
         var itemImageURLs       = defaults.value(forKey: Constants.Key.Item.imageURL)       as! [String]
         
         // Append the new items propeties to the arrays
@@ -63,7 +59,6 @@ final class LocalStorageService {
             itemNames.append(item.name)
             itemLocations.append(item.mostRecentLocation)
             itemLastUpdateDates.append(item.lastUpdateDate)
-            itemMovements.append(item.isMovedOften)
             itemImageURLs.append(item.imageURL)
         }
         else if isNew == false, let i = index {
@@ -71,7 +66,6 @@ final class LocalStorageService {
             itemNames[i]           = item.name
             itemLocations[i]       = item.mostRecentLocation
             itemLastUpdateDates[i] = item.lastUpdateDate
-            itemMovements[i]       = item.isMovedOften
             itemImageURLs[i]       = item.imageURL
             
         }
@@ -80,7 +74,6 @@ final class LocalStorageService {
         defaults.set(itemNames, forKey: Constants.Key.Item.name)
         defaults.set(itemLocations, forKey: Constants.Key.Item.location)
         defaults.set(itemLastUpdateDates, forKey: Constants.Key.Item.lastUpdateDate)
-        defaults.set(itemMovements, forKey: Constants.Key.Item.movement)
         defaults.set(itemImageURLs, forKey: Constants.Key.Item.imageURL)
         
     }
@@ -105,7 +98,6 @@ final class LocalStorageService {
         let itemNames           = defaults.value(forKey: Constants.Key.Item.name)           as! [String]
         let itemLocations       = defaults.value(forKey: Constants.Key.Item.location)       as! [[Double]]
         let itemLastUpdateDates = defaults.value(forKey: Constants.Key.Item.lastUpdateDate) as! [String]
-        let itemMovements       = defaults.value(forKey: Constants.Key.Item.movement)       as! [Bool]
         let itemImageURLs       = defaults.value(forKey: Constants.Key.Item.imageURL)       as! [String]
         
         // Initialize an array for items
@@ -116,14 +108,12 @@ final class LocalStorageService {
             let name           = itemNames[i]
             let location       = itemLocations[i]
             let lastUpdateDate = itemLastUpdateDates[i]
-            let isMovedOften   = itemMovements[i]
             let imageURL       = itemImageURLs[i]
             
             // Create the item and append it to the array of userItems
             let item = Item.init(withName: name,
                                  withLocation: location,
                                  withLastUpdateDate: lastUpdateDate,
-                                 withMovement: isMovedOften,
                                  withImageURL: imageURL)
             items.append(item)
             
@@ -149,7 +139,6 @@ final class LocalStorageService {
         defaults.set(nil, forKey: Constants.Key.Item.name)
         defaults.set(nil, forKey: Constants.Key.Item.location)
         defaults.set(nil, forKey: Constants.Key.Item.lastUpdateDate)
-        defaults.set(nil, forKey: Constants.Key.Item.movement)
         defaults.set(nil, forKey: Constants.Key.Item.imageURL)
         
     }

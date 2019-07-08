@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if Stored.user != nil {
             
-            let tabBarVC = UIStoryboard(name: "InApp", bundle: .main).instantiateViewController(withIdentifier: Constants.ID.VC.tabBar)
+            let tabBarVC = UIStoryboard(name: Constants.ID.Storyboard.tabBar, bundle: .main).instantiateViewController(withIdentifier: Constants.ID.VC.tabBar)
             
             window?.rootViewController = tabBarVC
             window?.makeKeyAndVisible()

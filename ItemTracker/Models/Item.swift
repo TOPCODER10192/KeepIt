@@ -14,15 +14,13 @@ struct Item {
     var name: String
     var mostRecentLocation: [Double]
     var lastUpdateDate: String
-    var isMovedOften: Bool
     var imageURL: String
 
-    init(withName: String, withLocation: [Double], withLastUpdateDate: String, withMovement: Bool, withImageURL: String) {
+    init(withName: String, withLocation: [Double], withLastUpdateDate: String, withImageURL: String) {
         
         name               = withName
         mostRecentLocation = withLocation
         lastUpdateDate     = withLastUpdateDate
-        isMovedOften       = withMovement
         imageURL           = withImageURL
         
     }

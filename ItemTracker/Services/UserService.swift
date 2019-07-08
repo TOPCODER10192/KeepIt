@@ -49,13 +49,11 @@ final class UserService {
                     let name           = document.documentID
                     let location       = itemData[Constants.Key.Item.location]       as! [Double]
                     let lastUpdateDate = itemData[Constants.Key.Item.lastUpdateDate] as! String
-                    let movement       = itemData[Constants.Key.Item.movement]       as! Bool
                     let url            = itemData[Constants.Key.Item.imageURL]       as! String
                     
                     let item = Item.init(withName: name,
                                          withLocation: location,
                                          withLastUpdateDate: lastUpdateDate,
-                                         withMovement: movement,
                                          withImageURL: url)
                     
                     items.append(item)
@@ -106,12 +104,10 @@ final class UserService {
     static func writeItem(item: Item, ref: DocumentReference) {
         
         let location        = item.mostRecentLocation
-        let isMovedOften    = item.isMovedOften
         let url             = item.imageURL
         let lastTimeUpdated = item.lastUpdateDate
         
         ref.setData([Constants.Key.Item.location: location,
-                     Constants.Key.Item.movement: isMovedOften,
                      Constants.Key.Item.imageURL: url,
                      Constants.Key.Item.lastUpdateDate: lastTimeUpdated])
         

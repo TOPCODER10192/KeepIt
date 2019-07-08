@@ -31,20 +31,14 @@ final class AddItemViewController: UIViewController {
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var backButton: UIBarButtonItem!
     
-    @IBOutlet weak var scrollContentView: UIView!
-    
     @IBOutlet weak var itemNameTextField: UITextField!
     @IBOutlet weak var addImageButton: UIButton!
     
-    @IBOutlet weak var movementLabel: UILabel!
-    @IBOutlet weak var movementSegmentedDisplay: UISegmentedControl!
-    
     @IBOutlet weak var locationLabel: UILabel!
-    @IBOutlet weak var locationSegmentedDisplay: UISegmentedControl!
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapSearchBar: UISearchBar!
-    @IBOutlet weak var mapViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var nearMeButton: UIButton!
     
     @IBOutlet weak var addItemButton: UIButton!
     
@@ -56,7 +50,6 @@ final class AddItemViewController: UIViewController {
     
     var itemName: String?
     var itemCoordinates: [Double]?
-    var itemMoves: Bool = true
     var itemImage: UIImage?
     var time: String?
     
@@ -74,9 +67,6 @@ final class AddItemViewController: UIViewController {
         floatingViewHeight.constant       = Constants.View.Height.addItem
         floatingViewYConstraint.constant  = UIScreen.main.bounds.height
         
-        // Setup the scroll content view
-        scrollContentView.backgroundColor = UIColor.clear
-        
         // Setup the navigationBar
         navigationBar.layer.cornerRadius  = Constants.View.CornerRadius.standard
         navigationBar.clipsToBounds       = true
@@ -91,17 +81,19 @@ final class AddItemViewController: UIViewController {
         addImageButton.layer.borderWidth  = 1
 
         // Setup the searchBar
-        mapSearchBar.alpha                = 0
+        mapSearchBar.alpha                = 1
         mapSearchBar.delegate             = self
         mapSearchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
+        // Setup the near me button
+        nearMeButton.layer.cornerRadius   = Constants.View.CornerRadius.button
+        nearMeButton.backgroundColor      = Constants.Color.primary
+        
         // Setup the mapView
-        mapViewHeight.constant            = 0
         mapView.layer.borderColor         = Constants.Color.primary.cgColor
         mapView.layer.borderWidth         = 1
         mapView.delegate                  = self
         checkLocationServices()
-        readUserCoordinates()
         
         // Setup the addItemButton
         addItemButton.layer.cornerRadius  = Constants.View.CornerRadius.button
@@ -119,7 +111,7 @@ final class AddItemViewController: UIViewController {
         
     }
     
-    // MARK: - IBAction Properties
+    // MARK: - IBAction Method
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         
         // Lower the keyboard
@@ -195,47 +187,26 @@ final class AddItemViewController: UIViewController {
         
     }
     
-    @IBAction func locationSegmentChanged(_ sender: UISegmentedControl) {
+    @IBAction func nearMeButtonTapped(_ sender: UIButton) {
         
         // Lower the keyboard
         lowerKeyboard()
-
-        // If the first segment is selected, then the user has selected the "Near Me" Option
-        if locationSegmentedDisplay.selectedSegmentIndex == 0 {
-            
-            UIView.animate(withDuration: 0.3) {
-                
-                // Decrease the view height by 200, set map height to 0
-                self.floatingViewHeight.constant -= Constants.View.Height.smallMap
-                self.mapViewHeight.constant       = 0
-                self.mapSearchBar.alpha           = 0
-                self.view.layoutIfNeeded()
-                
-            }
-            
-            // Read the users coordinates
-            readUserCoordinates()
-            
-        }
-        // If the second segment is selected, then the user has selected the "Custom Location" Option
-        else if locationSegmentedDisplay.selectedSegmentIndex == 1 {
-            
-            UIView.animate(withDuration: 0.3) {
-                
-                // Increase the view height by 200, set map height to 200
-                self.floatingViewHeight.constant += Constants.View.Height.smallMap
-                self.mapViewHeight.constant       = Constants.View.Height.smallMap
-                self.mapSearchBar.alpha           = 1
-                self.view.layoutIfNeeded()
-                
-            }
-            
-            // Update the coordinated of the to the annotation
-            updateItemCoordinates()
-            
-        }
         
-        // Check to activate the add item button
+        // Get the location of the touch in the mapView and convert it to a coordinate
+        let coordinate = locationManager.location!.coordinate
+        itemCoordinates = [coordinate.latitude, coordinate.longitude] as [Double]?
+        
+        // Create an annotation
+        let annotation        = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        
+        // Remove all previous annotations
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotation(annotation)
+        
+        centerMapOnUser(span: Constants.Map.defaultSpan)
+        
+        // Check to see if the button should be activated
         checkToActivateButton()
         
     }
@@ -261,22 +232,6 @@ final class AddItemViewController: UIViewController {
         
         // Check to see if the button should be activated
         checkToActivateButton()
-        
-    }
-    
-    @IBAction func movementSegmentChanged(_ sender: UISegmentedControl) {
-        
-        // Lower the keyboard
-        lowerKeyboard()
-        
-        // If the first segment is selected, then the user has selected the "Yes" option
-        if movementSegmentedDisplay.selectedSegmentIndex == 0 {
-            itemMoves = true
-        }
-        // If the second segment is selected, then the user has selected the "Yes" option
-        else if movementSegmentedDisplay.selectedSegmentIndex == 1 {
-            itemMoves = false
-        }
         
     }
     
@@ -315,7 +270,6 @@ final class AddItemViewController: UIViewController {
         var item = Item.init(withName: self.itemName!,
                              withLocation: self.itemCoordinates!,
                              withLastUpdateDate: self.time!,
-                             withMovement: self.itemMoves,
                              withImageURL: "")
     
         // If the user took a photo
@@ -411,11 +365,6 @@ extension AddItemViewController {
         
     }
     
-}
-
-// MARK: - Helper Methods
-extension AddItemViewController {
-    
     func lowerKeyboard() {
         
         // Resign first responder from both of the text fields
@@ -423,6 +372,11 @@ extension AddItemViewController {
         mapSearchBar.resignFirstResponder()
         
     }
+    
+}
+
+// MARK: - Helper Methods
+extension AddItemViewController {
     
     func getTheDate() {
         
@@ -454,7 +408,37 @@ extension AddItemViewController {
         // Activate button
         activateButton(isActivated: true, color: Constants.Color.primary)
         
+    }
+
+    
+    func activateButton (isActivated: Bool, color: UIColor) {
         
+        // Activate the add item button and change its color
+        addItemButton.isEnabled       = isActivated
+        addItemButton.backgroundColor = color
+        
+    }
+    
+}
+
+// MARK: - Image Methods
+extension AddItemViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        
+        // Dismiss the image picker controller
+        picker.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        // Attempt to get the image and check that it isn't nil
+        itemImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        guard itemImage != nil else { return }
+        
+        addImageButton.setBackgroundImage(itemImage!, for: .normal)
+        picker.dismiss(animated: true, completion: nil)
     }
     
     func showImagePicker(type: UIImagePickerController.SourceType) {
@@ -471,146 +455,22 @@ extension AddItemViewController {
         
     }
     
-    func checkLocationAuthorization() {
-        
-        // Switch over all the options for location authorization
-        switch CLLocationManager.authorizationStatus() {
-        
-        // Case if the user has made there location available
-        case .authorizedAlways, .authorizedWhenInUse:
-            // Show the users location on the map
-            mapView.showsUserLocation = true
-            centerViewOnUserLocation()
-            
-        // Case if the user has not selected a permission level
-        case .notDetermined:
-            // Show a request for location
-            locationManager.requestAlwaysAuthorization()
-            break
-            
-        // Case if the user has denied permission
-        case .restricted, .denied:
-            // Show an alert that says the user won't have access to the near me option
-            break
-            
-        @unknown default:
-            break
-        }
-        
-    }
-    
-    func setupLocationManager() {
-        
-        // Set the delegate and desired accuracy for the location messenger
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        
-    }
-    
-    func checkLocationServices() {
-        
-        // If the user has location services on then setup the location manager and check the level of authorization
-        if CLLocationManager.locationServicesEnabled() {
-            setupLocationManager()
-            checkLocationAuthorization()
-        }
-        else {
-            // Let the user know that they have to turn location services on
-        }
-        
-    }
-    
-    func centerViewOnUserLocation() {
-        
-        // Get the users location
-        if let location = locationManager.location?.coordinate {
-            
-            // Get a region for the map to show
-            let region = MKCoordinateRegion.init(center: location,
-                                                 latitudinalMeters: 1000,
-                                                 longitudinalMeters: 1000)
-            
-            // Set the region for the map
-            mapView.setRegion(region, animated: false)
-            
-        }
-        
-    }
-    
-    func activateButton (isActivated: Bool, color: UIColor) {
-        
-        // Activate the add item button and change its color
-        addItemButton.isEnabled       = isActivated
-        addItemButton.backgroundColor = color
-        
-    }
-    
-    func readUserCoordinates() {
-        
-        // Check that location services are on
-        guard CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
-              CLLocationManager.authorizationStatus() == .authorizedAlways else {
-                
-                activateButton(isActivated: false, color: Constants.Color.inactiveButton)
-                return
-                
-        }
-        
-        // Check the users location
-        itemCoordinates = [locationManager.location!.coordinate.latitude,
-                           locationManager.location!.coordinate.longitude] as [Double]?
-        
-    }
-    
-    func updateItemCoordinates() {
-        
-        // Iterate through the annotations on the map
-        for annotation in mapView.annotations {
-            
-            // If the annotation can be cast an mkPoint annotation then get the coordinates of the annotation
-            if annotation as? MKPointAnnotation != nil {
-                itemCoordinates = [annotation.coordinate.latitude, annotation.coordinate.longitude]
-                return
-            }
-            
-        }
-        
-        // If no MKPointAnnotations were found then return nil
-        itemCoordinates = nil
-        
-        
-    }
-    
 }
 
-// MARK: - Methods Conforming to CLLocationManagerDelegate
-extension AddItemViewController: CLLocationManagerDelegate {
+// MARK: - Item Name Methods
+extension AddItemViewController: UITextFieldDelegate {
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        // Check that the location isn't nil
-        guard let locations = locations.last else { return }
-        
-        // Get the center and the region
-        let center = CLLocationCoordinate2D(latitude: locations.coordinate.latitude, longitude: locations.coordinate.longitude)
-        let region = MKCoordinateRegion.init(center: center, latitudinalMeters: 1000, longitudinalMeters: 1000)
-        
-        // Set the mapview
-        mapView.setRegion(region, animated: false)
+        // Lower the keyboard
+        textField.resignFirstResponder()
+        return true
         
     }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
-        // Check the new authorization state
-        checkLocationAuthorization()
-        
-    }
-    
 }
 
-// MARK: - MKMapViewDelegateMethods
-extension AddItemViewController: MKMapViewDelegate {
+// MARK: - Map Methods
+extension AddItemViewController: MKMapViewDelegate, UISearchBarDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
@@ -656,22 +516,39 @@ extension AddItemViewController: MKMapViewDelegate {
         
     }
     
-}
-
-// MARK: - UITextFieldDelegate Methods
-extension AddItemViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func centerMapOnUser(span: MKCoordinateSpan) {
         
-        // Lower the keyboard
-        textField.resignFirstResponder()
-        return true
+        // Get the users location
+        let location = locationManager.location?.coordinate
+        guard location != nil else { return }
+        
+        // Get the center and the region
+        let center = location!
+        let region = MKCoordinateRegion.init(center: center, span: span)
+        
+        // Set the region
+        mapView.setRegion(region, animated: true)
         
     }
-}
-
-// MARK: - UISearchBarDelegate Methods
-extension AddItemViewController: UISearchBarDelegate {
+    
+    func updateItemCoordinates() {
+        
+        // Iterate through the annotations on the map
+        for annotation in mapView.annotations {
+            
+            // If the annotation can be cast an mkPoint annotation then get the coordinates of the annotation
+            if annotation as? MKPointAnnotation != nil {
+                itemCoordinates = [annotation.coordinate.latitude, annotation.coordinate.longitude]
+                return
+            }
+            
+        }
+        
+        // If no MKPointAnnotations were found then return nil
+        itemCoordinates = nil
+        
+        
+    }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
@@ -720,24 +597,104 @@ extension AddItemViewController: UISearchBarDelegate {
     
 }
 
-// MARK: - UIImagePickerControllerDelegate Methods
-extension AddItemViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+// MARK: - Location Methods
+extension AddItemViewController: CLLocationManagerDelegate {
     
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        // Dismiss the image picker controller
-        picker.dismiss(animated: true, completion: nil)
+        // Check that the location isn't nil
+        guard let locations = locations.last else { return }
+        
+        // Get the center and the region
+        let center = CLLocationCoordinate2D(latitude: locations.coordinate.latitude, longitude: locations.coordinate.longitude)
+        let region = MKCoordinateRegion.init(center: center, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        
+        // Set the mapview
+        mapView.setRegion(region, animated: false)
         
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
-        // Attempt to get the image and check that it isn't nil
-        itemImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
-        guard itemImage != nil else { return }
+        // Check the new authorization state
+        checkLocationAuthorization()
         
-        addImageButton.setBackgroundImage(itemImage!, for: .normal)
-        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func checkLocationAuthorization() {
+        
+        // Switch over all the options for location authorization
+        switch CLLocationManager.authorizationStatus() {
+            
+        // Case if the user has made there location available
+        case .authorizedAlways, .authorizedWhenInUse:
+            // Show the users location on the map
+            mapView.showsUserLocation = true
+            nearMeButton.isHidden     = false
+            centerMapOnUser(span: Constants.Map.defaultSpan)
+            
+        // Case if the user has not selected a permission level
+        case .notDetermined:
+            // Show a request for location
+            locationManager.requestAlwaysAuthorization()
+            break
+            
+        // Case if the user has denied permission
+        case .restricted, .denied:
+            nearMeButton.isHidden = true
+            break
+            
+        @unknown default:
+            break
+        }
+        
+    }
+    
+    func setupLocationManager() {
+        
+        // Set the delegate and desired accuracy for the location messenger
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+    }
+    
+    func checkLocationServices() {
+        
+        // If the user has location services on then setup the location manager and check the level of authorization
+        if CLLocationManager.locationServicesEnabled() {
+            setupLocationManager()
+            checkLocationAuthorization()
+        }
+        else {
+            // Let the user know that they have to turn location services on
+            nearMeButton.isHidden = true
+        }
+        
+    }
+    
+    func readUserCoordinates() {
+        
+        // Check that location services are on
+        guard CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() == .authorizedAlways else {
+                
+                activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+                return
+                
+        }
+        
+        // Check the users location
+        itemCoordinates = [locationManager.location!.coordinate.latitude,
+                           locationManager.location!.coordinate.longitude] as [Double]?
+        
     }
     
 }
+
+
+
+// MARK: - Helper Methods
+
+
+

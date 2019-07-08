@@ -158,9 +158,10 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        /*
         // Perform the segue to the selected item vc
         performSegue(withIdentifier: Constants.ID.Segues.itemSelected, sender: self)
-
+         */
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

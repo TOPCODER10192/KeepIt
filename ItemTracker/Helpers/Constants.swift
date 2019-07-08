@@ -16,9 +16,9 @@ struct Constants {
         
         struct Storyboard {
             
-            static let auth   = "Auth"
-            static let inApp  = "InApp"
-            static let popups = "Popups"
+            static let auth    = "Auth"
+            static let tabBar   = "TabBar"
+            static let popups   = "Popups"
             static let settings = "Settings"
             
         }
@@ -51,8 +51,6 @@ struct Constants {
             
             static let item           = "ItemCell"
             static let addItem        = "AddItemCell"
-            static let itemHeader     = "ItemHeaderCell"
-            static let itemFooter     = "ItemFooterCell"
             static let updateLocation = "UpdateLocationCell"
             
         }
@@ -90,9 +88,8 @@ struct Constants {
             
             static let login: CGFloat          = min(240, UIScreen.main.bounds.height - 350)
             static let createAccount: CGFloat  = min(230, UIScreen.main.bounds.height - 350)
-            static let addItem: CGFloat        = min(390, UIScreen.main.bounds.height - 240)
+            static let addItem: CGFloat        = min(530, UIScreen.main.bounds.height - 40)
             static let annotation: CGFloat     = 40
-            static let smallMap: CGFloat       = 200
             static let updateLocation: CGFloat = 150
             static let itemHeader: CGFloat     = 200
             
