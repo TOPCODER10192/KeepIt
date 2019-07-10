@@ -114,9 +114,9 @@ class UpdateLocationViewController: UIViewController {
             item.lastUpdateDate = time
             item.mostRecentLocation = usersLocation
             
+            UserService.writeItem(item: item, isNew: false, completion: nil)
             Stored.userItems[i] = item
             LocalStorageService.saveUserItem(item: item, isNew: false, index: i)
-            UserService.writeItem(item: item)
             
         }
         

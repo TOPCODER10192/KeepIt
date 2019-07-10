@@ -9,10 +9,13 @@
 import UIKit
 import MapKit
 
+import FirebaseFirestore
+
 // MARK: - Add Item Protocol
 protocol SingleItemProtocol {
     
     func itemSaved(item: Item)
+    func itemDeleted()
     
 }
 
@@ -32,6 +35,7 @@ class SingleItemViewController: UIViewController {
     @IBOutlet weak var editButton: UIBarButtonItem!
     
     @IBOutlet weak var itemImageContainerView: UIView!
+    @IBOutlet weak var imagePrompt: UILabel!
     @IBOutlet weak var itemImageView: UIImageView!
     @IBOutlet weak var itemNameTextField: UITextField!
     
@@ -56,7 +60,6 @@ class SingleItemViewController: UIViewController {
     
     var itemName: String?
     var itemCoordinates: [Double]?
-    var itemLastTimeUpdated: String?
     
     // MARK: - View Methods
     override func viewDidLoad() {
@@ -66,54 +69,62 @@ class SingleItemViewController: UIViewController {
         checkLocationServices()
         
         // Setup the Dim View
-        dimView.backgroundColor          = UIColor.clear
+        dimView.backgroundColor                   = UIColor.clear
 
         // Setup the Floating View
-        floatingView.layer.cornerRadius  = Constants.View.CornerRadius.standard
-        floatingViewHeight.constant      = Constants.View.Height.singleItem
-        floatingViewWidth.constant       = Constants.View.Width.standard
-        floatingViewYConstraint.constant = UIScreen.main.bounds.height
-        floatingView.backgroundColor     = Constants.Color.floatingView
+        floatingView.layer.cornerRadius           = Constants.View.CornerRadius.standard
+        floatingViewHeight.constant               = Constants.View.Height.singleItem
+        floatingViewWidth.constant                = Constants.View.Width.standard
+        floatingViewYConstraint.constant          = UIScreen.main.bounds.height
+        floatingView.backgroundColor              = Constants.Color.floatingView
         
         // Setup the Navigation Bar
-        navigationBar.layer.cornerRadius = Constants.View.CornerRadius.standard
-        navigationBar.clipsToBounds      = true
-        navigationBarTitle.title         = "Item"
-        closeButton.tintColor            = Constants.Color.primary
-        editButton.tintColor             = Constants.Color.primary
+        navigationBar.layer.cornerRadius          = Constants.View.CornerRadius.standard
+        navigationBar.clipsToBounds               = true
+        navigationBarTitle.title                  = "Add an Item"
+        closeButton.tintColor                     = Constants.Color.primary
+        editButton.tintColor                      = Constants.Color.primary
         
         // Setup the Item Image Container View
-        itemImageContainerView.layer.cornerRadius = itemImageView.bounds.width / 2
+        itemImageContainerView.layer.cornerRadius = (floatingViewHeight.constant - 65) * 0.21505376 / 2
         itemImageContainerView.layer.borderWidth  = 3
         itemImageContainerView.layer.borderColor  = Constants.Color.primary.cgColor
         itemImageContainerView.clipsToBounds      = true
         
+        // Setup the Image Prompt
+        imagePrompt.adjustsFontSizeToFitWidth     = true
+        imagePrompt.text                          = "Tap to Add Image"
+        
         // Setup the Item Name Text Field
-        itemNameTextField.delegate = self
+        itemNameTextField.delegate                = self
         
         // Setup the Location Prompt
+        locationPrompt.text                       = "Place a pin on your items location"
+        locationPrompt.adjustsFontSizeToFitWidth  = true
         
         // Setup the Map View
-        mapView.delegate                  = self
-        mapView.showsUserLocation         = true
-        mapView.layer.borderWidth         = 1
-        mapView.layer.borderColor         = Constants.Color.primary.cgColor
-        mapView.tintColor                 = Constants.Color.primary
+        mapView.delegate                          = self
+        mapView.showsUserLocation                 = true
+        mapView.layer.borderWidth                 = 1
+        mapView.layer.borderColor                 = Constants.Color.primary.cgColor
+        mapView.tintColor                         = Constants.Color.primary
         
         // Setup the Map Search Bar
-        mapSearchBar.delegate             = self
-        mapSearchBar.layer.borderWidth    = 1
-        mapSearchBar.layer.borderColor    = Constants.Color.primary.cgColor
-        mapSearchBar.layer.cornerRadius   = Constants.View.CornerRadius.standard
+        mapSearchBar.delegate                     = self
+        mapSearchBar.layer.borderWidth            = 1
+        mapSearchBar.layer.borderColor            = Constants.Color.primary.cgColor
+        mapSearchBar.layer.cornerRadius           = Constants.View.CornerRadius.standard
         mapSearchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
         // Setup the Near Me Button
-        nearMeButton.layer.cornerRadius   = Constants.View.CornerRadius.button
-        nearMeButton.backgroundColor      = Constants.Color.primary
+        nearMeButton.layer.cornerRadius           = Constants.View.CornerRadius.button
+        nearMeButton.backgroundColor              = Constants.Color.primary
         
         // Setup the Save Item Button
-        saveItemButton.layer.cornerRadius = Constants.View.CornerRadius.button
-        saveItemButton.backgroundColor    = Constants.Color.primary
+        saveItemButton.layer.cornerRadius         = Constants.View.CornerRadius.button
+        saveItemButton.backgroundColor            = Constants.Color.primary
+        saveItemButton.setTitle("", for: .disabled)
+        saveItemButton.setTitle("Save Item", for: .normal)
         activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Show the items properties
@@ -460,15 +471,16 @@ extension SingleItemViewController: CLLocationManagerDelegate {
             
         case .authorizedAlways, .authorizedWhenInUse:
             
+            if inEditMode == true {
+            nearMeButton.isHidden = false
+            }
+            
             if existingItem == nil {
                 centerMapOnAnnotation(annotation: mapView.userLocation, span: Constants.Map.defaultSpan)
             }
             
-        case .notDetermined:
-            break
-            
-        case .restricted, .denied:
-            break
+        case .restricted, .denied, .notDetermined:
+            nearMeButton.isHidden = true
             
         @unknown default:
             print("Unknown Authoriztion Status")
@@ -568,6 +580,9 @@ extension SingleItemViewController {
     
     func showItemProperties() {
         
+        // If no item exists then exit
+        guard existingItem != nil else { return }
+        
         // Set the Item Image View
         if let url = URL(string: existingItem!.imageURL) {
             itemImageView.sd_setImage(with: url, completed: nil)
@@ -614,36 +629,47 @@ extension SingleItemViewController {
             return
         }
         
+        navigationBarTitle.title = existingItem!.name
+        
         if inEditMode == true {
             
-            editButton.title = "Reset"
+            editButton.title                  = "Reset"
             
-            imageTapGesture.isEnabled = true
-            
-            itemNameTextField.isEnabled = true
-            itemNameTextField.borderStyle = .roundedRect
+            imageTapGesture.isEnabled         = true
+            imagePrompt.text                  = "Tap to Add Image"
+            itemNameTextField.isEnabled       = true
+            itemNameTextField.borderStyle     = .roundedRect
             itemNameTextField.backgroundColor = UIColor.white
             
-            mapSearchBar.isHidden    = false
-            mapHoldGesture.isEnabled = true
-            nearMeButton.isHidden    = false
+            locationPrompt.text               = "Place a pin on your items location"
             
-            checkToActivateButton()
+            mapSearchBar.isHidden             = false
+            mapHoldGesture.isEnabled          = true
+            
+            activateButton(isActivated: true, color: Constants.Color.primary)
+            saveItemButton.setTitle("Save Item", for: .normal)
+            
+            checkLocationAuthorization()
         
         }
         else {
             
-            editButton.title = "Edit"
+            editButton.title                  = "Edit"
             
-            imageTapGesture.isEnabled = false
-            
-            itemNameTextField.isEnabled = false
-            itemNameTextField.borderStyle = .none
+            imageTapGesture.isEnabled         = false
+            imagePrompt.text                  = "No Image"
+            itemNameTextField.isEnabled       = false
+            itemNameTextField.borderStyle     = .none
             itemNameTextField.backgroundColor = UIColor.clear
             
-            mapSearchBar.isHidden    = true
-            mapHoldGesture.isEnabled = false
-            nearMeButton.isHidden    = true
+            locationPrompt.text               = "Your items location is shown below"
+            
+            mapSearchBar.isHidden             = true
+            mapHoldGesture.isEnabled          = false
+            nearMeButton.isHidden             = true
+            
+            activateButton(isActivated: true, color: Constants.Color.error)
+            saveItemButton.setTitle("Delete Item", for: .normal)
             
             showItemProperties()
             
@@ -651,7 +677,7 @@ extension SingleItemViewController {
         
     }
     
-    func getTheDate() {
+    func getTheDate() -> String{
         
         // Create a date formatter
         let dateFormatter = DateFormatter()
@@ -659,7 +685,7 @@ extension SingleItemViewController {
         dateFormatter.timeStyle = .short
         
         // Extract the string for the current time
-        itemLastTimeUpdated = dateFormatter.string(from: Date())
+        return dateFormatter.string(from: Date())
         
     }
     
@@ -670,10 +696,11 @@ extension SingleItemViewController {
     
     @IBAction func saveItemButtonTapped(_ sender: UIButton) {
         
-        for item in Stored.userItems {
+        if inEditMode == false && existingItem != nil {
             
-            // If the item shares a name with another item then return
-            guard item.name != itemName! || itemName == existingItem?.name else { return }
+            // Send a "Are you sure" prompt
+            loadConfirmVC()
+            return
             
         }
         
@@ -686,19 +713,19 @@ extension SingleItemViewController {
             }
         }
         
-        // If the name is changed then the old item must be deleted
-        if itemName! != existingItem?.name {
-            UserService.removeItem(item: existingItem!)
-        }
-        
         // Get the current date and time
-        getTheDate()
+        let timeStamp = getTheDate()
         
         // Initialize the item
-        var item = Item.init(withName: itemName!,
-                             withLocation: itemCoordinates!,
-                             withLastUpdateDate: itemLastTimeUpdated!,
-                             withImageURL: "")
+        var item = Item.init(withID            : "",
+                             withName          : itemName!,
+                             withLocation      : itemCoordinates!,
+                             withLastUpdateDate: timeStamp,
+                             withImageURL      : "")
+        
+        if existingItem != nil {
+            item.id = existingItem!.id
+        }
         
         // If the image is not nil
         if let image = itemImageView.image {
@@ -729,17 +756,58 @@ extension SingleItemViewController {
     }
     
     func storeItem(item: Item) {
-        UserService.writeItem(item: item)
-        LocalStorageService.saveUserItem(item: item, isNew: existingItem == nil, index: existingItemIndex)
         
-        if existingItemIndex == nil {
-            Stored.userItems.append(item)
-        }
-        else {
-            Stored.userItems[existingItemIndex!] = item
+        UserService.writeItem(item: item, isNew: existingItem == nil) { (id) in
+            
+            var newItem = item
+            newItem.id = id
+            
+            LocalStorageService.saveUserItem(item: newItem, isNew: self.existingItem == nil, index: self.existingItemIndex)
+            
+            if self.existingItemIndex == nil {
+                Stored.userItems.append(newItem)
+            }
+            else {
+                Stored.userItems[self.existingItemIndex!] = newItem
+            }
+            
+            self.delegate?.itemSaved(item: newItem)
+            
+            self.slideViewOut()
+            
         }
         
-        delegate?.itemSaved(item: item)
+    }
+    
+    func loadConfirmVC() {
+        
+        let confirmVC = storyboard?.instantiateViewController(withIdentifier: Constants.ID.VC.confirmation) as? ConfirmationViewController
+        guard confirmVC != nil else { return }
+        
+        confirmVC!.item = existingItem!
+        confirmVC!.delegate = self
+        confirmVC!.modalTransitionStyle   = .crossDissolve
+        confirmVC!.modalPresentationStyle = .overCurrentContext
+        
+        present(confirmVC!, animated: true, completion: nil)
+        
+    }
+    
+}
+
+extension SingleItemViewController: ConfirmationProtocol {
+    
+    func deleteItem() {
+        
+        UserService.removeItem(item: existingItem!)
+        Stored.userItems.remove(at: existingItemIndex!)
+        LocalStorageService.eraseUserItem(index: existingItemIndex!)
+        
+        if URL(string: existingItem!.imageURL) != nil {
+            ImageService.deleteImage(itemName: existingItem!.name)
+        }
+        
+        delegate?.itemDeleted()
         
         slideViewOut()
         

@@ -34,7 +34,7 @@ class ItemAnnotationView: MKAnnotationView {
         }
                 // Otherwise use a default image
         else {
-            imageView.image = UIImage(named: "Key Icon")
+            imageView.image = UIImage(named: "Default")
         }
             
         // Add the subview to the annotation view

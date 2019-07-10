@@ -46,12 +46,14 @@ final class UserService {
                     // Get the data from the document
                     let itemData = document.data()
                     
-                    let name           = document.documentID
+                    let id             = document.documentID
+                    let name           = itemData[Constants.Key.Item.name]           as! String
                     let location       = itemData[Constants.Key.Item.location]       as! [Double]
                     let lastUpdateDate = itemData[Constants.Key.Item.lastUpdateDate] as! String
                     let url            = itemData[Constants.Key.Item.imageURL]       as! String
                     
-                    let item = Item.init(withName: name,
+                    let item = Item.init(withID: id,
+                                         withName: name,
                                          withLocation: location,
                                          withLastUpdateDate: lastUpdateDate,
                                          withImageURL: url)
@@ -91,32 +93,45 @@ final class UserService {
 
             // Then attempt to write the users items
             for item in items {
-                writeItem(item: item)
+                writeItem(item: item, isNew: false, completion: nil)
             }
             
         })
 
     }
     
-    static func writeItem(item: Item) {
+    static func writeItem(item: Item, isNew: Bool, completion: ((String) -> Void)?) {
         
-        let itemRef =
-            db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items).document(item.name)
+        let itemsRef = db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items)
         
+        let name            = item.name
         let location        = item.mostRecentLocation
         let url             = item.imageURL
         let lastTimeUpdated = item.lastUpdateDate
         
-        itemRef.setData([Constants.Key.Item.location: location,
-                         Constants.Key.Item.imageURL: url,
-                         Constants.Key.Item.lastUpdateDate: lastTimeUpdated])
+        if isNew == true {
+            let itemRef = itemsRef.addDocument(data: [Constants.Key.Item.name          : name,
+                                                      Constants.Key.Item.location      : location,
+                                                      Constants.Key.Item.imageURL      : url,
+                                                      Constants.Key.Item.lastUpdateDate: lastTimeUpdated])
+            
+            completion!(itemRef.documentID)
+        }
+        else {
+            itemsRef.document(item.id).setData([Constants.Key.Item.name          : name,
+                                                Constants.Key.Item.location      : location,
+                                                Constants.Key.Item.imageURL      : url,
+                                                Constants.Key.Item.lastUpdateDate: lastTimeUpdated])
+            
+            completion!(item.id)
+        }
         
     }
     
     static func removeItem(item: Item) {
         
         let itemRef =
-            db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items).document(item.name)
+            db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items).document(item.id)
         
         itemRef.delete()
         

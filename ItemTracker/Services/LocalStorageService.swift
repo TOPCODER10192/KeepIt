@@ -21,6 +21,7 @@ final class LocalStorageService {
         defaults.set(user.email, forKey: Constants.Key.User.email)
         
         // Initialize array that will store item properties
+        var itemIDs             = [String]()
         var itemNames           = [String]()
         var itemLocations       = [[Double]]()
         var itemLastUpdateDates = [String]()
@@ -28,18 +29,20 @@ final class LocalStorageService {
         
         // Fill the arrays
         for item in items {
-            itemNames.append(item.name)
-            itemLocations.append(item.mostRecentLocation)
-            itemLastUpdateDates.append(item.lastUpdateDate)
-            itemImageURLs.append(item.imageURL)
+            itemIDs             += [item.id]
+            itemNames           += [item.name]
+            itemLocations       += [item.mostRecentLocation]
+            itemLastUpdateDates += [item.lastUpdateDate]
+            itemImageURLs       += [item.imageURL]
             
         }
         
         // Locally store the arrays
-        defaults.set(itemNames, forKey: Constants.Key.Item.name)
-        defaults.set(itemLocations, forKey: Constants.Key.Item.location)
+        defaults.set(itemIDs,             forKey: Constants.Key.Item.id)
+        defaults.set(itemNames,           forKey: Constants.Key.Item.name)
+        defaults.set(itemLocations,       forKey: Constants.Key.Item.location)
         defaults.set(itemLastUpdateDates, forKey: Constants.Key.Item.lastUpdateDate)
-        defaults.set(itemImageURLs, forKey: Constants.Key.Item.imageURL)
+        defaults.set(itemImageURLs,       forKey: Constants.Key.Item.imageURL)
         
     }
     
@@ -48,7 +51,8 @@ final class LocalStorageService {
         // Get standard user defaults
         let defaults = UserDefaults.standard
         
-        // Pull all the current item arrays from loca
+        // Pull all the current item arrays from local storage
+        var itemIDs             = defaults.value(forKey: Constants.Key.Item.id)             as! [String]
         var itemNames           = defaults.value(forKey: Constants.Key.Item.name)           as! [String]
         var itemLocations       = defaults.value(forKey: Constants.Key.Item.location)       as! [[Double]]
         var itemLastUpdateDates = defaults.value(forKey: Constants.Key.Item.lastUpdateDate) as! [String]
@@ -56,13 +60,15 @@ final class LocalStorageService {
         
         // Append the new items propeties to the arrays
         if isNew == true {
-            itemNames.append(item.name)
-            itemLocations.append(item.mostRecentLocation)
-            itemLastUpdateDates.append(item.lastUpdateDate)
-            itemImageURLs.append(item.imageURL)
+            itemIDs             += [item.id]
+            itemNames           += [item.name]
+            itemLocations       += [item.mostRecentLocation]
+            itemLastUpdateDates += [item.lastUpdateDate]
+            itemImageURLs       += [item.imageURL]
         }
         else if isNew == false, let i = index {
             
+            itemIDs[i]             = item.id
             itemNames[i]           = item.name
             itemLocations[i]       = item.mostRecentLocation
             itemLastUpdateDates[i] = item.lastUpdateDate
@@ -71,10 +77,41 @@ final class LocalStorageService {
         }
         
         // Locally store the arrays
-        defaults.set(itemNames, forKey: Constants.Key.Item.name)
-        defaults.set(itemLocations, forKey: Constants.Key.Item.location)
+        defaults.set(itemIDs,             forKey: Constants.Key.Item.id)
+        defaults.set(itemNames,           forKey: Constants.Key.Item.name)
+        defaults.set(itemLocations,       forKey: Constants.Key.Item.location)
         defaults.set(itemLastUpdateDates, forKey: Constants.Key.Item.lastUpdateDate)
-        defaults.set(itemImageURLs, forKey: Constants.Key.Item.imageURL)
+        defaults.set(itemImageURLs,       forKey: Constants.Key.Item.imageURL)
+        
+    }
+    
+    static func eraseUserItem(index: Int) {
+        
+        // Get standard user defaults
+        let defaults = UserDefaults.standard
+        
+        // Pull all the current item arrays from local storage
+        var itemIDs             = defaults.value(forKey: Constants.Key.Item.id)             as! [String]
+        var itemNames           = defaults.value(forKey: Constants.Key.Item.name)           as! [String]
+        var itemLocations       = defaults.value(forKey: Constants.Key.Item.location)       as! [[Double]]
+        var itemLastUpdateDates = defaults.value(forKey: Constants.Key.Item.lastUpdateDate) as! [String]
+        var itemImageURLs       = defaults.value(forKey: Constants.Key.Item.imageURL)       as! [String]
+        
+        // Remove the item
+        itemIDs.remove(at: index)
+        itemNames.remove(at: index)
+        itemLocations.remove(at: index)
+        itemLastUpdateDates.remove(at: index)
+        itemImageURLs.remove(at: index)
+        
+        // Locally store the arrays
+        defaults.set(itemIDs,             forKey: Constants.Key.Item.id)
+        defaults.set(itemNames,           forKey: Constants.Key.Item.name)
+        defaults.set(itemLocations,       forKey: Constants.Key.Item.location)
+        defaults.set(itemLastUpdateDates, forKey: Constants.Key.Item.lastUpdateDate)
+        defaults.set(itemImageURLs,       forKey: Constants.Key.Item.imageURL)
+        
+        
         
     }
     
@@ -95,6 +132,7 @@ final class LocalStorageService {
         let user = UserInfo(firstName: firstName!, lastName: lastName!, email: email!)
         
         // Read in the arrays of item properties
+        let itemIDs             = defaults.value(forKey: Constants.Key.Item.id)             as! [String]
         let itemNames           = defaults.value(forKey: Constants.Key.Item.name)           as! [String]
         let itemLocations       = defaults.value(forKey: Constants.Key.Item.location)       as! [[Double]]
         let itemLastUpdateDates = defaults.value(forKey: Constants.Key.Item.lastUpdateDate) as! [String]
@@ -105,16 +143,19 @@ final class LocalStorageService {
         
         for i in 0 ..< itemNames.count {
             // Pull the properties from each array
+            let id             = itemIDs[i]
             let name           = itemNames[i]
             let location       = itemLocations[i]
             let lastUpdateDate = itemLastUpdateDates[i]
             let imageURL       = itemImageURLs[i]
             
             // Create the item and append it to the array of userItems
-            let item = Item.init(withName: name,
+            let item = Item.init(withID: id,
+                                 withName: name,
                                  withLocation: location,
                                  withLastUpdateDate: lastUpdateDate,
                                  withImageURL: imageURL)
+            
             items.append(item)
             
         }
@@ -136,6 +177,7 @@ final class LocalStorageService {
         defaults.set(nil, forKey: Constants.Key.User.email)
         
         // Locally clear the item arrays
+        defaults.set(nil, forKey: Constants.Key.Item.name)
         defaults.set(nil, forKey: Constants.Key.Item.name)
         defaults.set(nil, forKey: Constants.Key.Item.location)
         defaults.set(nil, forKey: Constants.Key.Item.lastUpdateDate)

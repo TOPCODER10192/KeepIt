@@ -35,7 +35,7 @@ class TurnOnLocationViewController: UIViewController {
         dimView.backgroundColor = UIColor.clear
         
         // Setup the floating view
-        floatingView.backgroundColor     = Constants.Color.floatingView
+        floatingView.backgroundColor     = Constants.Color.notificationView
         floatingView.layer.cornerRadius  = Constants.View.CornerRadius.standard
         floatingViewYConstraint.constant = UIScreen.main.bounds.height
         

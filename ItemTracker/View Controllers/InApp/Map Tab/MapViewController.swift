@@ -164,27 +164,24 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
         guard annotation is MKPointAnnotation else { return nil }
         
         // Deque an annotation view for an item
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constants.ID.Annotation.item) as? ItemAnnotationView
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Constants.ID.Annotation.item) as? ItemAnnotationView ??
+                             ItemAnnotationView(annotation: annotation, reuseIdentifier: Constants.ID.Annotation.item)
         
-        // Create an annotation view for the item if none exist
-        if annotationView == nil {
-            annotationView = ItemAnnotationView(annotation: annotation, reuseIdentifier: Constants.ID.Annotation.item)
-        }
-        
-        guard annotationView != nil else { return nil }
         
         // Iterate through all the items
         for item in Stored.userItems {
             
             // If the annotation title matches the item name then set the sublayer for the annotation to match the item
             if annotation.title == item.name {
-                annotationView?.setSublayer(item: item)
+                
+                annotationView.setSublayer(item: item)
+                
             }
             
         }
         
         // Sets the callout for the annotationView
-        annotationView?.setCallout()
+        annotationView.setCallout()
         
         // Return the annotationView
         return annotationView
@@ -319,9 +316,9 @@ extension MapViewController: CLLocationManagerDelegate {
 }
 
 // MARK: - Custom Protocol Methods
-extension MapViewController: AddItemProtocol, UpdateLocationProtocol {
+extension MapViewController: SingleItemProtocol, UpdateLocationProtocol {
     
-    func itemAdded(item: Item) {
+    func itemSaved(item: Item) {
         
         // Initialize an annotation
         let annotation = MKPointAnnotation()
@@ -335,6 +332,13 @@ extension MapViewController: AddItemProtocol, UpdateLocationProtocol {
         // Add the annotation to the map and center over it
         mapView.addAnnotation(annotation)
         centerMapOnItem(annotation: annotation, span: Constants.Map.defaultSpan)
+        
+    }
+    
+    func itemDeleted() {
+        
+        // Reload all the annotations on the map
+        reloadAnnotations()
         
     }
     
@@ -368,7 +372,7 @@ extension MapViewController {
         
         let vc = sb.instantiateViewController(withIdentifier: ID)
         
-        if let vc = vc as? AddItemViewController {
+        if let vc = vc as? SingleItemViewController {
             vc.delegate = self
         }
         else if let vc = vc as? UpdateLocationViewController {

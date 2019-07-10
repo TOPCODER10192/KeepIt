@@ -37,11 +37,11 @@ struct Constants {
             static let forgotPassword = "ForgotPasswordVC"
             
             static let tabBar         = "TabBarVC"
-            static let selectedItem   = "SelectedItemVC"
             
             static let singleItem     = "SingleItemVC"
             static let updateLocation = "UpdateLocationVC"
             static let noLocation     = "LocationReminderVC"
+            static let confirmation   = "ConfirmationVC"
             
             static let settings       = "SettingsVC"
             
@@ -88,7 +88,7 @@ struct Constants {
             
             static let login: CGFloat          = min(240, UIScreen.main.bounds.height - 350)
             static let createAccount: CGFloat  = min(230, UIScreen.main.bounds.height - 350)
-            static let singleItem: CGFloat        = min(530, UIScreen.main.bounds.height - 40)
+            static let singleItem: CGFloat     = min(700, UIScreen.main.bounds.height - 60)
             static let annotation: CGFloat     = 40
             static let updateLocation: CGFloat = 150
             static let itemHeader: CGFloat     = 200
@@ -107,16 +107,15 @@ struct Constants {
     // MARK: - Color
     struct Color {
         
-        static let floatingView   = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 240/255)
-        static let primary        = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 255/255)
-        static let settings       = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 255/255)
-        static let inactiveButton = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 120/255)
+        static let floatingView     = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 255/255)
+        static let notificationView = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 255/255)
+        static let primary          = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 255/255)
+        static let settings         = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 255/255)
+        static let inactiveButton   = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 120/255)
         
         
-        static let success        = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 255/255)
-        static let error          = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 255/255)
-        
-        static let softError      = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 140/255)
+        static let success          = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 255/255)
+        static let error            = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 255/255)
     
     }
     
@@ -149,6 +148,7 @@ struct Constants {
         
         struct Item {
             
+            static let id             = "Item ID"
             static let items          = "Items"
             static let name           = "Item Name"
             static let movement       = "Is Moved Often"

@@ -11,13 +11,15 @@ import Foundation
 struct Item {
     
     // MARK: - Item Properties
+    var id: String
     var name: String
     var mostRecentLocation: [Double]
     var lastUpdateDate: String
     var imageURL: String
 
-    init(withName: String, withLocation: [Double], withLastUpdateDate: String, withImageURL: String) {
+    init(withID: String, withName: String, withLocation: [Double], withLastUpdateDate: String, withImageURL: String) {
         
+        id                 = withID
         name               = withName
         mostRecentLocation = withLocation
         lastUpdateDate     = withLastUpdateDate

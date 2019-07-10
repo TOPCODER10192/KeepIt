@@ -102,8 +102,15 @@ extension ItemsViewController {
     
 }
 
-// MARK: - Methods that conform to AddItemProtocol
+// MARK: - Single Item Protocol Methods
 extension ItemsViewController: SingleItemProtocol {
+    
+    func itemDeleted() {
+        
+        // Refresh the collectionView
+        itemsCollectionView.reloadData()
+        
+    }
     
     func itemSaved(item: Item) {
         
@@ -139,6 +146,9 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         
         if let url = URL(string: Stored.userItems[indexPath.row].imageURL) {
             cell.setPhoto(url: url)
+        }
+        else {
+            cell.itemImage.image = UIImage(named: "Default")
         }
             
         return cell
