@@ -63,7 +63,7 @@ final class MapViewController: UIViewController {
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
         // Load the add item vc
-        loadVC(ID: Constants.ID.VC.addItem,
+        loadVC(ID: Constants.ID.VC.singleItem,
                        sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
                        animate:  false)
         

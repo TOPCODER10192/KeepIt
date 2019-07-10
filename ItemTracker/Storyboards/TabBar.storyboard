@@ -37,7 +37,7 @@
                                                     <action selector="addButtonTapped:" destination="HIL-Jd-BGQ" id="rkP-Os-Sv8"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem image="UpdateIcon" id="AOW-Wu-tZu">
+                                            <barButtonItem systemItem="refresh" id="AOW-Wu-tZu">
                                                 <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
                                                     <action selector="updateButtonTapped:" destination="HIL-Jd-BGQ" id="HCd-RZ-st3"/>
@@ -143,7 +143,7 @@
                                                     <action selector="addButtonTapped:" destination="mLa-WI-aFu" id="Dw8-Xe-eKU"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem image="UpdateIcon" id="h8i-lH-Sql">
+                                            <barButtonItem systemItem="refresh" id="h8i-lH-Sql">
                                                 <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
                                                     <action selector="updateLocationButtonTapped:" destination="mLa-WI-aFu" id="CHK-Gc-5re"/>
@@ -243,7 +243,6 @@
         <!--Tab Bar Controller-->
         <scene sceneID="wEz-yV-RT6">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="OhC-cc-W0f" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tabBarController storyboardIdentifier="TabBarVC" id="OmI-px-LHd" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="66L-r7-Xek">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -256,6 +255,7 @@
                         <segue destination="mLa-WI-aFu" kind="relationship" relationship="viewControllers" id="dvW-2i-eg4"/>
                     </connections>
                 </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OhC-cc-W0f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-764" y="-354"/>
         </scene>
@@ -266,6 +266,5 @@
         <image name="NextButton" width="30" height="50"/>
         <image name="PreviousButton" width="30" height="50"/>
         <image name="Settings Icon" width="30" height="30"/>
-        <image name="UpdateIcon" width="30" height="30"/>
     </resources>
 </document>

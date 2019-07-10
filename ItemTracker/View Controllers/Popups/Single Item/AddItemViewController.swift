@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseFirestore
+import FirebaseStorage
 import MapKit
 import CoreLocation
 
@@ -29,7 +30,9 @@ final class AddItemViewController: UIViewController {
     @IBOutlet weak var floatingViewYConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarTitle: UINavigationItem!
     @IBOutlet weak var backButton: UIBarButtonItem!
+    @IBOutlet weak var editButton: UIBarButtonItem!
     
     @IBOutlet weak var itemNameTextField: UITextField!
     @IBOutlet weak var addImageButton: UIButton!
@@ -42,11 +45,14 @@ final class AddItemViewController: UIViewController {
     
     @IBOutlet weak var addItemButton: UIButton!
     
-    // MARK: - AddItemViewController Properties
+    // MARK: - Properties
     let db = Firestore.firestore()
     let locationManager = CLLocationManager()
     var delegate: AddItemProtocol?
     var sameNameError: Bool = false
+    var isInEditMode = true
+    
+    var existingItem: Item?
     
     var itemName: String?
     var itemCoordinates: [Double]?
@@ -60,25 +66,31 @@ final class AddItemViewController: UIViewController {
         // Setup the dimView
         dimView.backgroundColor           = UIColor.clear
         
+        // Show the items properties if one exists already
+        showItemProperties()
+        
         // Setup the FloatingView
         floatingView.backgroundColor      = Constants.Color.floatingView
         floatingView.layer.cornerRadius   = Constants.View.CornerRadius.standard
         floatingViewWidth.constant        = Constants.View.Width.standard
-        floatingViewHeight.constant       = Constants.View.Height.addItem
+        floatingViewHeight.constant       = Constants.View.Height.singleItem
         floatingViewYConstraint.constant  = UIScreen.main.bounds.height
         
         // Setup the navigationBar
         navigationBar.layer.cornerRadius  = Constants.View.CornerRadius.standard
         navigationBar.clipsToBounds       = true
-        
-        // Setup the itemNameTextField
-        itemNameTextField.delegate        = self
+    
+        // Set up the view based on if it is editing or not
+        setForEditMode()
         
         // Setup the addImageButton
         addImageButton.clipsToBounds      = true
         addImageButton.layer.cornerRadius = addImageButton.frame.width / 2
         addImageButton.layer.borderColor  = Constants.Color.primary.cgColor
-        addImageButton.layer.borderWidth  = 1
+        addImageButton.layer.borderWidth  = 3
+        
+        // Setup the itemNameTextField
+        itemNameTextField.delegate        = self
 
         // Setup the searchBar
         mapSearchBar.alpha                = 1
@@ -100,7 +112,6 @@ final class AddItemViewController: UIViewController {
         addItemButton.backgroundColor     = Constants.Color.primary
         activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -121,6 +132,19 @@ final class AddItemViewController: UIViewController {
         slideViewOut()
         
     }
+    
+    @IBAction func editButtonTapped(_ sender: Any) {
+        
+        isInEditMode = !isInEditMode
+        
+        if isInEditMode == false {
+            showItemProperties()
+        }
+        
+        setForEditMode()
+        
+    }
+    
     
     @IBAction func itemNameTextFieldBeganEditing(_ sender: UITextField) {
         
@@ -204,7 +228,7 @@ final class AddItemViewController: UIViewController {
         mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotation(annotation)
         
-        centerMapOnUser(span: Constants.Map.defaultSpan)
+        centerMapOnAnnotation(annotation: annotation, span: Constants.Map.defaultSpan)
         
         // Check to see if the button should be activated
         checkToActivateButton()
@@ -243,7 +267,7 @@ final class AddItemViewController: UIViewController {
         // Check that this item hasn't already been created
         for item in Stored.userItems {
             
-            guard itemName!.uppercased() != item.name.uppercased() else {
+            guard itemName!.uppercased() != item.name.uppercased() || itemName!.uppercased() == existingItem?.name.uppercased() else {
                 
                 // Reactivate the button
                 addItemButton.isEnabled = true
@@ -276,7 +300,7 @@ final class AddItemViewController: UIViewController {
         if itemImage != nil {
             
             // Store the image in the cloud and then get a download url for it
-            ImageService.storeImage(image: itemImage!) { (url) in
+            /* ImageService.storeImage(image: itemImage!) { (url) in
                 
                 // Update the item
                 item.imageURL = url.absoluteString
@@ -284,7 +308,7 @@ final class AddItemViewController: UIViewController {
                 // Append the item the usersItems array and locally store it
                 Stored.userItems.append(item)
                 LocalStorageService.saveUserItem(item: item, isNew: true)
-                UserService.writeItem(item: item, ref: itemRef)
+                //UserService.writeItem(item: item, ref: itemRef)
                 
                 // Tell the delegate that an item was added
                 self.delegate?.itemAdded(item: item)
@@ -293,6 +317,7 @@ final class AddItemViewController: UIViewController {
                 self.slideViewOut()
                 
             }
+ */
             
         }
             
@@ -302,7 +327,7 @@ final class AddItemViewController: UIViewController {
             // Append the item the usersItems array and locally store it
             Stored.userItems.append(item)
             LocalStorageService.saveUserItem(item: item, isNew: true)
-            UserService.writeItem(item: item, ref: itemRef)
+            //UserService.writeItem(item: item, ref: itemRef)
             
             // Tell the delegate that an item was added
             delegate?.itemAdded(item: item)
@@ -419,6 +444,78 @@ extension AddItemViewController {
         
     }
     
+    func setForEditMode() {
+        
+        if isInEditMode == true {
+            
+            if existingItem == nil {
+                navigationBarTitle.title = "Add Item"
+                
+                editButton.title     = ""
+                editButton.isEnabled = false
+            }
+            else {
+                editButton.title     = "Reset"
+                editButton.isEnabled = true
+            }
+            
+            addImageButton.isEnabled      = true
+            itemNameTextField.isEnabled   = true
+            itemNameTextField.borderStyle = .roundedRect
+            
+            locationLabel.text            = "Place a pin on your items location"
+            mapSearchBar.isHidden         = false
+            nearMeButton.isHidden         = false
+        }
+        else {
+            editButton.title              = "Edit"
+            editButton.isEnabled          = true
+            
+            addImageButton.isEnabled      = false
+            itemNameTextField.isEnabled   = false
+            itemNameTextField.borderStyle = .none
+            
+            locationLabel.text            = "Your items location is shown below"
+            mapSearchBar.isHidden         = true
+            nearMeButton.isHidden         = true
+        }
+        
+    }
+    
+    func showItemProperties() {
+        
+        if let item = existingItem {
+            
+            navigationBarTitle.title = item.name
+            
+            if let url = URL(string: item.imageURL) {
+                addImageButton.sd_setBackgroundImage(with: url, for: UIControl.State.normal, completed: nil)
+                addImageButton.sd_setBackgroundImage(with: url, for: UIControl.State.disabled, completed: nil)
+            }
+            
+            itemNameTextField.text = item.name
+            
+            
+            let latitude = item.mostRecentLocation[0]
+            let longitude = item.mostRecentLocation[1]
+            let coordinate = CLLocationCoordinate2DMake(latitude, longitude)
+            
+            // Create an annotation
+            let annotation        = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            
+            // Remove all previous annotations
+            mapView.removeAnnotations(mapView.annotations)
+            mapView.addAnnotation(annotation)
+            
+            itemName  = itemNameTextField.text
+            itemImage = addImageButton.backgroundImage(for: .normal)
+            itemCoordinates = [annotation.coordinate.latitude, annotation.coordinate.longitude]
+            
+        }
+        
+    }
+    
 }
 
 // MARK: - Image Methods
@@ -505,6 +602,7 @@ extension AddItemViewController: MKMapViewDelegate, UISearchBarDelegate {
                 annotationView.canShowCallout = false
             }
         }
+        
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationView.DragState, fromOldState oldState: MKAnnotationView.DragState) {
@@ -516,14 +614,25 @@ extension AddItemViewController: MKMapViewDelegate, UISearchBarDelegate {
         
     }
     
-    func centerMapOnUser(span: MKCoordinateSpan) {
+    func centerMapOnAnnotation(annotation: MKAnnotation, span: MKCoordinateSpan) {
+        
+        var center: CLLocationCoordinate2D
         
         // Get the users location
-        let location = locationManager.location?.coordinate
-        guard location != nil else { return }
+        if annotation is MKUserLocation {
+            
+            let location = locationManager.location?.coordinate
+            guard location != nil else { return }
+            center = location!
+            
+        }
+        else {
+            
+            center = annotation.coordinate
+            
+        }
         
-        // Get the center and the region
-        let center = location!
+        // Create the region the region
         let region = MKCoordinateRegion.init(center: center, span: span)
         
         // Set the region
@@ -536,8 +645,8 @@ extension AddItemViewController: MKMapViewDelegate, UISearchBarDelegate {
         // Iterate through the annotations on the map
         for annotation in mapView.annotations {
             
-            // If the annotation can be cast an mkPoint annotation then get the coordinates of the annotation
-            if annotation as? MKPointAnnotation != nil {
+            // If the annotation can be cast an MKPointAnnotation then get the coordinates of the annotation
+            if annotation is MKPointAnnotation {
                 itemCoordinates = [annotation.coordinate.latitude, annotation.coordinate.longitude]
                 return
             }
@@ -631,8 +740,12 @@ extension AddItemViewController: CLLocationManagerDelegate {
         case .authorizedAlways, .authorizedWhenInUse:
             // Show the users location on the map
             mapView.showsUserLocation = true
-            nearMeButton.isHidden     = false
-            centerMapOnUser(span: Constants.Map.defaultSpan)
+            
+            if isInEditMode == true {
+                nearMeButton.isHidden = false
+            }
+            
+            centerMapOnAnnotation(annotation: mapView.userLocation, span: Constants.Map.defaultSpan)
             
         // Case if the user has not selected a permission level
         case .notDetermined:
@@ -691,10 +804,6 @@ extension AddItemViewController: CLLocationManagerDelegate {
     }
     
 }
-
-
-
-// MARK: - Helper Methods
 
 
 

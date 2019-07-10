@@ -39,7 +39,7 @@ struct Constants {
             static let tabBar         = "TabBarVC"
             static let selectedItem   = "SelectedItemVC"
             
-            static let addItem        = "AddItemVC"
+            static let singleItem     = "SingleItemVC"
             static let updateLocation = "UpdateLocationVC"
             static let noLocation     = "LocationReminderVC"
             
@@ -88,7 +88,7 @@ struct Constants {
             
             static let login: CGFloat          = min(240, UIScreen.main.bounds.height - 350)
             static let createAccount: CGFloat  = min(230, UIScreen.main.bounds.height - 350)
-            static let addItem: CGFloat        = min(530, UIScreen.main.bounds.height - 40)
+            static let singleItem: CGFloat        = min(530, UIScreen.main.bounds.height - 40)
             static let annotation: CGFloat     = 40
             static let updateLocation: CGFloat = 150
             static let itemHeader: CGFloat     = 200

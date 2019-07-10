@@ -14,13 +14,12 @@ class SelectedItemViewController: UIViewController {
 
     // MARK: - IBOutlet Properties
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var editButton: UIButton!
     
     @IBOutlet weak var itemImageButton: UIButton!
     
     @IBOutlet weak var itemNameTextField: UITextField!
-    
-    @IBOutlet weak var itemLastSeenLabel: UILabel!
-    @IBOutlet weak var itemLocationDescriptionTextField: UITextField!
     
     // MARK: - Properties
     var item: Item?
@@ -51,9 +50,6 @@ class SelectedItemViewController: UIViewController {
         // Setup the item label
         itemNameTextField.text = item!.name
         
-        // Setup the last seen date label
-        itemLastSeenLabel.text                      = "Last Seen: \(item!.lastUpdateDate)"
-        itemLastSeenLabel.adjustsFontSizeToFitWidth = true
     }
 
 }
@@ -63,7 +59,7 @@ extension SelectedItemViewController {
     
     func setImage(url: URL) {
         
-        itemImageButton.sd_setBackgroundImage(with: url, for: UIControl.State.disabled) { (image, error, cacheType, url) in
+        itemImageButton.sd_setImage(with: url, for: UIControl.State.disabled) { (image, error, cacheType, url) in
             
             
         }

@@ -88,28 +88,37 @@ final class UserService {
             
             // Exit if the data could not be set
             guard error != nil else { return }
-            
-            // Get a reference to the items collection
-            let userItemsRef = userInfoRef.collection(Constants.Key.Item.items)
-            
+
             // Then attempt to write the users items
             for item in items {
-                writeItem(item: item, ref: userItemsRef.document(item.name))
+                writeItem(item: item)
             }
             
         })
 
     }
     
-    static func writeItem(item: Item, ref: DocumentReference) {
+    static func writeItem(item: Item) {
+        
+        let itemRef =
+            db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items).document(item.name)
         
         let location        = item.mostRecentLocation
         let url             = item.imageURL
         let lastTimeUpdated = item.lastUpdateDate
         
-        ref.setData([Constants.Key.Item.location: location,
-                     Constants.Key.Item.imageURL: url,
-                     Constants.Key.Item.lastUpdateDate: lastTimeUpdated])
+        itemRef.setData([Constants.Key.Item.location: location,
+                         Constants.Key.Item.imageURL: url,
+                         Constants.Key.Item.lastUpdateDate: lastTimeUpdated])
+        
+    }
+    
+    static func removeItem(item: Item) {
+        
+        let itemRef =
+            db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items).document(item.name)
+        
+        itemRef.delete()
         
     }
     

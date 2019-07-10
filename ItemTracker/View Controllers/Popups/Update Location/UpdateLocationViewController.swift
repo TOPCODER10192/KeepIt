@@ -116,7 +116,7 @@ class UpdateLocationViewController: UIViewController {
             
             Stored.userItems[i] = item
             LocalStorageService.saveUserItem(item: item, isNew: false, index: i)
-            UserService.writeItem(item: item, ref: itemsRef.document(item.name))
+            UserService.writeItem(item: item)
             
         }
         

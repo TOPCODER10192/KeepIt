@@ -12,14 +12,14 @@ import FirebaseFirestore
 
 final class ImageService {
     
-    static func storeImage(image: UIImage, completion: @escaping (URL) -> Void) {
+    static let firebaseStorage = Storage.storage()
+    
+    static func storeImage(image: UIImage, itemName: String, completion: @escaping (URL) -> Void) {
         
-        // Generate a random image id
-        let imageID = UUID.init().uuidString
         guard let userEmail = Stored.user?.email else { return }
         
         // Get a storage reference
-        let uploadRef = Storage.storage().reference().child(userEmail).child(imageID)
+        let uploadRef = firebaseStorage.reference().child(userEmail).child(itemName)
         
         // Get Data Representation of the image
         guard let imageData = image.jpegData(compressionQuality: 0.01) else { return }
@@ -46,6 +46,20 @@ final class ImageService {
                 }
                 
             }
+            
+        }
+        
+    }
+    
+    static func deleteImage(itemName: String) {
+        
+        guard let userEmail = Stored.user?.email else { return }
+        
+        let deleteRef = firebaseStorage.reference().child(userEmail).child(itemName)
+        
+        deleteRef.delete { (error) in
+            
+            guard error == nil else { return }
             
         }
         

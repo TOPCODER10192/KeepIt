@@ -45,7 +45,7 @@ final class ItemsViewController: UIViewController {
         
         // If the user has no items then bring up the Add Item VC
         if Stored.userItems.count == 0 {
-            loadVC(ID: Constants.ID.VC.addItem,
+            loadVC(ID: Constants.ID.VC.singleItem,
                    sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
                    animated: false)
         }
@@ -56,7 +56,7 @@ final class ItemsViewController: UIViewController {
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
         // Load the Add Item VC
-        loadVC(ID: Constants.ID.VC.addItem,
+        loadVC(ID: Constants.ID.VC.singleItem,
                sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
                animated: false)
         
@@ -103,9 +103,9 @@ extension ItemsViewController {
 }
 
 // MARK: - Methods that conform to AddItemProtocol
-extension ItemsViewController: AddItemProtocol {
+extension ItemsViewController: SingleItemProtocol {
     
-    func itemAdded(item: Item) {
+    func itemSaved(item: Item) {
         
         // Refresh the collectionView
         itemsCollectionView.reloadData()
@@ -158,29 +158,10 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        /*
-        // Perform the segue to the selected item vc
-        performSegue(withIdentifier: Constants.ID.Segues.itemSelected, sender: self)
-         */
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        // Get the selected index path
-        let indexPaths = itemsCollectionView.indexPathsForSelectedItems
-        guard indexPaths != nil else { return }
-        
-        // Get the selected index
-        let index = indexPaths![0].row
-        
-        // If the segue destination can be cast as a Selected Item VC then set its item
-        if let vc = segue.destination as? SelectedItemViewController {
-            
-            vc.item = Stored.userItems[index]
-            
-        }
-        
-        
+        // Present the selected item VC
+        loadVC(ID: Constants.ID.VC.singleItem,
+               sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+               animated: false)
         
     }
     
@@ -193,12 +174,22 @@ extension ItemsViewController  {
         
         let vc = sb.instantiateViewController(withIdentifier: ID)
         
-        if let vc = vc as? AddItemViewController {
+        if let vc = vc as? SingleItemViewController{
+            
+            let indexPaths = itemsCollectionView.indexPathsForSelectedItems
+            
+            if indexPaths != nil, indexPaths!.count > 0, let index = indexPaths?[0].row {
+                itemsCollectionView.selectItem(at: nil, animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
+                vc.existingItem = Stored.userItems[index]
+                vc.existingItemIndex = index
+            }
+            
             vc.delegate = self
         }
         else if let vc = vc as? UpdateLocationViewController {
             
         }
+
         
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: animated, completion: nil)
