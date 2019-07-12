@@ -200,14 +200,19 @@ extension SingleItemViewController: UIImagePickerControllerDelegate, UINavigatio
             
         }
         
-        // Add an action that will clear the image
-        actionSheet.addAction(UIAlertAction(title: "No Image", style: .default, handler: { (action) in
+        // If there is an image, add an option to take away the image
+        if itemImageView.image != nil {
             
-            // Clear the image
-            self.itemImageView.image = nil
-            self.imageChanged = true
+            // Add an action that will clear the image
+            actionSheet.addAction(UIAlertAction(title: "No Image", style: .default, handler: { (action) in
+                
+                // Clear the image
+                self.itemImageView.image = nil
+                self.imageChanged = true
+                
+            }))
             
-        }))
+        }
         
         // Add a cancel action to the action sheet
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -699,7 +704,7 @@ extension SingleItemViewController {
         if inEditMode == false && existingItem != nil {
             
             // Send a "Are you sure" prompt
-            loadConfirmVC()
+            showConfirmationsAlert()
             return
             
         }
@@ -779,37 +784,31 @@ extension SingleItemViewController {
         
     }
     
-    func loadConfirmVC() {
-        
-        let confirmVC = storyboard?.instantiateViewController(withIdentifier: Constants.ID.VC.confirmation) as? ConfirmationViewController
-        guard confirmVC != nil else { return }
-        
-        confirmVC!.item = existingItem!
-        confirmVC!.delegate = self
-        confirmVC!.modalTransitionStyle   = .crossDissolve
-        confirmVC!.modalPresentationStyle = .overCurrentContext
-        
-        present(confirmVC!, animated: true, completion: nil)
-        
-    }
-    
 }
 
-extension SingleItemViewController: ConfirmationProtocol {
+extension SingleItemViewController {
     
-    func deleteItem() {
+    func showConfirmationsAlert() {
         
-        UserService.removeItem(item: existingItem!)
-        Stored.userItems.remove(at: existingItemIndex!)
-        LocalStorageService.eraseUserItem(index: existingItemIndex!)
+        let areYouSureAlert = UIAlertController(title: "Delete \(existingItem!.name)?", message: nil, preferredStyle: .alert)
+        areYouSureAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        areYouSureAlert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { (action) in
+            
+            UserService.removeItem(item: self.existingItem!)
+            Stored.userItems.remove(at: self.existingItemIndex!)
+            LocalStorageService.eraseUserItem(index: self.existingItemIndex!)
+            
+            if URL(string: self.existingItem!.imageURL) != nil {
+                ImageService.deleteImage(itemName: self.existingItem!.name)
+            }
+            
+            self.delegate?.itemDeleted()
+            
+            self.slideViewOut()
+            
+        }))
         
-        if URL(string: existingItem!.imageURL) != nil {
-            ImageService.deleteImage(itemName: existingItem!.name)
-        }
-        
-        delegate?.itemDeleted()
-        
-        slideViewOut()
+        present(areYouSureAlert, animated: true, completion: nil)
         
     }
     

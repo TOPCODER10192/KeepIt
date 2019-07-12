@@ -6,261 +6,85 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="SF-Pro-Text-Regular.otf">
-            <string>SFProText-Regular</string>
-        </array>
         <array key="SF-Pro-Text-Semibold.otf">
             <string>SFProText-Semibold</string>
         </array>
     </customFonts>
     <scenes>
         <!--Settings-->
-        <scene sceneID="Ljm-mn-CJf">
+        <scene sceneID="2Yd-s8-M2r">
             <objects>
-                <viewController id="ypK-03-6ZG" customClass="SettingsViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="0L1-go-Tew">
+                <tableViewController id="2fi-jC-MoC" customClass="SettingsTableViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Wwm-Gh-V4E">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dt0-2V-hhQ">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RQ7-ml-d9v" userLabel="Content View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Mlq-Vk-dte" userLabel="User Info SV">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="120"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wws-Xs-8tB">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
-                                                        <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="40" id="uPo-b4-Z5B"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="22"/>
-                                                        <state key="normal" title="Your Information">
-                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="infoButtonTapped:" destination="ypK-03-6ZG" eventType="touchUpInside" id="vhV-yL-en5"/>
-                                                        </connections>
-                                                    </button>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0E6-xF-X5H" userLabel="User Info View">
-                                                        <rect key="frame" x="0.0" y="40" width="414" height="80"/>
-                                                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </view>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="120" id="fLz-hY-ewd"/>
-                                                </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jH0-d8-rB2" userLabel="Notifications SV">
-                                                <rect key="frame" x="0.0" y="121" width="414" height="250"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lOP-XU-bXi">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
-                                                        <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="40" id="cjP-P1-wdQ"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="22"/>
-                                                        <state key="normal" title="Notifications">
-                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="notificationsButtonTapped:" destination="ypK-03-6ZG" eventType="touchUpInside" id="Gwu-Yb-03c"/>
-                                                        </connections>
-                                                    </button>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pg5-Yw-uyb">
-                                                        <rect key="frame" x="4.5" y="40" width="405" height="210"/>
-                                                        <subviews>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="8mo-A7-Ckh" userLabel="Notifications Options SV">
-                                                                <rect key="frame" x="5" y="5" width="395" height="200"/>
-                                                                <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select how often you would like to be reminded to update your item locations" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bub-1u-cg9">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="395" height="41"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <nil key="textColor"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="w3i-Bs-ySr">
-                                                                        <rect key="frame" x="0.0" y="47.5" width="395" height="31"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="30" id="j9b-U2-msY"/>
-                                                                        </constraints>
-                                                                        <segments>
-                                                                            <segment title="Never"/>
-                                                                            <segment title="Daily"/>
-                                                                            <segment title="Weekly"/>
-                                                                        </segments>
-                                                                        <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                                                    </segmentedControl>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Edm-VV-HHN">
-                                                                        <rect key="frame" x="0.0" y="83.5" width="395" height="80"/>
-                                                                        <subviews>
-                                                                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BHx-IP-cS5">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="395" height="80"/>
-                                                                            </pickerView>
-                                                                        </subviews>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="80" id="V1u-8H-rRY"/>
-                                                                        </constraints>
-                                                                    </stackView>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tk2-E6-eGT">
-                                                                        <rect key="frame" x="0.0" y="170" width="395" height="30"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="30" id="lsc-YS-Pwq"/>
-                                                                        </constraints>
-                                                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="18"/>
-                                                                        <state key="normal" title="Save Changes">
-                                                                            <color key="titleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                                                        </state>
-                                                                    </button>
-                                                                </subviews>
-                                                                <constraints>
-                                                                    <constraint firstItem="w3i-Bs-ySr" firstAttribute="width" secondItem="8mo-A7-Ckh" secondAttribute="width" id="5CH-Ke-8Xc"/>
-                                                                    <constraint firstItem="bub-1u-cg9" firstAttribute="width" secondItem="8mo-A7-Ckh" secondAttribute="width" id="WM6-az-BRK"/>
-                                                                    <constraint firstItem="Tk2-E6-eGT" firstAttribute="centerX" secondItem="8mo-A7-Ckh" secondAttribute="centerX" id="upG-RG-SPR"/>
-                                                                    <constraint firstItem="Tk2-E6-eGT" firstAttribute="width" secondItem="8mo-A7-Ckh" secondAttribute="width" id="ypK-kQ-Lap"/>
-                                                                </constraints>
-                                                            </stackView>
-                                                        </subviews>
-                                                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <constraints>
-                                                            <constraint firstItem="8mo-A7-Ckh" firstAttribute="top" secondItem="pg5-Yw-uyb" secondAttribute="top" constant="5" id="5Hr-iu-nvP"/>
-                                                            <constraint firstAttribute="bottom" secondItem="8mo-A7-Ckh" secondAttribute="bottom" constant="5" id="dZL-s1-Hey"/>
-                                                            <constraint firstAttribute="trailing" secondItem="8mo-A7-Ckh" secondAttribute="trailing" constant="5" id="e4M-h5-Ohk"/>
-                                                            <constraint firstItem="8mo-A7-Ckh" firstAttribute="leading" secondItem="pg5-Yw-uyb" secondAttribute="leading" constant="5" id="krH-zt-HGo"/>
-                                                        </constraints>
-                                                    </view>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="lOP-XU-bXi" firstAttribute="leading" secondItem="jH0-d8-rB2" secondAttribute="leading" id="6A6-bX-Wly"/>
-                                                    <constraint firstItem="lOP-XU-bXi" firstAttribute="top" secondItem="jH0-d8-rB2" secondAttribute="top" id="kdQ-PK-T10"/>
-                                                    <constraint firstAttribute="trailing" secondItem="lOP-XU-bXi" secondAttribute="trailing" id="qQV-8Z-THk"/>
-                                                    <constraint firstAttribute="height" constant="250" id="seO-bD-dH8"/>
-                                                </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="adV-9Q-YiY" userLabel="Support SV">
-                                                <rect key="frame" x="0.0" y="372" width="414" height="120"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gek-v1-Zhr">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
-                                                        <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="40" id="bBz-gF-eal"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="22"/>
-                                                        <state key="normal" title="Support">
-                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="supportButtonTapped:" destination="ypK-03-6ZG" eventType="touchUpInside" id="lGZ-lJ-ZFz"/>
-                                                        </connections>
-                                                    </button>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wVL-BW-Egu">
-                                                        <rect key="frame" x="0.0" y="40" width="414" height="80"/>
-                                                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </view>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="120" id="vPS-Ao-Wvu"/>
-                                                </constraints>
-                                            </stackView>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xHW-uD-Zej" userLabel="Sign Out Button">
-                                                <rect key="frame" x="157" y="724" width="100" height="40"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="4bp-pN-qVw"/>
-                                                    <constraint firstAttribute="height" constant="40" id="wEO-6p-doo"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
-                                                <state key="normal" title="Sign Out">
-                                                    <color key="titleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="signOutButtonTapped:" destination="ypK-03-6ZG" eventType="touchUpInside" id="2Qr-m9-9uI"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="xHW-uD-Zej" secondAttribute="bottom" constant="10" id="5JI-jG-2JM"/>
-                                            <constraint firstAttribute="trailing" secondItem="adV-9Q-YiY" secondAttribute="trailing" id="64h-4W-9bH"/>
-                                            <constraint firstItem="jH0-d8-rB2" firstAttribute="leading" secondItem="RQ7-ml-d9v" secondAttribute="leading" id="E57-2D-cZ9"/>
-                                            <constraint firstAttribute="trailing" secondItem="jH0-d8-rB2" secondAttribute="trailing" id="GvM-Wt-uBM"/>
-                                            <constraint firstItem="adV-9Q-YiY" firstAttribute="top" secondItem="jH0-d8-rB2" secondAttribute="bottom" constant="1" id="HeN-vD-o5F"/>
-                                            <constraint firstItem="jH0-d8-rB2" firstAttribute="top" secondItem="Mlq-Vk-dte" secondAttribute="bottom" constant="1" id="XFx-9l-VnJ"/>
-                                            <constraint firstItem="Mlq-Vk-dte" firstAttribute="leading" secondItem="RQ7-ml-d9v" secondAttribute="leading" id="aeb-XV-gge"/>
-                                            <constraint firstItem="adV-9Q-YiY" firstAttribute="leading" secondItem="RQ7-ml-d9v" secondAttribute="leading" id="frm-y1-IOj"/>
-                                            <constraint firstItem="Mlq-Vk-dte" firstAttribute="top" secondItem="RQ7-ml-d9v" secondAttribute="top" id="uzU-Hz-xfC"/>
-                                            <constraint firstItem="xHW-uD-Zej" firstAttribute="centerX" secondItem="RQ7-ml-d9v" secondAttribute="centerX" id="vyV-ch-1w4"/>
-                                            <constraint firstAttribute="trailing" secondItem="Mlq-Vk-dte" secondAttribute="trailing" id="wsl-tL-Q4V"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="RQ7-ml-d9v" firstAttribute="height" secondItem="dt0-2V-hhQ" secondAttribute="height" id="4QH-JT-ap0"/>
-                                    <constraint firstItem="RQ7-ml-d9v" firstAttribute="top" secondItem="dt0-2V-hhQ" secondAttribute="top" id="Ffc-d3-x8a"/>
-                                    <constraint firstAttribute="bottom" secondItem="RQ7-ml-d9v" secondAttribute="bottom" id="GBo-yQ-EBf"/>
-                                    <constraint firstItem="RQ7-ml-d9v" firstAttribute="width" secondItem="dt0-2V-hhQ" secondAttribute="width" id="S7s-6E-bvd"/>
-                                    <constraint firstItem="RQ7-ml-d9v" firstAttribute="leading" secondItem="dt0-2V-hhQ" secondAttribute="leading" id="kXF-CK-qcC"/>
-                                    <constraint firstAttribute="trailing" secondItem="RQ7-ml-d9v" secondAttribute="trailing" id="wCK-vm-rFP"/>
-                                </constraints>
-                            </scrollView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="dt0-2V-hhQ" firstAttribute="top" secondItem="Eju-GK-qLC" secondAttribute="top" id="2ZM-mS-zAu"/>
-                            <constraint firstItem="Eju-GK-qLC" firstAttribute="bottom" secondItem="dt0-2V-hhQ" secondAttribute="bottom" id="bCS-sw-Vlq"/>
-                            <constraint firstAttribute="trailing" secondItem="dt0-2V-hhQ" secondAttribute="trailing" id="i8r-uZ-2bY"/>
-                            <constraint firstItem="dt0-2V-hhQ" firstAttribute="leading" secondItem="0L1-go-Tew" secondAttribute="leading" id="r2I-0M-Jan"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="Eju-GK-qLC"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Settings" id="W0c-cK-V0i">
-                        <barButtonItem key="rightBarButtonItem" systemItem="stop" id="i6d-hu-gFt" userLabel="Close Button">
+                        <view key="tableFooterView" contentMode="scaleToFill" id="UQD-y5-9Td" userLabel="Footer View">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="70"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kMU-F2-VUK">
+                                    <rect key="frame" x="103.5" y="15" width="207" height="40"/>
+                                    <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="Jo4-nY-h9e"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
+                                    <state key="normal" title="Sign Out">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="signOutButtonTapped:" destination="2fi-jC-MoC" eventType="touchUpInside" id="3zD-6N-kHm"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="kMU-F2-VUK" firstAttribute="centerY" secondItem="UQD-y5-9Td" secondAttribute="centerY" id="d2d-Jx-19p"/>
+                                <constraint firstItem="kMU-F2-VUK" firstAttribute="width" secondItem="UQD-y5-9Td" secondAttribute="width" multiplier="0.5" id="fRO-cU-e92"/>
+                                <constraint firstItem="kMU-F2-VUK" firstAttribute="centerX" secondItem="UQD-y5-9Td" secondAttribute="centerX" id="khX-sK-Bq0"/>
+                            </constraints>
+                        </view>
+                        <connections>
+                            <outlet property="dataSource" destination="2fi-jC-MoC" id="cFe-ZE-bQl"/>
+                            <outlet property="delegate" destination="2fi-jC-MoC" id="XG8-X8-H9a"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Settings" id="pLe-Ah-SCs">
+                        <barButtonItem key="rightBarButtonItem" systemItem="stop" id="tf7-Lg-Z3T">
                             <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="closeButtonTapped:" destination="ypK-03-6ZG" id="FKs-lT-dWT"/>
+                                <action selector="closeButtonTapped:" destination="2fi-jC-MoC" id="7Sl-sD-x4y"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="notificationFrequencyPickerView" destination="BHx-IP-cS5" id="tUf-4e-wH0"/>
-                        <outlet property="notificationFrequencySegmentedControl" destination="w3i-Bs-ySr" id="6cU-en-hEc"/>
-                        <outlet property="notificationsStackViewHeight" destination="seO-bD-dH8" id="hFU-FZ-ugz"/>
-                        <outlet property="supportStackViewHeight" destination="vPS-Ao-Wvu" id="j9v-WJ-6cy"/>
-                        <outlet property="userInfoStackViewHeight" destination="fLz-hY-ewd" id="lVj-yi-0Hu"/>
+                        <outlet property="closeButton" destination="tf7-Lg-Z3T" id="PK7-Op-uec"/>
+                        <outlet property="signOutButton" destination="kMU-F2-VUK" id="zmm-QV-qc9"/>
                     </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YIt-2b-PwF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="69e-yS-uBa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="663.768115942029" y="-17.410714285714285"/>
+            <point key="canvasLocation" x="634" y="-994"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="UVX-Ji-SyF">
+        <scene sceneID="1kN-hu-VYm">
             <objects>
-                <navigationController storyboardIdentifier="SettingsVC" automaticallyAdjustsScrollViewInsets="NO" id="lri-Rf-R7q" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ohK-E0-grQ">
+                <navigationController storyboardIdentifier="SettingsVC" id="ZLY-vW-UJE" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hgF-nG-VmN">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
-                        </textAttributes>
                     </navigationBar>
-                    <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="ypK-03-6ZG" kind="relationship" relationship="rootViewController" id="Gth-VY-ym1"/>
+                        <segue destination="2fi-jC-MoC" kind="relationship" relationship="rootViewController" id="frl-6A-Ae0"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SuQ-aD-mhI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kSZ-bS-gd2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-246.37681159420291" y="-17.410714285714285"/>
+            <point key="canvasLocation" x="-284" y="-994"/>
         </scene>
     </scenes>
 </document>

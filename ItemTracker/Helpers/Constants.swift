@@ -53,6 +53,8 @@ struct Constants {
             static let addItem        = "AddItemCell"
             static let updateLocation = "UpdateLocationCell"
             
+            static let settingsHeader = "SettingsHeaderCell"
+            
         }
         
         struct Annotation {

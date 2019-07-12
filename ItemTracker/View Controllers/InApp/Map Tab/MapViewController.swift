@@ -27,7 +27,7 @@ final class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Check the user's location services
+        // Check the location services
         checkLocationServices()
         
         // Setup the mapView
@@ -273,11 +273,23 @@ extension MapViewController: CLLocationManagerDelegate {
         }
         else {
             // Let the user know that they have to turn location services on
-            loadVC(ID: Constants.ID.VC.noLocation,
-                           sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
-                           animate: false)
+            presentLocationsAlert()
         }
         
+    }
+    
+    func presentLocationsAlert() {
+        // Pop up a notification that tells the user how to allow location
+        let locationsAlert = UIAlertController(title: "Location Services Off", message: "Go to Settings to Turn Them On" , preferredStyle: .alert)
+        locationsAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        locationsAlert.addAction(UIAlertAction(title: "Go to Settings", style: .default, handler: { (action) in
+            
+            // Go to the settings app
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            
+        }))
+        
+        present(locationsAlert, animated: true)
     }
     
     func checkLocationAuthorization() {
@@ -296,15 +308,12 @@ extension MapViewController: CLLocationManagerDelegate {
             
         // Case if no authorization
         case .restricted, .denied:
-            // Pop up a notification that tells the user how to allow location
-            loadVC(ID: Constants.ID.VC.noLocation,
-                           sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
-                           animate: false)
+            presentLocationsAlert()
             
             mapView.showsUserLocation = false
             
             // If the user has at least 1 item, center the map over the first one
-            guard Stored.userItems.count > 0 else { return }
+            guard mapView.annotations.count > 0 else { return }
             centerMapOnItem(annotation: mapView.annotations[0], span: Constants.Map.defaultSpan)
             
         @unknown default:
@@ -377,9 +386,6 @@ extension MapViewController {
         }
         else if let vc = vc as? UpdateLocationViewController {
             vc.delegate = self
-        }
-        else if let vc = vc as? TurnOnLocationViewController {
-            
         }
         
         vc.modalPresentationStyle = .overCurrentContext
