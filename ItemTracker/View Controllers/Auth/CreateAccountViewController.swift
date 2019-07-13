@@ -24,6 +24,7 @@ final class CreateAccountViewController: UIViewController {
     @IBOutlet weak var createAccountViewWidth: NSLayoutConstraint!
     @IBOutlet weak var createAccountViewHeight: NSLayoutConstraint!
     @IBOutlet weak var createAccountViewX: NSLayoutConstraint!
+    @IBOutlet weak var floatingViewToBottom: NSLayoutConstraint!
     
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var navigationBar: UINavigationBar!
@@ -33,10 +34,6 @@ final class CreateAccountViewController: UIViewController {
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var bottomButton: UIButton!
-    
-    @IBOutlet weak var errorView: UIView!
-    @IBOutlet weak var errorLabel: UILabel!
-    @IBOutlet weak var errorViewY: NSLayoutConstraint!
     
     // MARK: - CreateAccountViewController Properties
     var formIndex: Int = 0
@@ -57,6 +54,7 @@ final class CreateAccountViewController: UIViewController {
         createAccountViewWidth.constant      = Constants.View.Width.standard
         createAccountViewHeight.constant     = Constants.View.Height.createAccount
         createAccountViewX.constant          = UIScreen.main.bounds.width
+        floatingViewToBottom.constant        = UIScreen.main.bounds.height * 0.3
         
         // Setup the navigationBar
         backButton.tintColor             = Constants.Color.primary
@@ -76,14 +74,8 @@ final class CreateAccountViewController: UIViewController {
         bottomTextField.delegate    = self
         
         // Setup the button
-        bottomButton.layer.cornerRadius = Constants.View.CornerRadius.button
+        bottomButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
         activateButton(isActivated: false, color: Constants.Color.inactiveButton)
-        
-        // Setup the errorView
-        errorView.alpha              = 0
-        errorView.backgroundColor    = Constants.Color.error
-        errorView.layer.cornerRadius = Constants.View.CornerRadius.standard
-        errorViewY.constant          = UIScreen.main.bounds.height * 0.3
         
         // Create a listener for the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -111,7 +103,7 @@ final class CreateAccountViewController: UIViewController {
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut, animations: {
                 
                 // Move the view to just above the keyboard
-                self.errorViewY.constant = keyboardHeight + 5
+                self.floatingViewToBottom.constant = keyboardHeight + 15
                 self.view.layoutIfNeeded()
                 
             }, completion: nil)
@@ -203,7 +195,8 @@ final class CreateAccountViewController: UIViewController {
                 
                 // Check if the account was created successfully
                 guard error == nil else {
-                    self.handleErrors(error: error! as NSError)
+                    self.bottomButton.isEnabled = true
+                    self.present(AlertService.createErrorAlert(error: error! as NSError), animated: true, completion: nil)
                     return
                 }
                 
@@ -211,17 +204,28 @@ final class CreateAccountViewController: UIViewController {
                 let user = UserInfo(firstName: self.firstName!, lastName: self.lastName!, email: self.email!)
                 
                 // Store the users information in the database and store it locally
-                UserService.writeUserProfile(user: user, items: [])
-                LocalStorageService.saveCurrentUser(user: user, items: [])
-                
-                // Go into the main app
-                self.dismiss(animated: true, completion: {
+                UserService.writeUserProfile(user: user, completion: { (error) in
                     
-                    self.delegate?.goToInApp()
+                    guard error == nil else {
+                        self.present(AlertService.createErrorAlert(error: error! as NSError), animated: true, completion: nil)
+                        return
+                    }
+                    
+                    // Store the users information locally
+                    LocalStorageService.writeUser(user: user)
+                    Stored.user = user
+                    
+                    // Go into the main app
+                    self.dismiss(animated: true, completion: {
+                        
+                        self.delegate?.goToInApp()
+                        
+                    })
                     
                 })
                 
             }
+            
         }
         
     }
@@ -375,9 +379,6 @@ extension CreateAccountViewController {
     }
     
     func slideViewOut(finalX: CGFloat, completion: @escaping () -> Void) {
-       
-        // Make the error invisible
-        errorView.alpha = 0
         
         // Slide the view out to the right
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
@@ -390,51 +391,6 @@ extension CreateAccountViewController {
             completion()
             
         }
-        
-    }
-    
-}
-
-// MARK: - Methods related to error handling
-extension CreateAccountViewController {
-    
-    func handleErrors(error: NSError) {
-        
-        // Retrieve the error code and then switch between possible errors
-        if let errorCode = AuthErrorCode(rawValue: error.code) {
-            switch errorCode {
-                
-            case .emailAlreadyInUse:
-                presentErrorMessage(text: Constants.ErrorMessage.emailAlreadyRegistered)
-                
-            case .invalidEmail:
-                presentErrorMessage(text: Constants.ErrorMessage.invalidEmail)
-                
-            case .missingEmail:
-                presentErrorMessage(text: Constants.ErrorMessage.emailMissing)
-                
-            case .networkError:
-                presentErrorMessage(text: Constants.ErrorMessage.networkError)
-                
-            case .weakPassword:
-                presentErrorMessage(text: Constants.ErrorMessage.weakPassword)
-                
-            default:
-                presentErrorMessage(text: "Unable to create account")
-            }
-        }
-    }
-    
-    func presentErrorMessage(text: String) {
-        
-        // Set the text for the label, Set the alpha to 0 so it can fade back in
-        errorLabel.text = text
-        errorView.alpha = 0
-        
-        // Fade in the error bar
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            self.errorView.alpha = 1
-        }, completion: nil)
         
     }
     

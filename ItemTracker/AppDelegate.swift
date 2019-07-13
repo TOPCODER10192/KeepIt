@@ -15,11 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        UINavigationBar.appearance().tintColor = Constants.Color.primary
+        
         // Override point for customization after application launch.
         FirebaseApp.configure()
 
         // Attempt to load the current user
-        LocalStorageService.loadCurrentUser()
+        LocalStorageService.readUser()
         
         if Stored.user != nil {
             

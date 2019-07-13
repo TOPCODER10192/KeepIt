@@ -16,7 +16,7 @@ struct Constants {
         
         struct Storyboard {
             
-            static let auth    = "Auth"
+            static let auth     = "Auth"
             static let tabBar   = "TabBar"
             static let popups   = "Popups"
             static let settings = "Settings"
@@ -25,7 +25,9 @@ struct Constants {
         
         struct Segues {
             
-            static let itemSelected = "ItemSelected"
+            static let changeName     = "ChangeNameSegue"
+            static let changeEmail    = "ChangeEmailSegue"
+            static let changePassword = "ChangePasswordSegue"
             
         }
         
@@ -72,8 +74,9 @@ struct Constants {
         // MARK: - Corner Radius
         struct CornerRadius {
             
-            static let standard: CGFloat = 15
-            static let button: CGFloat   = 10
+            static let standard: CGFloat    = 15
+            static let smallButton: CGFloat = 10
+            static let bigButton: CGFloat   = 20
             
         }
         
@@ -90,17 +93,11 @@ struct Constants {
             
             static let login: CGFloat          = min(240, UIScreen.main.bounds.height - 350)
             static let createAccount: CGFloat  = min(230, UIScreen.main.bounds.height - 350)
+            static let forgotPassword: CGFloat = 200
             static let singleItem: CGFloat     = min(700, UIScreen.main.bounds.height - 60)
             static let annotation: CGFloat     = 40
             static let updateLocation: CGFloat = 150
             static let itemHeader: CGFloat     = 200
-            
-        }
-        
-        // MARK: - Y
-        struct Y {
-            
-            static let error: CGFloat = UIScreen.main.bounds.height * 0.3
             
         }
         

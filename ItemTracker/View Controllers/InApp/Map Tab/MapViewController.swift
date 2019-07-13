@@ -41,11 +41,11 @@ final class MapViewController: UIViewController {
         mapSearchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
         // Setup the prev and next annotation buttons
-        prevAnnotationButton.layer.cornerRadius = Constants.View.CornerRadius.button
+        prevAnnotationButton.layer.cornerRadius = Constants.View.CornerRadius.smallButton
         prevAnnotationButton.layer.borderWidth  = 1
         prevAnnotationButton.layer.borderColor  = Constants.Color.primary.cgColor
         
-        nextAnnotationButton.layer.cornerRadius = Constants.View.CornerRadius.button
+        nextAnnotationButton.layer.cornerRadius = Constants.View.CornerRadius.smallButton
         nextAnnotationButton.layer.borderWidth  = 1
         nextAnnotationButton.layer.borderColor  = Constants.Color.primary.cgColor
         

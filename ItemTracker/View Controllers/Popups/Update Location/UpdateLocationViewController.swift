@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseFirestore
 import CoreLocation
 
 protocol UpdateLocationProtocol {
@@ -37,7 +36,6 @@ class UpdateLocationViewController: UIViewController {
     var boxesChecked: [Bool] = Array.init(repeating: false, count: Stored.userItems.count)
     
     let locationManager = CLLocationManager()
-    let db = Firestore.firestore()
     var delegate: UpdateLocationProtocol?
     
     // MARK: - View Methods
@@ -73,7 +71,7 @@ class UpdateLocationViewController: UIViewController {
         }
         
         // Setup the add button
-        updateButton.layer.cornerRadius  = Constants.View.CornerRadius.button
+        updateButton.layer.cornerRadius  = Constants.View.CornerRadius.bigButton
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -92,9 +90,6 @@ class UpdateLocationViewController: UIViewController {
     }
     
     @IBAction func updateButtonTapped(_ sender: UIButton) {
-        
-        // Get a reference to the users items collection
-        let itemsRef = db.collection(Constants.Key.User.users).document(Stored.user!.email).collection(Constants.Key.Item.items)
         
         // Get the users information and cast it as [Double]
         let usersLocation = [locationManager.location?.coordinate.latitude, locationManager.location?.coordinate.longitude] as! [Double]
@@ -116,7 +111,7 @@ class UpdateLocationViewController: UIViewController {
             
             UserService.writeItem(item: item, isNew: false, completion: nil)
             Stored.userItems[i] = item
-            LocalStorageService.saveUserItem(item: item, isNew: false, index: i)
+            LocalStorageService.writeItem(item: item, isNew: false, index: i)
             
         }
         

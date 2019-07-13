@@ -13,14 +13,17 @@ final class UserService {
     
     private static let db = Firestore.firestore()
     
-    static func readUserProfile(email: String, completion: @escaping ()  -> Void) {
+    static func readUserProfile(email: String, completion: @escaping (Error?, UserInfo?, [Item]?)  -> Void) {
         
         // Get a reference to the users information
         let userDocRef = db.collection(Constants.Key.User.users).document(email)
         
         // Fetch the document
         userDocRef.getDocument { (document, error) in
-            guard document != nil && document!.exists && error == nil else { return }
+            guard document != nil && document!.exists && error == nil else {
+                completion(error, nil, nil)
+                return
+            }
             
             // Get data from the snapshot, check that the data isn't nil
             let userData = document!.data()
@@ -30,11 +33,17 @@ final class UserService {
             let firstName = userData![Constants.Key.User.firstName]! as! String
             let lastName  = userData![Constants.Key.User.lastName]! as! String
             
+            let user = UserInfo(firstName: firstName, lastName: lastName, email: email)
+            LocalStorageService.writeUser(user: user)
+            
             // Get a reference to the users items
             userDocRef.collection(Constants.Key.Item.items).getDocuments(completion: { (query, error) in
                 
                 // Check that the documents were succcessfully read
-                guard query != nil && error == nil else { return }
+                guard query != nil && error == nil else {
+                    completion(error, user, nil)
+                    return
+                }
                 
                 // Get all the documents that were obtained
                 let documents = query!.documents
@@ -62,13 +71,7 @@ final class UserService {
                     
                 }
                 
-                let user = UserInfo(firstName: firstName, lastName: lastName, email: email)
-                LocalStorageService.saveCurrentUser(user: user, items: items)
-                
-                Stored.user = user
-                Stored.userItems = items
-                
-                completion()
+                completion(nil, user, items)
                 
             })
             
@@ -76,25 +79,17 @@ final class UserService {
         
     }
     
-    static func writeUserProfile(user: UserInfo, items: [Item]) {
+    static func writeUserProfile(user: UserInfo, completion: @escaping (Error?) -> Void) {
         
         // Get a reference to the document containing the users info
         let userInfoRef  = db.collection(Constants.Key.User.users).document(user.email)
         
-        // Collect the data that will be stored
-        let dataToSave: [String: Any] = [Constants.Key.User.firstName: user.firstName,
-                                         Constants.Key.User.lastName: user.lastName]
-        
         // Send the data to the database
-        userInfoRef.setData(dataToSave, completion: { (error) in
+        userInfoRef.setData([Constants.Key.User.firstName: user.firstName,
+                             Constants.Key.User.lastName: user.lastName],
+                            completion: { (error) in
             
-            // Exit if the data could not be set
-            guard error != nil else { return }
-
-            // Then attempt to write the users items
-            for item in items {
-                writeItem(item: item, isNew: false, completion: nil)
-            }
+            completion(error)
             
         })
 

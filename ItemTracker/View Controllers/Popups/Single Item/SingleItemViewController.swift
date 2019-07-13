@@ -117,11 +117,11 @@ class SingleItemViewController: UIViewController {
         mapSearchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
         // Setup the Near Me Button
-        nearMeButton.layer.cornerRadius           = Constants.View.CornerRadius.button
+        nearMeButton.layer.cornerRadius           = Constants.View.CornerRadius.smallButton
         nearMeButton.backgroundColor              = Constants.Color.primary
         
         // Setup the Save Item Button
-        saveItemButton.layer.cornerRadius         = Constants.View.CornerRadius.button
+        saveItemButton.layer.cornerRadius         = Constants.View.CornerRadius.bigButton
         saveItemButton.backgroundColor            = Constants.Color.primary
         saveItemButton.setTitle("", for: .disabled)
         saveItemButton.setTitle("Save Item", for: .normal)
@@ -767,7 +767,7 @@ extension SingleItemViewController {
             var newItem = item
             newItem.id = id
             
-            LocalStorageService.saveUserItem(item: newItem, isNew: self.existingItem == nil, index: self.existingItemIndex)
+            LocalStorageService.writeItem(item: newItem, isNew: self.existingItem == nil, index: self.existingItemIndex)
             
             if self.existingItemIndex == nil {
                 Stored.userItems.append(newItem)
@@ -796,7 +796,7 @@ extension SingleItemViewController {
             
             UserService.removeItem(item: self.existingItem!)
             Stored.userItems.remove(at: self.existingItemIndex!)
-            LocalStorageService.eraseUserItem(index: self.existingItemIndex!)
+            LocalStorageService.deleteUserItem(index: self.existingItemIndex!)
             
             if URL(string: self.existingItem!.imageURL) != nil {
                 ImageService.deleteImage(itemName: self.existingItem!.name)

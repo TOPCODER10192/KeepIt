@@ -14,6 +14,7 @@ struct SectionData {
     var isExpanded = true
     let header: String
     let texts: [String]
+    let targets: [String]
     
 }
 
@@ -22,9 +23,12 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var closeButton: UIBarButtonItem!
     @IBOutlet weak var signOutButton: UIButton!
     
-    var sectionData = [SectionData(isExpanded: true, header: "Your Information", texts: ["Full Name", "Email", "Change Password"]),
-                       SectionData(isExpanded: true, header: "Notifications", texts: ["Email Notifications", "Phone Notifications"]),
-                       SectionData(isExpanded: true, header: "Support", texts: ["Write a Review", "Report a Problem"])]
+    var sectionData = [SectionData(isExpanded: true, header: "Your Information", texts: ["Full Name", "Email", "Change Password"],
+                                   targets: ["ChangeNameSegue", "ChangeEmailSegue", "ChangePasswordSegue"]),
+                       SectionData(isExpanded: true, header: "Notifications", texts: ["Email Notifications", "Phone Notifications"],
+                                   targets: ["EmailNotificationsSegue", "PhoneNotificationsSegue"]),
+                       SectionData(isExpanded: true, header: "Support", texts: ["Write a Review", "Report a Problem"],
+                                   targets: ["WriteReviewSegue", "ReportProblemSegue"])]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +37,7 @@ class SettingsTableViewController: UITableViewController {
         closeButton.tintColor = Constants.Color.primary
         
         // Setup the signOutButton
-        signOutButton.layer.cornerRadius = Constants.View.CornerRadius.button
+        signOutButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
         signOutButton.backgroundColor    = Constants.Color.primary
         
     }
@@ -106,6 +110,8 @@ class SettingsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        performSegue(withIdentifier: sectionData[indexPath.section].targets[indexPath.row], sender: self)
+        
     }
 
     @IBAction func closeButtonTapped(_ sender: UIBarButtonItem) {
@@ -141,7 +147,7 @@ class SettingsTableViewController: UITableViewController {
             try firebaseAuth.signOut()
             
             // Clear local storage
-            LocalStorageService.clearCurrentUser()
+            LocalStorageService.deleteAllInfo()
             
             // Create the authVC
             let authVC = UIStoryboard(name: Constants.ID.Storyboard.auth, bundle: .main)

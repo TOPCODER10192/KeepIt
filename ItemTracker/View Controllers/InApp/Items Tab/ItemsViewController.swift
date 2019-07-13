@@ -43,11 +43,8 @@ final class ItemsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // If the user has no items then bring up the Add Item VC
         if Stored.userItems.count == 0 {
-            loadVC(ID: Constants.ID.VC.singleItem,
-                   sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
-                   animated: false)
+            presentNoItemsAlert()
         }
         
     }
@@ -61,13 +58,21 @@ final class ItemsViewController: UIViewController {
                animated: false)
         
     }
-    
+
     @IBAction func updateButtonTapped(_ sender: UIBarButtonItem) {
         
         // Load the Update Location VC
-        loadVC(ID: Constants.ID.VC.updateLocation,
-                       sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
-                       animated: false )
+        if Stored.userItems.count > 0 {
+            loadVC(ID: Constants.ID.VC.updateLocation,
+                           sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                           animated: false)
+        }
+        // Otherwise, show the user an alert that they need to add items
+        else {
+            
+            presentNoItemsAlert()
+            
+        }
         
     }
     
@@ -204,6 +209,25 @@ extension ItemsViewController  {
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: animated, completion: nil)
         
+    }
+    
+    func presentNoItemsAlert() {
+        
+        let noItemsAlert = UIAlertController(title: "No Items",
+                                             message: "You're not keeping track of any of your items yet",
+                                             preferredStyle: .alert)
+        
+        noItemsAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        noItemsAlert.addAction(UIAlertAction(title: "Add an Item", style: .default, handler: { (action) in
+            
+            // Load the Single Item VC
+            self.loadVC(ID: Constants.ID.VC.singleItem,
+                        sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                        animated: false)
+            
+        }))
+        
+        present(noItemsAlert, animated: true, completion: nil)
         
     }
 

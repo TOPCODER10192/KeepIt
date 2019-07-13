@@ -37,11 +37,11 @@
         <scene sceneID="abP-Mw-Afh">
             <objects>
                 <viewController storyboardIdentifier="LoginVC" id="iR7-Nl-SyO" userLabel="LoginVC" customClass="LoginViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="hKf-g8-wHc">
+                    <view key="view" contentMode="scaleToFill" id="hKf-g8-wHc" userLabel="Content View">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgK-cE-3pH" userLabel="Login View">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgK-cE-3pH" userLabel="Floating View">
                                 <rect key="frame" x="32" y="357" width="350" height="240"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="133-kp-FWd" userLabel="Login Stack View">
@@ -127,30 +127,10 @@
                                     <constraint firstAttribute="trailing" secondItem="133-kp-FWd" secondAttribute="trailing" constant="10" id="fea-0t-xOo"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qmL-Hs-wRZ" userLabel="Error View">
-                                <rect key="frame" x="88.5" y="602" width="237" height="30"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email is not registered" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="did-at-7MJ">
-                                        <rect key="frame" x="20" y="4.5" width="197" height="21.5"/>
-                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="18"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="did-at-7MJ" secondAttribute="width" constant="40" id="ABd-fg-ENh"/>
-                                    <constraint firstAttribute="height" constant="30" id="OdR-vV-vnK"/>
-                                    <constraint firstItem="did-at-7MJ" firstAttribute="centerY" secondItem="qmL-Hs-wRZ" secondAttribute="centerY" id="qfz-dq-xMI"/>
-                                    <constraint firstItem="did-at-7MJ" firstAttribute="centerX" secondItem="qmL-Hs-wRZ" secondAttribute="centerX" id="yp6-3a-m7x"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="qmL-Hs-wRZ" firstAttribute="centerX" secondItem="hKf-g8-wHc" secondAttribute="centerX" id="MC7-cj-qRh"/>
-                            <constraint firstItem="qmL-Hs-wRZ" firstAttribute="top" secondItem="bgK-cE-3pH" secondAttribute="bottom" constant="5" id="Pe4-IX-Wtq"/>
-                            <constraint firstItem="l8P-Kf-NP7" firstAttribute="bottom" secondItem="qmL-Hs-wRZ" secondAttribute="bottom" constant="230" id="aZh-6z-AXp"/>
+                            <constraint firstItem="l8P-Kf-NP7" firstAttribute="bottom" secondItem="bgK-cE-3pH" secondAttribute="bottom" constant="265" id="DUo-k2-Zb4"/>
                             <constraint firstItem="bgK-cE-3pH" firstAttribute="centerX" secondItem="hKf-g8-wHc" secondAttribute="centerX" id="buW-uH-Xt7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="l8P-Kf-NP7"/>
@@ -158,15 +138,13 @@
                     <connections>
                         <outlet property="createAccountButton" destination="T4C-7A-YCZ" id="rwe-1E-wI8"/>
                         <outlet property="emailTextField" destination="tu9-WJ-d7y" id="lhY-yx-aGv"/>
-                        <outlet property="errorLabel" destination="did-at-7MJ" id="mNc-t5-Bnn"/>
-                        <outlet property="errorView" destination="qmL-Hs-wRZ" id="iWz-UW-XkP"/>
-                        <outlet property="errorViewY" destination="aZh-6z-AXp" id="cAv-15-vVg"/>
+                        <outlet property="floatingView" destination="bgK-cE-3pH" id="R5r-SA-iiI"/>
+                        <outlet property="floatingViewHeight" destination="dE6-S7-dZe" id="RKs-cL-Jge"/>
+                        <outlet property="floatingViewToBottom" destination="DUo-k2-Zb4" id="jzp-p9-BGY"/>
+                        <outlet property="floatingViewToCenterX" destination="buW-uH-Xt7" id="yvw-qi-wTS"/>
+                        <outlet property="floatingViewWidth" destination="aDB-Rq-fhF" id="Kze-Ou-N7T"/>
                         <outlet property="forgotPasswordButton" destination="09K-PI-TGP" id="DYs-7a-d42"/>
                         <outlet property="loginButton" destination="jrd-5t-gBB" id="A0I-vK-phJ"/>
-                        <outlet property="loginView" destination="bgK-cE-3pH" id="YRt-ej-bmt"/>
-                        <outlet property="loginViewHeight" destination="dE6-S7-dZe" id="CmI-E8-HbN"/>
-                        <outlet property="loginViewWidth" destination="aDB-Rq-fhF" id="ICz-Dm-ONU"/>
-                        <outlet property="loginViewX" destination="buW-uH-Xt7" id="hPB-6g-1rQ"/>
                         <outlet property="passwordTextField" destination="2Qi-TE-7AF" id="hJH-2d-FpC"/>
                     </connections>
                 </viewController>
@@ -178,11 +156,11 @@
         <scene sceneID="G2W-Rv-9db">
             <objects>
                 <viewController storyboardIdentifier="CreateAccountVC" id="Sng-kg-CmN" customClass="CreateAccountViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Ako-yk-yD7">
+                    <view key="view" contentMode="scaleToFill" id="Ako-yk-yD7" userLabel="Content View">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XgA-1T-qG1" userLabel="Create Account View">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XgA-1T-qG1" userLabel="Floating View">
                                 <rect key="frame" x="32" y="367" width="350" height="230"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="deE-Pm-7Q7">
@@ -267,31 +245,11 @@
                                     <constraint firstAttribute="trailing" secondItem="Bm9-Fs-C4P" secondAttribute="trailing" constant="10" id="tk9-fY-ZZM"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4mZ-8v-6Ro" userLabel="Error View">
-                                <rect key="frame" x="70.5" y="602" width="273.5" height="30"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email is already registered" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qhr-J1-o6N" userLabel="Error Label">
-                                        <rect key="frame" x="20" y="4.5" width="233.5" height="21.5"/>
-                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="18"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
-                                <constraints>
-                                    <constraint firstItem="Qhr-J1-o6N" firstAttribute="centerX" secondItem="4mZ-8v-6Ro" secondAttribute="centerX" id="H3h-no-Uzy"/>
-                                    <constraint firstAttribute="height" constant="30" id="PRr-Vb-D53"/>
-                                    <constraint firstAttribute="width" secondItem="Qhr-J1-o6N" secondAttribute="width" constant="40" id="fNM-Dd-MGK"/>
-                                    <constraint firstItem="Qhr-J1-o6N" firstAttribute="centerY" secondItem="4mZ-8v-6Ro" secondAttribute="centerY" id="zcm-DG-h5U"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="4mZ-8v-6Ro" firstAttribute="top" secondItem="XgA-1T-qG1" secondAttribute="bottom" constant="5" id="R8e-Yt-aQF"/>
                             <constraint firstItem="XgA-1T-qG1" firstAttribute="centerX" secondItem="Ako-yk-yD7" secondAttribute="centerX" id="SeU-KG-zU1"/>
-                            <constraint firstItem="FEi-xZ-feq" firstAttribute="bottom" secondItem="4mZ-8v-6Ro" secondAttribute="bottom" constant="230" id="de8-n9-Zg1"/>
-                            <constraint firstItem="4mZ-8v-6Ro" firstAttribute="centerX" secondItem="Ako-yk-yD7" secondAttribute="centerX" id="eXv-3h-Thp"/>
+                            <constraint firstItem="FEi-xZ-feq" firstAttribute="bottom" secondItem="XgA-1T-qG1" secondAttribute="bottom" constant="265" id="Y2M-x8-PkA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FEi-xZ-feq"/>
                     </view>
@@ -303,9 +261,7 @@
                         <outlet property="createAccountViewHeight" destination="1Ml-h1-pxP" id="bMP-vZ-JIs"/>
                         <outlet property="createAccountViewWidth" destination="9FN-XN-VJY" id="ZCA-Af-ckU"/>
                         <outlet property="createAccountViewX" destination="SeU-KG-zU1" id="Dqv-oM-8Ic"/>
-                        <outlet property="errorLabel" destination="Qhr-J1-o6N" id="Ojp-q3-g6b"/>
-                        <outlet property="errorView" destination="4mZ-8v-6Ro" id="g8I-hi-D34"/>
-                        <outlet property="errorViewY" destination="de8-n9-Zg1" id="caN-pD-Yyu"/>
+                        <outlet property="floatingViewToBottom" destination="Y2M-x8-PkA" id="Gfb-hP-CW0"/>
                         <outlet property="navigationBar" destination="deE-Pm-7Q7" id="OEn-eS-wn7"/>
                         <outlet property="navigationBarTitle" destination="9Z0-Sb-rYQ" id="Bw8-hA-MM5"/>
                         <outlet property="promptLabel" destination="XXY-zv-ZkZ" id="GHz-q8-JRD"/>
@@ -324,8 +280,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vsb-o7-OrD" userLabel="Forgot Password View">
-                                <rect key="frame" x="32" y="403.5" width="350" height="193.5"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vsb-o7-OrD" userLabel="Floating View">
+                                <rect key="frame" x="32" y="397" width="350" height="200"/>
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="me3-WO-Axa">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
@@ -344,16 +300,16 @@
                                         </items>
                                     </navigationBar>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="ECd-9J-iUm" userLabel="Info Stack View">
-                                        <rect key="frame" x="10" y="55" width="330" height="128.5"/>
+                                        <rect key="frame" x="10" y="55" width="330" height="135"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your email below and we'll send a link to reset your password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1g6-EH-BAc" userLabel="Prompt Label">
-                                                <rect key="frame" x="0.0" y="0.0" width="330" height="38.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your email below and we'll send a link to reset your password" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1g6-EH-BAc" userLabel="Prompt Label">
+                                                <rect key="frame" x="0.0" y="0.0" width="330" height="45"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TiY-Qy-pfg" userLabel="Email Text Field">
-                                                <rect key="frame" x="0.0" y="46" width="330" height="35"/>
+                                                <rect key="frame" x="0.0" y="52.5" width="330" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="Wo2-cN-ZGC"/>
                                                 </constraints>
@@ -365,7 +321,7 @@
                                                 </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YhG-9d-sAk" userLabel="Reset Password Button">
-                                                <rect key="frame" x="0.0" y="88.5" width="330" height="40"/>
+                                                <rect key="frame" x="0.0" y="95" width="330" height="40"/>
                                                 <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="zkW-6N-7Om"/>
@@ -389,45 +345,25 @@
                                     <constraint firstItem="ECd-9J-iUm" firstAttribute="top" secondItem="me3-WO-Axa" secondAttribute="bottom" constant="10" id="PWi-XQ-edT"/>
                                     <constraint firstItem="ECd-9J-iUm" firstAttribute="leading" secondItem="Vsb-o7-OrD" secondAttribute="leading" constant="10" id="Q2a-VA-hg1"/>
                                     <constraint firstAttribute="trailing" secondItem="me3-WO-Axa" secondAttribute="trailing" id="X45-ln-flM"/>
+                                    <constraint firstAttribute="height" constant="200" id="YRK-J2-5U5"/>
                                     <constraint firstAttribute="bottom" secondItem="ECd-9J-iUm" secondAttribute="bottom" constant="10" id="ZSN-Xm-7DD"/>
                                     <constraint firstAttribute="trailing" secondItem="ECd-9J-iUm" secondAttribute="trailing" constant="10" id="fcG-VJ-20G"/>
                                     <constraint firstAttribute="width" constant="350" id="mIL-dX-1YB"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JHd-gi-BEa" userLabel="Error View">
-                                <rect key="frame" x="88.5" y="602" width="237" height="30"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email is not registered" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G4z-Df-7j5" userLabel="Error Label">
-                                        <rect key="frame" x="20" y="4.5" width="197" height="21.5"/>
-                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="18"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
-                                <constraints>
-                                    <constraint firstItem="G4z-Df-7j5" firstAttribute="centerY" secondItem="JHd-gi-BEa" secondAttribute="centerY" id="0Gj-et-WKZ"/>
-                                    <constraint firstAttribute="height" constant="30" id="0bd-9b-EXX"/>
-                                    <constraint firstAttribute="width" secondItem="G4z-Df-7j5" secondAttribute="width" constant="40" id="Q7P-1L-8hr"/>
-                                    <constraint firstItem="G4z-Df-7j5" firstAttribute="centerX" secondItem="JHd-gi-BEa" secondAttribute="centerX" id="wff-XG-40C"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Vsb-o7-OrD" firstAttribute="centerX" secondItem="eJE-CP-sqf" secondAttribute="centerX" id="HMd-tI-dm7"/>
-                            <constraint firstItem="JHd-gi-BEa" firstAttribute="top" secondItem="Vsb-o7-OrD" secondAttribute="bottom" constant="5" id="RRZ-dl-yjW"/>
-                            <constraint firstItem="kG5-u8-B93" firstAttribute="bottom" secondItem="JHd-gi-BEa" secondAttribute="bottom" constant="230" id="bGe-4C-vve"/>
-                            <constraint firstItem="JHd-gi-BEa" firstAttribute="centerX" secondItem="eJE-CP-sqf" secondAttribute="centerX" id="uA4-3I-D2G"/>
+                            <constraint firstItem="kG5-u8-B93" firstAttribute="bottom" secondItem="Vsb-o7-OrD" secondAttribute="bottom" constant="265" id="gPs-uC-1iM"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kG5-u8-B93"/>
                     </view>
                     <connections>
                         <outlet property="backButton" destination="czV-Bu-66H" id="rrb-1d-Kho"/>
                         <outlet property="emailTextField" destination="TiY-Qy-pfg" id="Tyk-oM-sxR"/>
-                        <outlet property="errorLabel" destination="G4z-Df-7j5" id="7Wg-zC-SY7"/>
-                        <outlet property="errorView" destination="JHd-gi-BEa" id="TuU-v2-hgc"/>
-                        <outlet property="errorViewY" destination="bGe-4C-vve" id="FiN-qT-SEr"/>
+                        <outlet property="floatingViewHeight" destination="YRK-J2-5U5" id="f82-B9-oL0"/>
+                        <outlet property="floatingViewToBottom" destination="gPs-uC-1iM" id="4e3-sh-PAS"/>
                         <outlet property="forgotPasswordView" destination="Vsb-o7-OrD" id="LHa-du-bdc"/>
                         <outlet property="forgotPasswordViewWidth" destination="mIL-dX-1YB" id="gdL-PD-Uyq"/>
                         <outlet property="forgotPasswordViewX" destination="HMd-tI-dm7" id="3Us-w7-hTi"/>

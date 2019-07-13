@@ -21,10 +21,11 @@ protocol LoginProtocol {
 final class LoginViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
-    @IBOutlet weak var loginView: UIView!
-    @IBOutlet weak var loginViewX: NSLayoutConstraint!
-    @IBOutlet weak var loginViewWidth: NSLayoutConstraint!
-    @IBOutlet weak var loginViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var floatingView: UIView!
+    @IBOutlet weak var floatingViewToCenterX: NSLayoutConstraint!
+    @IBOutlet weak var floatingViewWidth: NSLayoutConstraint!
+    @IBOutlet weak var floatingViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var floatingViewToBottom: NSLayoutConstraint!
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -33,11 +34,8 @@ final class LoginViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var createAccountButton: UIButton!
     
-    @IBOutlet weak var errorView: UIView!
-    @IBOutlet weak var errorViewY: NSLayoutConstraint!
-    @IBOutlet weak var errorLabel: UILabel!
     
-    // MARK: - LoginViewController Properties
+    // MARK: - Properties
     var delegate: LoginProtocol?
     var firstTimeSeeingView: Bool?
     
@@ -49,15 +47,16 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
 
         // Setup the loginView
-        loginView.backgroundColor    = Constants.Color.floatingView
-        loginView.layer.cornerRadius = Constants.View.CornerRadius.standard
-        loginViewWidth.constant      = Constants.View.Width.standard
-        loginViewHeight.constant     = Constants.View.Height.login
-        loginViewX.constant          = -UIScreen.main.bounds.width
+        floatingView.backgroundColor    = Constants.Color.floatingView
+        floatingView.layer.cornerRadius = Constants.View.CornerRadius.standard
+        floatingViewWidth.constant      = Constants.View.Width.standard
+        floatingViewHeight.constant     = Constants.View.Height.login
+        floatingViewToCenterX.constant          = -UIScreen.main.bounds.width
+        floatingViewToBottom.constant = UIScreen.main.bounds.height * 0.3
         
         // If first time seeing the view then slide in from the right
         if firstTimeSeeingView == true {
-            loginViewX.constant *= -1
+            floatingViewToCenterX.constant *= -1
         }
         
         // Setup the emailTextField
@@ -70,17 +69,11 @@ final class LoginViewController: UIViewController {
         forgotPasswordButton.setTitleColor(Constants.Color.primary, for: .normal)
         
         // Setup the loginButton
-        loginButton.layer.cornerRadius = Constants.View.CornerRadius.button
+        loginButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
         activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Setup the createAccountButton
         createAccountButton.setTitleColor(Constants.Color.primary, for: .normal)
-        
-        // Setup the error view
-        errorView.alpha              = 0
-        errorView.layer.cornerRadius = Constants.View.CornerRadius.standard
-        errorView.backgroundColor    = Constants.Color.error
-        errorViewY.constant          = Constants.View.Y.error
         
         // Create a listener for the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -109,14 +102,18 @@ final class LoginViewController: UIViewController {
             UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut, animations: {
                 
                 // Move the view to just above the keyboard
-                self.errorViewY.constant = keyboardHeight + 5
+                self.floatingViewToBottom.constant = keyboardHeight + 15
                 self.view.layoutIfNeeded()
                 
             }, completion: nil)
         }
     }
     
-    // MARK: - IBAction Methods
+}
+
+// MARK: - Text Field Methods
+extension LoginViewController: UITextFieldDelegate {
+    
     @IBAction func emailIsEditing(_ sender: UITextField) {
         
         // Store the email thats in the text field
@@ -137,15 +134,40 @@ final class LoginViewController: UIViewController {
         
     }
     
-    @IBAction func forgotPasswordTapped(_ sender: UIButton) {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        // Go to the forgotPasswordViewController
-        slideViewOut {
-            self.dismiss(animated: false, completion: {
-                self.delegate?.goToForgotPassword()
-            })
+        // Deselect the responding text field
+        textField.resignFirstResponder()
+        
+        // Move to the next text field, or lower the keyboard if at the end
+        if textField == emailTextField {
+            passwordTextField.becomeFirstResponder()
         }
+        
+        return true
+        
+    }
+    
+}
 
+// MARK: - Button Methods
+extension LoginViewController {
+    
+    @IBAction func createAccountTapped(_ sender: UIButton) {
+        
+        // Slide the view out
+        slideViewOut {
+            
+            // Dismiss Login VC
+            self.dismiss(animated: false, completion: {
+                
+                // Tell the delegate to go to create account
+                self.delegate?.goToCreateAccount()
+                
+            })
+            
+        }
+        
     }
     
     @IBAction func loginTapped(_ sender: UIButton) {
@@ -161,15 +183,34 @@ final class LoginViewController: UIViewController {
             guard let self = self else { return }
             
             // Check to see if any errors occured
-            guard user != nil && error == nil else {
+            guard user != nil, error == nil else {
                 self.loginButton.isEnabled = true
-                self.handleErrors(error: error! as NSError)
+                self.present(AlertService.createErrorAlert(error: error! as NSError), animated: true, completion: nil)
                 return
             }
             
-            UserService.readUserProfile(email: self.email!, completion: {
+            UserService.readUserProfile(email: self.email!, completion: { (error, userInfo, items) in
                 
-                // Collect all the users information
+                // Check to see if information was successfully read
+                guard error == nil, userInfo != nil, items != nil else {
+                    self.loginButton.isEnabled = true
+                    self.present(AlertService.createErrorAlert(error: error! as NSError), animated: true, completion: nil)
+                    return
+                }
+                
+                // Store the user locally
+                LocalStorageService.writeUser(user: userInfo!)
+                
+                // Store all the users items locally
+                for item in items! {
+                    LocalStorageService.writeItem(item: item, isNew: true)
+                }
+                
+                // Store the information as easily accessible variables
+                Stored.user = userInfo
+                Stored.userItems = items!
+                
+                // Go into the app
                 self.dismiss(animated: true, completion: {
                     
                     self.delegate?.goToInApp()
@@ -182,12 +223,17 @@ final class LoginViewController: UIViewController {
         
     }
     
-    @IBAction func createAccountTapped(_ sender: UIButton) {
+    @IBAction func forgotPasswordTapped(_ sender: UIButton) {
         
-        // Slide the view off the screen
+        // Slide the View Out
         slideViewOut {
+            
+            // Dismiss the Login VC
             self.dismiss(animated: false, completion: {
-                self.delegate?.goToCreateAccount()
+                
+                // Tell the delegate to go to the Forgot Password VC
+                self.delegate?.goToForgotPassword()
+                
             })
         }
         
@@ -197,14 +243,6 @@ final class LoginViewController: UIViewController {
 
 // MARK: - Helper Methods
 extension LoginViewController {
-    
-    func lowerKeyboard() {
-        
-        // Resign first responder from either text field
-        emailTextField.resignFirstResponder()
-        passwordTextField.resignFirstResponder()
-        
-    }
     
     func checkToActivateButton() {
         
@@ -228,16 +266,16 @@ extension LoginViewController {
     }
     
 }
-    
+
 // MARK: - Animation Methods
 extension LoginViewController {
-
+    
     func slideViewIn() {
         
         // Slide the view in to the center
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             
-            self.loginViewX.constant = 0
+            self.floatingViewToCenterX.constant = 0
             self.view.layoutIfNeeded()
             
         }, completion: nil)
@@ -246,13 +284,10 @@ extension LoginViewController {
     
     func slideViewOut(completion: @escaping () -> Void) {
         
-        // Make the errorView invisible
-        errorView.alpha = 0
-        
         // Animate the view off screen to the left
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
             
-            self.loginViewX.constant = -UIScreen.main.bounds.width
+            self.floatingViewToCenterX.constant = -UIScreen.main.bounds.width
             self.view.layoutIfNeeded()
             
         }) { (true) in
@@ -263,73 +298,11 @@ extension LoginViewController {
         }
     }
     
-}
-
-// MARK: - Error handling methods
-extension LoginViewController {
-    
-    func presentErrorMessage(text: String) {
+    func lowerKeyboard() {
         
-        // Set the text for the label, Set the alpha to 0 so it can fade back in
-        errorLabel.text = text
-        errorView.alpha = 0
-        
-        // Fade in the error bar
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            
-            self.errorView.alpha = 1
-            
-        }, completion: nil)
-        
-    }
-    
-    func handleErrors(error: NSError) {
-        
-        // Retrieve the error code and then switch between possible errors
-        if let errorCode = AuthErrorCode(rawValue: error.code) {
-            switch errorCode {
-                
-            case .wrongPassword:
-                presentErrorMessage(text: Constants.ErrorMessage.wrongPassword)
-                
-            case .invalidEmail:
-                presentErrorMessage(text: Constants.ErrorMessage.invalidEmail)
-                
-            case .userNotFound:
-                presentErrorMessage(text: Constants.ErrorMessage.emailNotRegistered)
-                
-            case .missingEmail:
-                presentErrorMessage(text: Constants.ErrorMessage.emailMissing)
-                
-            case .networkError:
-                presentErrorMessage(text: Constants.ErrorMessage.networkError)
-                
-            case .userDisabled:
-                presentErrorMessage(text: Constants.ErrorMessage.accountDisabled)
-            default:
-                presentErrorMessage(text: "Unable to sign in")
-            }
-        }
-        
-    }
-    
-}
-
-// MARK: - Functions that conform to the UITextFieldDelegate
-extension LoginViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        // Move to the next text field, or lower the keyboard if at the end
-        if textField == emailTextField {
-            emailTextField.resignFirstResponder()
-            passwordTextField.becomeFirstResponder()
-        }
-        else if textField == passwordTextField {
-            passwordTextField.resignFirstResponder()
-        }
-        
-        return true
+        // Resign first responder from either text field
+        emailTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
         
     }
     
