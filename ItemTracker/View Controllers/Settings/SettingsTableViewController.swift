@@ -13,7 +13,7 @@ struct SectionData {
     
     var isExpanded = true
     let header: String
-    let texts: [String]
+    var texts: [String]
     let targets: [String]
     
 }
@@ -21,14 +21,18 @@ struct SectionData {
 class SettingsTableViewController: UITableViewController {
 
     @IBOutlet weak var closeButton: UIBarButtonItem!
-    @IBOutlet weak var signOutButton: UIButton!
+    @IBOutlet weak var signOutButton: UIBarButtonItem!
     
-    var sectionData = [SectionData(isExpanded: true, header: "Your Information", texts: ["Full Name", "Email", "Change Password"],
-                                   targets: ["ChangeNameSegue", "ChangeEmailSegue", "ChangePasswordSegue"]),
+    var sectionData = [SectionData(isExpanded: true, header: "Your Information",
+                                   texts: ["Full Name: \(Stored.user!.firstName) \(Stored.user!.lastName)",
+                                           "Email: \(Stored.user!.email)", "Change Password", "Quick Locations"],
+                                   targets: ["ChangeNameSegue", "ChangeEmailSegue", "ChangePasswordSegue", "QuickLocationsSegue"]),
                        SectionData(isExpanded: true, header: "Notifications", texts: ["Email Notifications", "Phone Notifications"],
                                    targets: ["EmailNotificationsSegue", "PhoneNotificationsSegue"]),
-                       SectionData(isExpanded: true, header: "Support", texts: ["Write a Review", "Report a Problem"],
-                                   targets: ["WriteReviewSegue", "ReportProblemSegue"])]
+                       SectionData(isExpanded: true, header: "Premium", texts: ["Info about premium", "Upgrade to premium"],
+                                   targets: ["PremiumInfoSegue", "PayPremiumSegue"]),
+                       SectionData(isExpanded: true, header: "Support", texts: ["FAQ", "Write a Review", "Report a Problem"],
+                                   targets: ["FAQSegue", "WriteReviewSegue", "ReportProblemSegue"])]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,8 +41,7 @@ class SettingsTableViewController: UITableViewController {
         closeButton.tintColor = Constants.Color.primary
         
         // Setup the signOutButton
-        signOutButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
-        signOutButton.backgroundColor    = Constants.Color.primary
+        signOutButton.tintColor   = Constants.Color.primary
         
     }
 
@@ -113,6 +116,19 @@ class SettingsTableViewController: UITableViewController {
         performSegue(withIdentifier: sectionData[indexPath.section].targets[indexPath.row], sender: self)
         
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let destinationVC = segue.destination
+        
+        if let destinationVC = destinationVC as? ChangeNameViewController {
+            destinationVC.delegate = self
+        }
+        else if let destinationVC = destinationVC as? ChangeEmailViewController {
+            destinationVC.delegate = self
+        }
+        
+    }
 
     @IBAction func closeButtonTapped(_ sender: UIBarButtonItem) {
         
@@ -120,7 +136,7 @@ class SettingsTableViewController: UITableViewController {
         
     }
     
-    @IBAction func signOutButtonTapped(_ sender: UIButton) {
+    @IBAction func signOutButtonTapped(_ sender: UIBarButtonItem) {
         
         let areYouSureAlert = UIAlertController(title: "Sign out?", message: nil, preferredStyle: .alert)
         
@@ -147,7 +163,7 @@ class SettingsTableViewController: UITableViewController {
             try firebaseAuth.signOut()
             
             // Clear local storage
-            LocalStorageService.deleteAllInfo()
+            LocalStorageService.clearUser()
             
             // Create the authVC
             let authVC = UIStoryboard(name: Constants.ID.Storyboard.auth, bundle: .main)
@@ -198,6 +214,29 @@ extension SettingsTableViewController {
             
         }
         
+    }
+    
+}
+
+extension SettingsTableViewController: NameChangedProtocol, EmailChangedProtocol {
+    
+    func nameWasChanged(name: String) {
+        
+        // Change the name that is displayed
+        sectionData[0].texts[0] = "First Name: \(name)"
+        
+        // Reload the tableView
+        self.tableView.reloadData()
+        
+    }
+    
+    func emailWasChanged(email: String) {
+        
+        // Change the email that is displayed
+        sectionData[0].texts[1] = "Email: \(email)"
+        
+        // Reload the tableView
+        self.tableView.reloadData()
     }
     
 }

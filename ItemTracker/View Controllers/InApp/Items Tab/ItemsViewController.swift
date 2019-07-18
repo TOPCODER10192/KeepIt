@@ -43,10 +43,6 @@ final class ItemsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if Stored.userItems.count == 0 {
-            presentNoItemsAlert()
-        }
-        
     }
     
     // MARK: - IBAction Methods
@@ -131,8 +127,17 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
+        let numItems = Stored.userItems.count
+        
+        if numItems > 0 {
+            collectionView.eraseEmptyMessage()
+        }
+        else {
+            collectionView.setEmptyMessage("You're not tracking any items\nPress the \"+\" to add an item")
+        }
+        
         // Return the number of items that the user has stored
-        return Stored.userItems.count
+        return numItems
         
     }
     
@@ -185,32 +190,6 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
 // MARK: - Helper Functions
 extension ItemsViewController  {
     
-    func loadVC(ID: String, sb: UIStoryboard, animated: Bool) {
-        
-        let vc = sb.instantiateViewController(withIdentifier: ID)
-        
-        if let vc = vc as? SingleItemViewController{
-            
-            let indexPaths = itemsCollectionView.indexPathsForSelectedItems
-            
-            if indexPaths != nil, indexPaths!.count > 0, let index = indexPaths?[0].row {
-                itemsCollectionView.selectItem(at: nil, animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
-                vc.existingItem = Stored.userItems[index]
-                vc.existingItemIndex = index
-            }
-            
-            vc.delegate = self
-        }
-        else if let vc = vc as? UpdateLocationViewController {
-            
-        }
-
-        
-        vc.modalPresentationStyle = .overCurrentContext
-        present(vc, animated: animated, completion: nil)
-        
-    }
-    
     func presentNoItemsAlert() {
         
         let noItemsAlert = UIAlertController(title: "No Items",
@@ -230,6 +209,63 @@ extension ItemsViewController  {
         present(noItemsAlert, animated: true, completion: nil)
         
     }
+    
+    func loadVC(ID: String, sb: UIStoryboard, animated: Bool) {
+        
+        let vc = sb.instantiateViewController(withIdentifier: ID)
+        
+        if let vc = vc as? SingleItemViewController{
+            
+            let indexPaths = itemsCollectionView.indexPathsForSelectedItems
+            
+            if indexPaths != nil, indexPaths!.count > 0, let index = indexPaths?[0].row {
+                itemsCollectionView.selectItem(at: nil,
+                                               animated: false,
+                                               scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
+                
+                vc.existingItem = Stored.userItems[index]
+                vc.existingItemIndex = index
+            }
+            
+            vc.delegate = self
+        }
+        
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: animated, completion: nil)
+        
+    }
 
+}
+
+// MARK: - Additional Collection View Methods
+extension UICollectionView {
+    
+    func setEmptyMessage(_ message: String) {
+        
+        // Create a background message label
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0,
+                                   width: self.bounds.size.width,
+                                   height: self.bounds.size.height))
+        
+        // Set the text for the label
+        messageLabel.text = message
+        messageLabel.textColor = .gray
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        messageLabel.font = UIFont(name: "TrebuchetMS", size: 22)
+        messageLabel.sizeToFit()
+        
+        // Set the background view of the collection view
+        self.backgroundView = messageLabel
+        
+    }
+    
+    func eraseEmptyMessage() {
+        
+        // Get rid of the collection view background
+        self.backgroundView = nil
+        
+    }
+    
 }
 

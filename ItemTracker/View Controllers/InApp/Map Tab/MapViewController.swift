@@ -71,6 +71,11 @@ final class MapViewController: UIViewController {
     
     @IBAction func updateLocationButtonTapped(_ sender: UIBarButtonItem) {
         
+        guard Stored.userItems.count > 0 else {
+            presentNoItemsAlert()
+            return
+        }
+        
         // Load the update location vc
         loadVC(ID: Constants.ID.VC.updateLocation,
                        sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
@@ -106,6 +111,11 @@ final class MapViewController: UIViewController {
         // If the annotation is an MKUserLocation then skip over it
         if mapView.annotations[itemIndex] is MKUserLocation {
             itemIndex -= 1
+            
+            if itemIndex < 0 {
+                itemIndex = mapView.annotations.count - 1
+            }
+            
         }
         
         // Center the map over the item
@@ -273,23 +283,9 @@ extension MapViewController: CLLocationManagerDelegate {
         }
         else {
             // Let the user know that they have to turn location services on
-            presentLocationsAlert()
+            present(AlertService.createLocationsAlert(), animated: true, completion: nil)
         }
         
-    }
-    
-    func presentLocationsAlert() {
-        // Pop up a notification that tells the user how to allow location
-        let locationsAlert = UIAlertController(title: "Location Services Off", message: "Go to Settings to Turn Them On" , preferredStyle: .alert)
-        locationsAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        locationsAlert.addAction(UIAlertAction(title: "Go to Settings", style: .default, handler: { (action) in
-            
-            // Go to the settings app
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-            
-        }))
-        
-        present(locationsAlert, animated: true)
     }
     
     func checkLocationAuthorization() {
@@ -308,7 +304,7 @@ extension MapViewController: CLLocationManagerDelegate {
             
         // Case if no authorization
         case .restricted, .denied:
-            presentLocationsAlert()
+            present(AlertService.createLocationsAlert(), animated: true, completion: nil)
             
             mapView.showsUserLocation = false
             
@@ -376,6 +372,27 @@ extension MapViewController: SingleItemProtocol, UpdateLocationProtocol {
 
 // MARK: - Helper Methods
 extension MapViewController {
+    
+    func presentNoItemsAlert() {
+        
+        let noItemsAlert = UIAlertController(title: "No Items",
+                                             message: "You're not keeping track of any of your items yet",
+                                             preferredStyle: .alert)
+        
+        noItemsAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        noItemsAlert.addAction(UIAlertAction(title: "Add an Item", style: .default, handler: { (action) in
+            
+            // Load the Single Item VC
+            self.loadVC(ID: Constants.ID.VC.singleItem,
+                        sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                        animate: false)
+            
+        }))
+        
+        // Present the noItems alert controller
+        present(noItemsAlert, animated: true, completion: nil)
+        
+    }
     
     func loadVC(ID: String, sb: UIStoryboard, animate: Bool) {
         

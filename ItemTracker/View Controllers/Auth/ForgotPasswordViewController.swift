@@ -19,10 +19,10 @@ protocol ForgotPasswordProtocol {
 final class ForgotPasswordViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
-    @IBOutlet weak var forgotPasswordView: UIView!
-    @IBOutlet weak var forgotPasswordViewWidth: NSLayoutConstraint!
+    @IBOutlet weak var floatingView: UIView!
+    @IBOutlet weak var floatingViewWidth: NSLayoutConstraint!
     @IBOutlet weak var floatingViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var forgotPasswordViewX: NSLayoutConstraint!
+    @IBOutlet weak var floatingViewX: NSLayoutConstraint!
     @IBOutlet weak var floatingViewToBottom: NSLayoutConstraint!
     
     @IBOutlet weak var navigationBar: UINavigationBar!
@@ -41,10 +41,10 @@ final class ForgotPasswordViewController: UIViewController {
         super.viewDidLoad()
 
         // Setup the forgotPasswordVIew
-        forgotPasswordView.backgroundColor    = Constants.Color.floatingView
-        forgotPasswordView.layer.cornerRadius = Constants.View.CornerRadius.standard
-        forgotPasswordViewWidth.constant      = Constants.View.Width.standard
-        forgotPasswordViewX.constant          = UIScreen.main.bounds.width
+        floatingView.backgroundColor    = Constants.Color.floatingView
+        floatingView.layer.cornerRadius = Constants.View.CornerRadius.standard
+        floatingViewWidth.constant      = Constants.View.Width.standard
+        floatingViewX.constant          = UIScreen.main.bounds.width
         floatingViewHeight.constant           = Constants.View.Height.forgotPassword
         floatingViewToBottom.constant         = UIScreen.main.bounds.height * 0.3
         
@@ -124,20 +124,20 @@ final class ForgotPasswordViewController: UIViewController {
         resetPasswordButton.isEnabled = false
         emailTextField.resignFirstResponder()
         
+        // Start a progress animation
+        ProgressService.progressAnimation(text: "Trying to Send You an Email")
+        
         // Send the password reset email
         Auth.auth().sendPasswordReset(withEmail: email!) { error in
             
-            // Reactivate the button
-            self.resetPasswordButton.isEnabled = true
-            
             // If there is an error, print an appropriate error message
             guard error == nil else {
-                self.present(AlertService.createErrorAlert(error: error! as NSError), animated: true, completion: nil)
+                self.resetPasswordButton.isEnabled = true
+                ProgressService.errorAnimation(text: ErrorService.firebaseAuthError(error: error!))
                 return
             }
             
-            // The email was successful so the email should be sent
-            self.present(AlertService.createSuccessAlert(description: "Email sent to Reset Password"), animated: true, completion: nil)
+            ProgressService.successAnimation(text: "Email to Reset Password was Sent")
             
         }
         
@@ -178,7 +178,7 @@ extension ForgotPasswordViewController {
         
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             
-            self.forgotPasswordViewX.constant = 0
+            self.floatingViewX.constant = 0
             self.view.layoutIfNeeded()
             
         }, completion: nil)
@@ -189,7 +189,7 @@ extension ForgotPasswordViewController {
         
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
             
-            self.forgotPasswordViewX.constant = UIScreen.main.bounds.width
+            self.floatingViewX.constant = UIScreen.main.bounds.width
             self.view.layoutIfNeeded()
             
         }) { (true) in

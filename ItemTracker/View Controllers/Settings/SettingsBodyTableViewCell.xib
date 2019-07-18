@@ -25,13 +25,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Pa-m2-04F">
-                        <rect key="frame" x="10" y="0.0" width="256.5" height="43.5"/>
-                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
+                        <rect key="frame" x="10" y="0.0" width="269.5" height="43.5"/>
+                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NextButton" translatesAutoresizingMaskIntoConstraints="NO" id="MIB-Bl-Fzx">
-                        <rect key="frame" x="276.5" y="0.0" width="43.5" height="43.5"/>
+                        <rect key="frame" x="289.5" y="6.5" width="30.5" height="30.5"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="MIB-Bl-Fzx" secondAttribute="height" multiplier="1:1" id="6Jb-N2-VVF"/>
                         </constraints>
@@ -42,7 +42,7 @@
                     <constraint firstItem="3Pa-m2-04F" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" id="5G0-rL-8dX"/>
                     <constraint firstAttribute="trailing" secondItem="MIB-Bl-Fzx" secondAttribute="trailing" id="8dc-TG-4ze"/>
                     <constraint firstItem="MIB-Bl-Fzx" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="NFN-ug-jg1"/>
-                    <constraint firstItem="MIB-Bl-Fzx" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" id="bj9-O1-4Ih"/>
+                    <constraint firstItem="MIB-Bl-Fzx" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.7" id="bj9-O1-4Ih"/>
                     <constraint firstItem="3Pa-m2-04F" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="cBG-ND-4BA"/>
                     <constraint firstItem="3Pa-m2-04F" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="err-gF-WX1"/>
                 </constraints>

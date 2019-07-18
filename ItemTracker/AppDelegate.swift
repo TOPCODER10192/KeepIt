@@ -16,18 +16,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        UINavigationBar.appearance().tintColor = Constants.Color.primary
-        
         // Override point for customization after application launch.
         FirebaseApp.configure()
 
         // Attempt to load the current user
-        LocalStorageService.readUser()
+        LocalStorageService.getUser()
         
+        // Check if a user exists in local storage
         if Stored.user != nil {
             
+            LocalStorageService.listItems()
+            
+            // Create the Tab Bar Controller
             let tabBarVC = UIStoryboard(name: Constants.ID.Storyboard.tabBar, bundle: .main).instantiateViewController(withIdentifier: Constants.ID.VC.tabBar)
             
+            // Present the Tab Bar Controller
             window?.rootViewController = tabBarVC
             window?.makeKeyAndVisible()
             

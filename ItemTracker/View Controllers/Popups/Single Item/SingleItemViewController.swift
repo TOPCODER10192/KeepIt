@@ -673,7 +673,7 @@ extension SingleItemViewController {
             mapHoldGesture.isEnabled          = false
             nearMeButton.isHidden             = true
             
-            activateButton(isActivated: true, color: Constants.Color.error)
+            activateButton(isActivated: true, color: Constants.Color.deleteButton)
             saveItemButton.setTitle("Delete Item", for: .normal)
             
             showItemProperties()
@@ -701,10 +701,15 @@ extension SingleItemViewController {
     
     @IBAction func saveItemButtonTapped(_ sender: UIButton) {
         
+        // Disable the save item button
+        saveItemButton.isEnabled = false
+        
+        // Determine if the user is attempting to delete an item
         if inEditMode == false && existingItem != nil {
             
             // Send a "Are you sure" prompt
             showConfirmationsAlert()
+            saveItemButton.isEnabled = true
             return
             
         }
@@ -722,12 +727,13 @@ extension SingleItemViewController {
         let timeStamp = getTheDate()
         
         // Initialize the item
-        var item = Item.init(withID            : "",
-                             withName          : itemName!,
-                             withLocation      : itemCoordinates!,
-                             withLastUpdateDate: timeStamp,
-                             withImageURL      : "")
+        var item = Item(withID            : "",
+                        withName          : itemName!,
+                        withLocation      : itemCoordinates!,
+                        withLastUpdateDate: timeStamp,
+                        withImageURL      : "")
         
+        // If the item existed then maintain its id
         if existingItem != nil {
             item.id = existingItem!.id
         }
@@ -735,10 +741,13 @@ extension SingleItemViewController {
         // If the image is not nil
         if let image = itemImageView.image {
             
+            // Check if the image was changed
             if imageChanged == true {
             
+                // Store the new image in firebase storage
                 ImageService.storeImage(image: image, itemName: itemName!) { (url) in
                     
+                    // Set the items image url and store the item in firestore
                     item.imageURL = url.absoluteString
                     self.storeItem(item: item)
                     
@@ -746,6 +755,7 @@ extension SingleItemViewController {
             }
             else {
                 
+                // Use the existing image url and store the item in firestore
                 item.imageURL = existingItem!.imageURL
                 self.storeItem(item: item)
                 
@@ -754,6 +764,7 @@ extension SingleItemViewController {
         }
         else {
             
+            // The item has no image, so store in firestore
             storeItem(item: item)
             
         }
@@ -762,23 +773,66 @@ extension SingleItemViewController {
     
     func storeItem(item: Item) {
         
-        UserService.writeItem(item: item, isNew: existingItem == nil) { (id) in
+        // Check if the item is new or not
+        if existingItem == nil {
             
-            var newItem = item
-            newItem.id = id
+            // Show a progress animation
+            ProgressService.progressAnimation(text: "Trying to Create \(itemName!)")
             
-            LocalStorageService.writeItem(item: newItem, isNew: self.existingItem == nil, index: self.existingItemIndex)
-            
-            if self.existingItemIndex == nil {
+            // Attempt to write a new item to firestore
+            FirestoreService.createItem(item: item) { (id, error) in
+                
+                // Check if the item was successfully added
+                guard error == nil else {
+                    self.saveItemButton.isEnabled = true
+                    ProgressService.errorAnimation(text: "Unable to Create \(self.itemName!)")
+                    return
+                }
+                
+                // Show that the process was successful
+                ProgressService.successAnimation(text: "Successfully Created \(self.itemName!)")
+                
+                // Create a replica item and change its id
+                var newItem = item
+                newItem.id  = id
+                
+                // Store the item locally
+                LocalStorageService.createItem(item: newItem)
                 Stored.userItems.append(newItem)
+                
+                // Tell the delegate the item was written and lower the view
+                self.delegate?.itemSaved(item: newItem)
+                self.slideViewOut()
+                
             }
-            else {
-                Stored.userItems[self.existingItemIndex!] = newItem
+        }
+        else {
+            
+            // Show a progress animation
+            ProgressService.progressAnimation(text: "Trying to Update \(existingItem!.name)")
+            
+            // Attempt to update the item in firestore
+            FirestoreService.updateItem(item: item) { (error) in
+                
+                // Check that the item was updated successfully
+                guard error == nil else {
+                    self.saveItemButton.isEnabled = true
+                    ProgressService.errorAnimation(text: "Unable to Update \(self.itemName!)")
+                    return
+                }
+                
+                // Show that the process was successful
+                ProgressService.successAnimation(text: "Successfully Updated \(self.itemName!)")
+                
+                // Store the item locally
+                LocalStorageService.updateItem(item: item, index: self.existingItemIndex!)
+                Stored.userItems[self.existingItemIndex!] = item
+                
+                // Tell the delegate the item was updated and lower the view
+                self.delegate?.itemSaved(item: item)
+                self.slideViewOut()
+                
             }
-            
-            self.delegate?.itemSaved(item: newItem)
-            
-            self.slideViewOut()
             
         }
         
@@ -790,24 +844,47 @@ extension SingleItemViewController {
     
     func showConfirmationsAlert() {
         
+        // Create an alert for deleting an item
         let areYouSureAlert = UIAlertController(title: "Delete \(existingItem!.name)?", message: nil, preferredStyle: .alert)
+        
+        // Add actions to the alert
         areYouSureAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         areYouSureAlert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { (action) in
             
-            UserService.removeItem(item: self.existingItem!)
-            Stored.userItems.remove(at: self.existingItemIndex!)
-            LocalStorageService.deleteUserItem(index: self.existingItemIndex!)
+            // Start a Progress Animation
+            ProgressService.progressAnimation(text: "Trying to Delete \(self.existingItem!.name)")
             
-            if URL(string: self.existingItem!.imageURL) != nil {
-                ImageService.deleteImage(itemName: self.existingItem!.name)
-            }
-            
-            self.delegate?.itemDeleted()
-            
-            self.slideViewOut()
+            // Attempt to delete the item from firestore
+            FirestoreService.deleteItem(item: self.existingItem!, completion: { (error) in
+                
+                // Check that the item was deleted successfully
+                guard error == nil else {
+                    self.saveItemButton.isEnabled = true
+                    ProgressService.errorAnimation(text: "Unable to Delete \(self.existingItem!.name)")
+                    return
+                }
+                
+                // If the item had an image, then remove it from storage
+                if URL(string: self.existingItem!.imageURL) != nil {
+                    ImageService.deleteImage(itemName: self.existingItem!.name)
+                }
+                
+                // Show that the process was successful
+                ProgressService.successAnimation(text: "Successfully Deleted \(self.existingItem!.name)")
+                
+                // Save the changes locally
+                Stored.userItems.remove(at: self.existingItemIndex!)
+                LocalStorageService.deleteItem(index: self.existingItemIndex!)
+                
+                // Tell the delgate that an item was deleted and slide the view out
+                self.delegate?.itemDeleted()
+                self.slideViewOut()
+                
+            })
             
         }))
         
+        // Present the alert
         present(areYouSureAlert, animated: true, completion: nil)
         
     }

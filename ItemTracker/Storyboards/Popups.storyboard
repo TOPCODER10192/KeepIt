@@ -237,7 +237,7 @@
                                                             <constraint firstAttribute="bottom" secondItem="I8I-Lq-QXc" secondAttribute="bottom" id="wJf-KW-Brn"/>
                                                         </constraints>
                                                     </view>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Item Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pYP-wD-oNo">
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Item Name" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="pYP-wD-oNo">
                                                         <rect key="frame" x="65" y="105" width="200" height="30"/>
                                                         <nil key="textColor"/>
                                                         <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="24"/>
@@ -265,7 +265,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vSk-SP-kuG" userLabel="Map Container View">
                                                         <rect key="frame" x="0.0" y="30" width="330" height="220"/>
                                                         <subviews>
-                                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ele-1m-m9d">
+                                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ele-1m-m9d">
                                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="220"/>
                                                                 <gestureRecognizers/>
                                                                 <connections>
@@ -404,4 +404,5 @@
     <resources>
         <image name="Wallet" width="100" height="100"/>
     </resources>
+    <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
 </document>

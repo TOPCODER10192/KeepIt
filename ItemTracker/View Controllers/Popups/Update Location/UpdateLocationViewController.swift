@@ -91,6 +91,18 @@ class UpdateLocationViewController: UIViewController {
     
     @IBAction func updateButtonTapped(_ sender: UIButton) {
         
+        // Disable the button
+        updateButton.isEnabled = false
+        
+        guard locationManager.location?.coordinate != nil else {
+            updateButton.isEnabled = true
+            present(AlertService.createLocationsAlert(), animated: true, completion: nil)
+            return
+        }
+        
+        // Show a progress animation
+        ProgressService.progressAnimation(text: "Trying to Update the Location of Your Items")
+        
         // Get the users information and cast it as [Double]
         let usersLocation = [locationManager.location?.coordinate.latitude, locationManager.location?.coordinate.longitude] as! [Double]
         
@@ -105,21 +117,39 @@ class UpdateLocationViewController: UIViewController {
                 continue
             }
             
+            // Retrieve the item being updated
             var item = Stored.userItems[i]
+            
+            // Change the items location and time of last update
             item.lastUpdateDate = time
             item.mostRecentLocation = usersLocation
             
-            UserService.writeItem(item: item, isNew: false, completion: nil)
-            Stored.userItems[i] = item
-            LocalStorageService.writeItem(item: item, isNew: false, index: i)
+            // Attempt to update the item in firestore
+            FirestoreService.updateItem(item: item) { (error) in
+                
+                // Check if the update was successful
+                guard error == nil else {
+                    self.updateButton.isEnabled = true
+                    ProgressService.errorAnimation(text: "Unable to Update Your Item Locations")
+                    return
+                }
+                
+                // Show that the process was successful
+                ProgressService.successAnimation(text: "Successfully Updated the Location of Your Items")
+                
+                // Save the changes locally
+                Stored.userItems[i] = item
+                LocalStorageService.updateItem(item: item, index: i)
+                
+                // Tell the delegate reload the annotations and slide the view out
+                self.delegate?.reloadAnnotations()
+                self.slideViewOut()
+                
+            }
             
         }
         
-        delegate?.reloadAnnotations()
-        slideViewOut()
-        
     }
-    
 
 }
 

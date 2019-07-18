@@ -109,27 +109,9 @@ struct Constants {
         static let floatingView     = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 255/255)
         static let notificationView = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 255/255)
         static let primary          = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 255/255)
-        static let settings         = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 255/255)
-        static let inactiveButton   = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 120/255)
-        
-        
-        static let success          = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 255/255)
-        static let error            = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 255/255)
+        static let inactiveButton   = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 255/255)
+        static let deleteButton     = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 255/255)
     
-    }
-    
-    // MARK: - Error Handling Messages
-    struct ErrorMessage {
-        
-        static let accountDisabled         = "This account has been disabled"
-        static let emailAlreadyRegistered  = "This Email already in use"
-        static let emailMissing            = "An Email must be provided"
-        static let emailNotRegistered      = "This Email is not registered"
-        static let invalidEmail            = "This Email has an invalid format"
-        static let networkError            = "Unable to connect to the server"
-        static let weakPassword            = "Password needs at least 6 characters"
-        static let wrongPassword           = "Incorrect password"
-        
     }
     
     // MARK: - Keys for database and local storage
@@ -137,23 +119,22 @@ struct Constants {
         
         struct User {
             
-            static let users         = "Users"
-            static let userID        = "User ID"
-            static let firstName     = "First Name"
-            static let lastName      = "Last Name"
-            static let email         = "Email"
+            static let users     = "users"
+            static let id        = "userID"
+            static let firstName = "firstName"
+            static let lastName  = "lastName"
+            static let email     = "email"
             
         }
         
         struct Item {
             
-            static let id             = "Item ID"
-            static let items          = "Items"
-            static let name           = "Item Name"
-            static let movement       = "Is Moved Often"
-            static let lastUpdateDate = "Last Updated"
-            static let location       = "Location"
-            static let imageURL       = "Image URL"
+            static let items          = "items"
+            static let id             = "itemID"
+            static let name           = "itemName"
+            static let lastUpdateDate = "itemLastUpdated"
+            static let location       = "itemLocation"
+            static let imageURL       = "imageURL"
             
         }
     

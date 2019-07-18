@@ -178,42 +178,57 @@ extension LoginViewController {
         // Disable the button
         loginButton.isEnabled = false
         
+        // Start the progress animation
+        ProgressService.progressAnimation(text: "Trying to log you in")
+        
         // Attempt to login the user
-        Auth.auth().signIn(withEmail: email!, password: password!) { [weak self] user, error in
+        Auth.auth().signIn(withEmail: email!, password: password!) { [weak self] authResult, error in
             guard let self = self else { return }
             
             // Check to see if any errors occured
-            guard user != nil, error == nil else {
+            guard authResult != nil, error == nil else {
                 self.loginButton.isEnabled = true
-                self.present(AlertService.createErrorAlert(error: error! as NSError), animated: true, completion: nil)
+                ProgressService.errorAnimation(text: ErrorService.firebaseAuthError(error: error!))
                 return
             }
             
-            UserService.readUserProfile(email: self.email!, completion: { (error, userInfo, items) in
+            // Attempt to get the user from the database
+            FirestoreService.getUser(userID: Auth.auth().currentUser!.uid, completion: { (error, user) in
                 
                 // Check to see if information was successfully read
-                guard error == nil, userInfo != nil, items != nil else {
+                guard error == nil, user != nil else {
                     self.loginButton.isEnabled = true
-                    self.present(AlertService.createErrorAlert(error: error! as NSError), animated: true, completion: nil)
+                    ProgressService.errorAnimation(text: "Unable to Get Your Information")
                     return
                 }
                 
                 // Store the user locally
-                LocalStorageService.writeUser(user: userInfo!)
+                LocalStorageService.writeUser(user: user!)
+                Stored.user = user
                 
-                // Store all the users items locally
-                for item in items! {
-                    LocalStorageService.writeItem(item: item, isNew: true)
-                }
-                
-                // Store the information as easily accessible variables
-                Stored.user = userInfo
-                Stored.userItems = items!
-                
-                // Go into the app
-                self.dismiss(animated: true, completion: {
+                // Attempt to get the users items form the database
+                FirestoreService.listItems(completion: { (error, items) in
                     
-                    self.delegate?.goToInApp()
+                    // Check to see if items were succesfully read
+                    guard error == nil, items != nil else {
+                        self.loginButton.isEnabled = true
+                        ProgressService.errorAnimation(text: "Unable to Get Your Information")
+                        return
+                    }
+                    
+                    // Present a success message
+                    ProgressService.successAnimation(text: "Successfully Logged In")
+                    
+                    // Store all the users items locally
+                    for item in items! {
+                        LocalStorageService.createItem(item: item)
+                    }
+                    Stored.userItems = items!
+                    
+                    // Go into the app
+                    self.dismiss(animated: true, completion: {
+                        self.delegate?.goToInApp()
+                    })
                     
                 })
                 

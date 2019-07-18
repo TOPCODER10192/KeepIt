@@ -47,20 +47,27 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="133-kp-FWd" userLabel="Login Stack View">
                                         <rect key="frame" x="10" y="10" width="330" height="220"/>
                                         <subviews>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tu9-WJ-d7y" userLabel="Email Text Field">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tu9-WJ-d7y" userLabel="Email Text Field" customClass="CustomTextField" customModule="ItemTracker" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="35"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="username"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="MailIcon"/>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="emailIsEditing:" destination="iR7-Nl-SyO" eventType="editingChanged" id="YDw-gg-ZSn"/>
                                                 </connections>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Qi-TE-7AF" userLabel="Password Text Field">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Qi-TE-7AF" userLabel="Password Text Field" customClass="CustomTextField" customModule="ItemTracker" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="46" width="330" height="35"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
                                                 <textInputTraits key="textInputTraits" returnKeyType="continue" secureTextEntry="YES" textContentType="password"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="LockIcon"/>
+                                                    <userDefinedRuntimeAttribute type="image" keyPath="rightImage" value="EyeIcon"/>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="passwordIsEditing:" destination="iR7-Nl-SyO" eventType="editingChanged" id="U08-jX-wbX"/>
                                                 </connections>
@@ -257,11 +264,11 @@
                         <outlet property="backButton" destination="Cgv-mp-RSu" id="19g-GK-cqw"/>
                         <outlet property="bottomButton" destination="2Nm-NN-IEJ" id="oiQ-4s-TxQ"/>
                         <outlet property="bottomTextField" destination="2Lp-Jb-DPF" id="0sw-TB-rtR"/>
-                        <outlet property="createAccountView" destination="XgA-1T-qG1" id="nes-m6-jFW"/>
-                        <outlet property="createAccountViewHeight" destination="1Ml-h1-pxP" id="bMP-vZ-JIs"/>
-                        <outlet property="createAccountViewWidth" destination="9FN-XN-VJY" id="ZCA-Af-ckU"/>
-                        <outlet property="createAccountViewX" destination="SeU-KG-zU1" id="Dqv-oM-8Ic"/>
+                        <outlet property="floatingView" destination="XgA-1T-qG1" id="zZX-wI-B8h"/>
+                        <outlet property="floatingViewHeight" destination="1Ml-h1-pxP" id="1Qx-hJ-pWg"/>
                         <outlet property="floatingViewToBottom" destination="Y2M-x8-PkA" id="Gfb-hP-CW0"/>
+                        <outlet property="floatingViewWidth" destination="9FN-XN-VJY" id="w7m-wu-VVd"/>
+                        <outlet property="floatingViewX" destination="SeU-KG-zU1" id="45d-Xg-Mp1"/>
                         <outlet property="navigationBar" destination="deE-Pm-7Q7" id="OEn-eS-wn7"/>
                         <outlet property="navigationBarTitle" destination="9Z0-Sb-rYQ" id="Bw8-hA-MM5"/>
                         <outlet property="promptLabel" destination="XXY-zv-ZkZ" id="GHz-q8-JRD"/>
@@ -308,7 +315,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TiY-Qy-pfg" userLabel="Email Text Field">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TiY-Qy-pfg" userLabel="Email Text Field" customClass="CustomTextField" customModule="ItemTracker" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="52.5" width="330" height="35"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="Wo2-cN-ZGC"/>
@@ -316,6 +323,9 @@
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="MailIcon"/>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="emailTextFieldEditing:" destination="2J2-lv-M4y" eventType="editingChanged" id="iv5-xf-akF"/>
                                                 </connections>
@@ -362,11 +372,11 @@
                     <connections>
                         <outlet property="backButton" destination="czV-Bu-66H" id="rrb-1d-Kho"/>
                         <outlet property="emailTextField" destination="TiY-Qy-pfg" id="Tyk-oM-sxR"/>
+                        <outlet property="floatingView" destination="Vsb-o7-OrD" id="HDC-J9-w50"/>
                         <outlet property="floatingViewHeight" destination="YRK-J2-5U5" id="f82-B9-oL0"/>
                         <outlet property="floatingViewToBottom" destination="gPs-uC-1iM" id="4e3-sh-PAS"/>
-                        <outlet property="forgotPasswordView" destination="Vsb-o7-OrD" id="LHa-du-bdc"/>
-                        <outlet property="forgotPasswordViewWidth" destination="mIL-dX-1YB" id="gdL-PD-Uyq"/>
-                        <outlet property="forgotPasswordViewX" destination="HMd-tI-dm7" id="3Us-w7-hTi"/>
+                        <outlet property="floatingViewWidth" destination="mIL-dX-1YB" id="AV9-RZ-BDT"/>
+                        <outlet property="floatingViewX" destination="HMd-tI-dm7" id="xOx-p2-2hg"/>
                         <outlet property="navigationBar" destination="me3-WO-Axa" id="ili-tG-6be"/>
                         <outlet property="resetPasswordButton" destination="YhG-9d-sAk" id="4gF-dk-QfG"/>
                     </connections>
@@ -377,6 +387,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="EyeIcon" width="30" height="30"/>
+        <image name="LockIcon" width="30" height="30"/>
+        <image name="MailIcon" width="30" height="30"/>
         <image name="Separation Line" width="289" height="1"/>
     </resources>
+    <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
 </document>
