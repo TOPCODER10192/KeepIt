@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import FirebaseAuth
 import FirebaseFirestore
 
 final class FirestoreService {
     
+    private static let firebaseAuth = Auth.auth()
     private static let db = Firestore.firestore()
     
     // MARK: - Read Methods
@@ -109,23 +111,6 @@ final class FirestoreService {
         
     }
     
-    static func deleteUser(user: UserInfo, completion: @escaping (Error?) -> Void) {
-        
-        // Get a reference to the document containing the user
-        let userDocRef = db.collection(Constants.Key.User.users)
-                           .document(user.id)
-        
-        // Attempt to delete the user from the database
-        userDocRef.delete
-        { (error) in
-            
-            // Call the completion handler with the error
-            completion(error)
-            
-        }
-        
-    }
-    
     static func createItem(item: Item, completion: @escaping (String, Error?) -> Void) {
         
         // Get a reference to where the document will be written
@@ -186,6 +171,64 @@ final class FirestoreService {
             completion(error)
         
         }
+        
+    }
+    
+    static func deleteUser(password: String, completion: @escaping (Error?) -> Void) {
+        
+        // Get the curren user and check that it is not nil
+        guard let user = firebaseAuth.currentUser else { return }
+        
+        // Get the current users email and check that it isn't nil
+        guard let email = user.email else { return }
+        
+        // Create a credential from the users email and the password they typed in
+        let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+        
+        // Reauthenticate the user
+        user.reauthenticate(with: credential, completion: { (authResult, error) in
+            
+            // Check if the authentication is successful
+            guard authResult != nil, error == nil else {
+                completion(error)
+                return
+            }
+            
+            // Attempt to delete all the users images
+            for item in Stored.userItems {
+                if URL(string: item.imageURL) != nil {
+                    ImageService.deleteImage(itemName: item.name)
+                }
+            }
+            
+            // Get a reference to the path containg the user in firestore
+            let userDocRef = db.collection(Constants.Key.User.users).document(Stored.user!.id)
+            
+            // Attempt to delete the user from the firestore page
+            userDocRef.delete(completion: { (error) in
+                
+                // Check if there were any errors
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+                
+                // Attempt to delete the users account
+                user.delete(completion: { (error) in
+                    
+                    // Check if there is an error
+                    guard error == nil else {
+                        completion(error)
+                        return
+                    }
+                    
+                    completion(nil)
+                    
+                })
+                
+            })
+            
+        })
         
     }
     

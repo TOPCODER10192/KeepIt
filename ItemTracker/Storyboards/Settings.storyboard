@@ -403,6 +403,168 @@
             </objects>
             <point key="canvasLocation" x="632" y="-265"/>
         </scene>
+        <!--Phone Notifications-->
+        <scene sceneID="OnI-fD-69w">
+            <objects>
+                <viewController title="Phone Notifications" id="0Ff-O0-qdl" customClass="PhoneNotificationsViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uNA-4N-Pd7">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When would you like to be reminded to update the locations of your items" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y4Y-uD-INQ">
+                                <rect key="frame" x="20.5" y="118" width="373" height="48"/>
+                                <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="IWg-7a-BHs">
+                                <rect key="frame" x="20.5" y="186" width="373" height="29"/>
+                                <segments>
+                                    <segment title="Never"/>
+                                    <segment title="Daily"/>
+                                    <segment title="Weekly"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentedControlChanged:" destination="0Ff-O0-qdl" eventType="valueChanged" id="eaY-WP-RQC"/>
+                                </connections>
+                            </segmentedControl>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="52k-Nd-RdG" userLabel="Daily Picker View">
+                                <rect key="frame" x="20.5" y="234" width="373" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="W1w-cU-U0k"/>
+                                </constraints>
+                            </pickerView>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uAG-rp-wW6" userLabel="Weekly Picker View">
+                                <rect key="frame" x="20.5" y="234" width="373" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="fq3-22-l1E"/>
+                                </constraints>
+                            </pickerView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We will never send you reminders unless you change your mind later" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Emo-Jt-Iel">
+                                <rect key="frame" x="31" y="283.5" width="352" height="51.5"/>
+                                <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="22"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DdY-rv-IPT">
+                                <rect key="frame" x="122" y="414" width="170" height="40"/>
+                                <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="ntH-jJ-Xh7"/>
+                                    <constraint firstAttribute="width" constant="170" id="u6F-LT-KdZ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
+                                <state key="normal" title="Save Changes">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="saveChangesButtonTapped:" destination="0Ff-O0-qdl" eventType="touchUpInside" id="nyc-IY-KyU"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="uAG-rp-wW6" firstAttribute="top" secondItem="IWg-7a-BHs" secondAttribute="bottom" constant="20" id="0cw-gl-HW1"/>
+                            <constraint firstItem="Emo-Jt-Iel" firstAttribute="width" secondItem="uNA-4N-Pd7" secondAttribute="width" multiplier="0.85" id="4TK-hp-yvW"/>
+                            <constraint firstItem="Emo-Jt-Iel" firstAttribute="centerX" secondItem="uNA-4N-Pd7" secondAttribute="centerX" id="5d9-B9-SA6"/>
+                            <constraint firstItem="52k-Nd-RdG" firstAttribute="centerX" secondItem="uNA-4N-Pd7" secondAttribute="centerX" id="8ch-Sy-kgT"/>
+                            <constraint firstItem="uAG-rp-wW6" firstAttribute="centerX" secondItem="uNA-4N-Pd7" secondAttribute="centerX" id="Bah-Sk-no2"/>
+                            <constraint firstItem="y4Y-uD-INQ" firstAttribute="width" secondItem="uNA-4N-Pd7" secondAttribute="width" multiplier="0.9" id="CAl-96-gwr"/>
+                            <constraint firstItem="IWg-7a-BHs" firstAttribute="centerX" secondItem="uNA-4N-Pd7" secondAttribute="centerX" id="EaC-4w-HTI"/>
+                            <constraint firstItem="IWg-7a-BHs" firstAttribute="top" secondItem="y4Y-uD-INQ" secondAttribute="bottom" constant="20" id="Eva-bP-aok"/>
+                            <constraint firstItem="52k-Nd-RdG" firstAttribute="top" secondItem="IWg-7a-BHs" secondAttribute="bottom" constant="20" id="HpA-Tg-ZEk"/>
+                            <constraint firstItem="Emo-Jt-Iel" firstAttribute="centerY" secondItem="uAG-rp-wW6" secondAttribute="centerY" id="MaY-zb-Ukg"/>
+                            <constraint firstItem="IWg-7a-BHs" firstAttribute="width" secondItem="uNA-4N-Pd7" secondAttribute="width" multiplier="0.9" id="ZLB-Gg-UKY"/>
+                            <constraint firstItem="uAG-rp-wW6" firstAttribute="width" secondItem="uNA-4N-Pd7" secondAttribute="width" multiplier="0.9" id="edt-Vy-lde"/>
+                            <constraint firstItem="y4Y-uD-INQ" firstAttribute="top" secondItem="1oj-MK-vae" secondAttribute="top" constant="30" id="guS-0T-vij"/>
+                            <constraint firstItem="52k-Nd-RdG" firstAttribute="width" secondItem="uNA-4N-Pd7" secondAttribute="width" multiplier="0.9" id="h0h-us-JsE"/>
+                            <constraint firstItem="DdY-rv-IPT" firstAttribute="top" secondItem="52k-Nd-RdG" secondAttribute="bottom" constant="30" id="trL-XT-zDC"/>
+                            <constraint firstItem="DdY-rv-IPT" firstAttribute="centerX" secondItem="uNA-4N-Pd7" secondAttribute="centerX" id="uxT-zd-BDM"/>
+                            <constraint firstItem="y4Y-uD-INQ" firstAttribute="centerX" secondItem="uNA-4N-Pd7" secondAttribute="centerX" id="xeQ-1Y-uLJ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="1oj-MK-vae"/>
+                    </view>
+                    <connections>
+                        <outlet property="dailyPickerView" destination="52k-Nd-RdG" id="GZB-gi-lsv"/>
+                        <outlet property="noRemindersLabel" destination="Emo-Jt-Iel" id="x8s-xw-N0f"/>
+                        <outlet property="saveChangesButton" destination="DdY-rv-IPT" id="s5e-sC-nww"/>
+                        <outlet property="segmentedControl" destination="IWg-7a-BHs" id="dYY-6C-I9S"/>
+                        <outlet property="weeklyPickerView" destination="uAG-rp-wW6" id="YDi-up-unY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YH8-Lg-GeI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1388" y="-265"/>
+        </scene>
+        <!--Delete Account-->
+        <scene sceneID="u7k-ON-krJ">
+            <objects>
+                <viewController title="Delete Account" id="Kw6-Lq-zbb" customClass="DeleteAccountViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Tp9-xw-tO7">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iuF-ej-kH9">
+                                <rect key="frame" x="-1" y="175.5" width="416" height="40"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm Your Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CEj-Xl-6WF" customClass="CustomTextField" customModule="ItemTracker" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="0.0" width="376" height="40"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="LockIcon"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="passwordTextFieldEditing:" destination="Kw6-Lq-zbb" eventType="editingChanged" id="U0h-xr-cXT"/>
+                                        </connections>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="CEj-Xl-6WF" firstAttribute="top" secondItem="iuF-ej-kH9" secondAttribute="top" id="1R2-AF-SSj"/>
+                                    <constraint firstItem="CEj-Xl-6WF" firstAttribute="leading" secondItem="iuF-ej-kH9" secondAttribute="leading" constant="20" id="BDV-sE-zX7"/>
+                                    <constraint firstAttribute="height" constant="40" id="DCn-14-ApR"/>
+                                    <constraint firstAttribute="trailing" secondItem="CEj-Xl-6WF" secondAttribute="trailing" constant="20" id="O6b-cR-PBW"/>
+                                    <constraint firstAttribute="bottom" secondItem="CEj-Xl-6WF" secondAttribute="bottom" id="i7Z-DU-zMu"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oRj-b3-bUr">
+                                <rect key="frame" x="112" y="245.5" width="190" height="40"/>
+                                <color key="backgroundColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="dVK-IF-xe2"/>
+                                    <constraint firstAttribute="width" constant="190" id="rl3-MS-UC6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
+                                <state key="normal" title="Delete Account">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteAccountButtonTapped:" destination="Kw6-Lq-zbb" eventType="touchUpInside" id="Gf5-uH-F4R"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="iuF-ej-kH9" firstAttribute="width" secondItem="Tp9-xw-tO7" secondAttribute="width" constant="2" id="2oi-gT-aPx"/>
+                            <constraint firstItem="iuF-ej-kH9" firstAttribute="centerX" secondItem="Tp9-xw-tO7" secondAttribute="centerX" id="716-NW-1n0"/>
+                            <constraint firstItem="oRj-b3-bUr" firstAttribute="centerX" secondItem="Tp9-xw-tO7" secondAttribute="centerX" id="Isa-ag-ZFv"/>
+                            <constraint firstItem="oRj-b3-bUr" firstAttribute="top" secondItem="iuF-ej-kH9" secondAttribute="bottom" constant="30" id="XOa-jw-ZKT"/>
+                            <constraint firstItem="3D1-Eu-G06" firstAttribute="bottom" secondItem="iuF-ej-kH9" secondAttribute="bottom" multiplier="4" id="gQ5-wu-UJH"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="3D1-Eu-G06"/>
+                    </view>
+                    <connections>
+                        <outlet property="deleteAccountButton" destination="oRj-b3-bUr" id="FH0-yq-bx6"/>
+                        <outlet property="passwordTextField" destination="CEj-Xl-6WF" id="7E7-Zb-gR5"/>
+                        <outlet property="passwordView" destination="iuF-ej-kH9" id="4Im-9y-GWi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Fi-T2-Rvr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2133" y="-265"/>
+        </scene>
         <!--Settings-->
         <scene sceneID="2Yd-s8-M2r">
             <objects>
@@ -414,7 +576,22 @@
                         <view key="tableFooterView" contentMode="scaleToFill" id="UQD-y5-9Td" userLabel="Footer View">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="70"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2nj-Yh-2PM">
+                                    <rect key="frame" x="145.5" y="18.5" width="123" height="33"/>
+                                    <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="17"/>
+                                    <color key="tintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+                                    <state key="normal" title="Delete Account"/>
+                                    <connections>
+                                        <action selector="deleteAccountButtonTapped:" destination="2fi-jC-MoC" eventType="touchUpInside" id="VQX-Hu-CMt"/>
+                                    </connections>
+                                </button>
+                            </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="2nj-Yh-2PM" firstAttribute="centerY" secondItem="UQD-y5-9Td" secondAttribute="centerY" id="rVh-CQ-Pi0"/>
+                                <constraint firstItem="2nj-Yh-2PM" firstAttribute="centerX" secondItem="UQD-y5-9Td" secondAttribute="centerX" id="rxI-jU-0dF"/>
+                            </constraints>
                         </view>
                         <connections>
                             <outlet property="dataSource" destination="2fi-jC-MoC" id="cFe-ZE-bQl"/>
@@ -437,10 +614,13 @@
                     </navigationItem>
                     <connections>
                         <outlet property="closeButton" destination="tf7-Lg-Z3T" id="PK7-Op-uec"/>
+                        <outlet property="deleteAccountButton" destination="2nj-Yh-2PM" id="cXH-pI-Y2U"/>
                         <outlet property="signOutButton" destination="exI-aS-tno" id="3NR-ZT-q0R"/>
                         <segue destination="qaK-vW-SVI" kind="show" identifier="ChangeNameSegue" id="9nL-ue-2U0"/>
                         <segue destination="XCa-h7-qaB" kind="show" identifier="ChangeEmailSegue" id="aVq-oP-1cF"/>
                         <segue destination="pO6-81-YgO" kind="show" identifier="ChangePasswordSegue" id="nSM-xd-OIb"/>
+                        <segue destination="0Ff-O0-qdl" kind="show" identifier="PhoneNotificationsSegue" id="gb9-1q-Vhg"/>
+                        <segue destination="Kw6-Lq-zbb" kind="show" identifier="DeleteAccountSegue" id="ltK-kP-8ec"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="69e-yS-uBa" userLabel="First Responder" sceneMemberID="firstResponder"/>

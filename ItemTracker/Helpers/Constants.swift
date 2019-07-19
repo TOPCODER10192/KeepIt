@@ -24,10 +24,8 @@ struct Constants {
         }
         
         struct Segues {
-            
-            static let changeName     = "ChangeNameSegue"
-            static let changeEmail    = "ChangeEmailSegue"
-            static let changePassword = "ChangePasswordSegue"
+
+            static let deleteAccount = "DeleteAccountSegue"
             
         }
         
@@ -40,10 +38,9 @@ struct Constants {
             
             static let tabBar         = "TabBarVC"
             
+            static let welcome        = "WelcomeVC"
             static let singleItem     = "SingleItemVC"
             static let updateLocation = "UpdateLocationVC"
-            static let noLocation     = "LocationReminderVC"
-            static let confirmation   = "ConfirmationVC"
             
             static let settings       = "SettingsVC"
             
@@ -51,11 +48,22 @@ struct Constants {
         
         struct Cell {
             
-            static let item           = "ItemCell"
-            static let addItem        = "AddItemCell"
-            static let updateLocation = "UpdateLocationCell"
+            static let welcomeLocations     = "LocationsCell"
+            static let welcomeNotifications = "NotificationsCell"
             
-            static let settingsHeader = "SettingsHeaderCell"
+            static let item                 = "ItemCell"
+            static let addItem              = "AddItemCell"
+            static let updateLocation       = "UpdateLocationCell"
+            
+            static let settingsHeader       = "SettingsHeaderCell"
+            
+        }
+        
+        struct Nib {
+            
+            static let welcomeLocations     = "LocationsCollectionViewCell"
+            static let welcomeNotifications = "NotificationsCollectionViewCell"
+            static let settingsBody         = "SettingsBodyTableViewCell"
             
         }
         

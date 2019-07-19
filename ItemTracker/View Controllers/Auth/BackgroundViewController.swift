@@ -21,7 +21,7 @@ final class BackgroundViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         
         // Present the LoginVC
-        presentVC(id: Constants.ID.VC.login, extraInfo: nil)
+        presentVC(id: Constants.ID.VC.login, animate: false)
         
     }
 
@@ -30,7 +30,7 @@ final class BackgroundViewController: UIViewController {
 // MARK: - Helper methods
 extension BackgroundViewController {
     
-    func presentVC(id: String, extraInfo: String?) {
+    func presentVC(id: String, animate: Bool) {
         
         // Create an generalized VC
         let vc = storyboard?.instantiateViewController(withIdentifier: id)
@@ -54,17 +54,21 @@ extension BackgroundViewController {
             // Set the delegate for the ForgotPasswordVC
             vc.delegate = self
         }
+        else if let vc = vc as? WelcomeViewController {
+            // Set the delegate for the WelcomeViewController
+            vc.delegate = self
+        }
         
         // Set the presentation style for the VC and present the VC
         vc?.modalPresentationStyle = .overCurrentContext
-        present(vc!, animated: false, completion: nil)
+        present(vc!, animated: animate, completion: nil)
         
     }
     
 }
 
 // MARK:- Methods that conform to the LoginProtocol
-extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, ForgotPasswordProtocol {
+extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, ForgotPasswordProtocol, WelcomeProtocol {
     
     func goToInApp() {
         
@@ -80,21 +84,27 @@ extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, Forgot
     func goToCreateAccount() {
         
         // Present the CreateAccountVC
-        presentVC(id: Constants.ID.VC.createAccount, extraInfo: nil)
+        presentVC(id: Constants.ID.VC.createAccount, animate: false)
         
     }
     
     func goToForgotPassword() {
         
         // Present the ForgotPasswordVC
-        presentVC(id: Constants.ID.VC.forgotPassword, extraInfo: nil)
+        presentVC(id: Constants.ID.VC.forgotPassword, animate: false)
         
     }
     
     func goBackToLogin() {
         
         // Present the LoginVC
-        presentVC(id: Constants.ID.VC.login, extraInfo: nil)
+        presentVC(id: Constants.ID.VC.login, animate: false)
+        
+    }
+    
+    func goToWelcome() {
+        
+        presentVC(id: Constants.ID.VC.welcome, animate: true)
         
     }
     

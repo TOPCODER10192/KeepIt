@@ -13,7 +13,7 @@ import FirebaseAuth
 protocol CreateAccountProtocol {
     
     func goBackToLogin()
-    func goToInApp()
+    func goToWelcome()
     
 }
 
@@ -205,7 +205,7 @@ extension CreateAccountViewController {
                     // Go into the main app
                     self.dismiss(animated: true, completion: {
                         
-                        self.delegate?.goToInApp()
+                        self.delegate?.goToWelcome()
                         
                     })
                     

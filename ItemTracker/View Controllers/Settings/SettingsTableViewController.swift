@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 struct SectionData {
     
@@ -20,9 +21,13 @@ struct SectionData {
 
 class SettingsTableViewController: UITableViewController {
 
+    // MARK: - IBOutlet Properties
     @IBOutlet weak var closeButton: UIBarButtonItem!
     @IBOutlet weak var signOutButton: UIBarButtonItem!
     
+    @IBOutlet weak var deleteAccountButton: UIButton!
+    
+    // MARK: - Properties
     var sectionData = [SectionData(isExpanded: true, header: "Your Information",
                                    texts: ["Full Name: \(Stored.user!.firstName) \(Stored.user!.lastName)",
                                            "Email: \(Stored.user!.email)", "Change Password", "Quick Locations"],
@@ -34,6 +39,7 @@ class SettingsTableViewController: UITableViewController {
                        SectionData(isExpanded: true, header: "Support", texts: ["FAQ", "Write a Review", "Report a Problem"],
                                    targets: ["FAQSegue", "WriteReviewSegue", "ReportProblemSegue"])]
     
+    // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,22 +49,30 @@ class SettingsTableViewController: UITableViewController {
         // Setup the signOutButton
         signOutButton.tintColor   = Constants.Color.primary
         
+        // Setup the delete account button
+        deleteAccountButton.tintColor = Constants.Color.deleteButton
+        
     }
 
-    // MARK: - Table view data source
+}
+
+// MARK: - Table View Methods
+extension SettingsTableViewController {
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         
         // Return the number of sections
         return sectionData.count
         
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         // Return the number of rows in the section
         if sectionData[section].isExpanded == true {
             return sectionData[section].texts.count
         }
+        // If the section is collapsed then return 0
         else {
             return 0
         }
@@ -67,8 +81,10 @@ class SettingsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = Bundle.main.loadNibNamed("SettingsBodyTableViewCell", owner: self, options: nil)?.first as! SettingsBodyTableViewCell
+        // Let the cell be a settings bodyCell
+        let cell = Bundle.main.loadNibNamed(Constants.ID.Nib.settingsBody, owner: self, options: nil)?.first as! SettingsBodyTableViewCell
         
+        // Set the label to match the section and row in the sectionData
         cell.promptLabel.text = sectionData[indexPath.section].texts[indexPath.row]
         
         return cell
@@ -101,43 +117,56 @@ class SettingsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
+        // Let the row height be 40
         return 40
         
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
+        // Let the header height be 40
         return 40
         
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        // Segue to the rows target view controller
         performSegue(withIdentifier: sectionData[indexPath.section].targets[indexPath.row], sender: self)
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        // Let the destinationVC be the destination of the segue
         let destinationVC = segue.destination
         
+        // Attempt to type cast it as a ChangeNameVC
         if let destinationVC = destinationVC as? ChangeNameViewController {
             destinationVC.delegate = self
         }
+        // Attempt to type cast it as a ChangeEmailVC
         else if let destinationVC = destinationVC as? ChangeEmailViewController {
             destinationVC.delegate = self
         }
         
     }
+    
+}
 
+// MARK: - Navigation Bar Button Methods
+extension SettingsTableViewController {
+    
     @IBAction func closeButtonTapped(_ sender: UIBarButtonItem) {
         
+        // Dismiss the settings vc
         self.dismiss(animated: true, completion: nil)
         
     }
     
     @IBAction func signOutButtonTapped(_ sender: UIBarButtonItem) {
         
+        // Create an alert asking the user if they are sure
         let areYouSureAlert = UIAlertController(title: "Sign out?", message: nil, preferredStyle: .alert)
         
         areYouSureAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -155,6 +184,7 @@ class SettingsTableViewController: UITableViewController {
     
     func signOutUser() {
         
+        // Attempt to sign out the user
         let firebaseAuth = Auth.auth()
         
         do {
@@ -184,29 +214,46 @@ class SettingsTableViewController: UITableViewController {
     
 }
 
+// MARK: - Delete Button Methods
+extension SettingsTableViewController {
+    
+    @IBAction func deleteAccountButtonTapped(_ sender: UIButton) {
+        
+        performSegue(withIdentifier: Constants.ID.Segues.deleteAccount, sender: self)
+        
+    }
+    
+}
+
+// MARK: - Heading Button Methods
 extension SettingsTableViewController {
     
     @objc func headerTapped(button: UIButton) {
         
+        // Recover the section from the buttons tag
         let section = button.tag
         
         // Invert the state of the sections expansion
         sectionData[section].isExpanded = !sectionData[section].isExpanded
         
+        // Create an empty array of index paths
         var indexPaths = [IndexPath]()
         
+        // Collect all the index paths to be removed or added
         for row in 0 ..< sectionData[section].texts.count {
             
             indexPaths.append(IndexPath(row: row, section: section))
             
         }
         
+        // Collapse the table view
         if sectionData[section].isExpanded == false {
             
             // Remove all the rows in the section
             tableView.deleteRows(at: indexPaths, with: .fade)
             
         }
+        // Expand the table view
         else {
             
             // Add the rows back into the section
@@ -218,6 +265,7 @@ extension SettingsTableViewController {
     
 }
 
+// MARK: - Custom Protocol Methods
 extension SettingsTableViewController: NameChangedProtocol, EmailChangedProtocol {
     
     func nameWasChanged(name: String) {
@@ -237,6 +285,7 @@ extension SettingsTableViewController: NameChangedProtocol, EmailChangedProtocol
         
         // Reload the tableView
         self.tableView.reloadData()
+        
     }
     
 }

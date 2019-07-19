@@ -157,7 +157,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d0n-Vu-xIp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1642.0289855072465" y="541.74107142857144"/>
+            <point key="canvasLocation" x="-2133" y="542"/>
         </scene>
         <!--Create Account View Controller-->
         <scene sceneID="G2W-Rv-9db">
@@ -277,7 +277,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rZD-1m-kZd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-920" y="542"/>
+            <point key="canvasLocation" x="-1351" y="542"/>
         </scene>
         <!--Forgot Password View Controller-->
         <scene sceneID="6O2-RR-sbE">
@@ -383,7 +383,98 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kmK-3v-Lua" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-162" y="542"/>
+            <point key="canvasLocation" x="-567" y="542"/>
+        </scene>
+        <!--Welcome View Controller-->
+        <scene sceneID="GFr-vB-N5l">
+            <objects>
+                <viewController storyboardIdentifier="WelcomeVC" id="Sum-uV-gMo" customClass="WelcomeViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hmR-io-g0J">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J3a-4I-yVo">
+                                <rect key="frame" x="57" y="238" width="300" height="420"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's Get Started" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ti-7l-r0d">
+                                        <rect key="frame" x="58.5" y="20" width="183.5" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="O98-6A-BET"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="22"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Kto-8z-cNv">
+                                        <rect key="frame" x="30" y="70" width="240" height="280"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9me-qg-cGo">
+                                            <size key="itemSize" width="50" height="50"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells/>
+                                    </collectionView>
+                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="5QP-et-FaO">
+                                        <rect key="frame" x="138.5" y="350" width="23" height="37"/>
+                                        <color key="pageIndicatorTintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="0.5" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <color key="currentPageIndicatorTintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    </pageControl>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FyW-Kn-tUP">
+                                        <rect key="frame" x="20" y="377" width="94" height="33"/>
+                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="17"/>
+                                        <state key="normal" title="Setup Later">
+                                            <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setupLaterButtonTapped:" destination="Sum-uV-gMo" eventType="touchUpInside" id="qej-pl-nkI"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bq5-uF-CO4">
+                                        <rect key="frame" x="207" y="377" width="73" height="33"/>
+                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="17"/>
+                                        <state key="normal" title="Continue"/>
+                                        <connections>
+                                            <action selector="continueButtonTapped:" destination="Sum-uV-gMo" eventType="touchUpInside" id="VKe-r6-qSL"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="bq5-uF-CO4" secondAttribute="trailing" constant="20" id="2MS-0d-eAy"/>
+                                    <constraint firstItem="5QP-et-FaO" firstAttribute="top" secondItem="Kto-8z-cNv" secondAttribute="bottom" id="6Qf-6U-A5c"/>
+                                    <constraint firstItem="Kto-8z-cNv" firstAttribute="top" secondItem="J3a-4I-yVo" secondAttribute="top" constant="70" id="DG6-ma-3Gc"/>
+                                    <constraint firstAttribute="bottom" secondItem="Kto-8z-cNv" secondAttribute="bottom" constant="70" id="Dsp-Wt-Nz3"/>
+                                    <constraint firstAttribute="bottom" secondItem="bq5-uF-CO4" secondAttribute="bottom" constant="10" id="G1I-VU-XMV"/>
+                                    <constraint firstAttribute="width" constant="300" id="H9s-7r-lHT"/>
+                                    <constraint firstAttribute="trailing" secondItem="Kto-8z-cNv" secondAttribute="trailing" constant="30" id="HXk-aP-O5n"/>
+                                    <constraint firstItem="Kto-8z-cNv" firstAttribute="leading" secondItem="J3a-4I-yVo" secondAttribute="leading" constant="30" id="HY6-Fj-woJ"/>
+                                    <constraint firstItem="5QP-et-FaO" firstAttribute="centerX" secondItem="J3a-4I-yVo" secondAttribute="centerX" id="aQV-jf-47S"/>
+                                    <constraint firstAttribute="height" constant="420" id="jyj-ld-VVT"/>
+                                    <constraint firstItem="FyW-Kn-tUP" firstAttribute="leading" secondItem="J3a-4I-yVo" secondAttribute="leading" constant="20" id="laY-Ag-bla"/>
+                                    <constraint firstAttribute="bottom" secondItem="FyW-Kn-tUP" secondAttribute="bottom" constant="10" id="ld0-FB-Q2Z"/>
+                                    <constraint firstItem="6Ti-7l-r0d" firstAttribute="centerX" secondItem="J3a-4I-yVo" secondAttribute="centerX" id="rpk-dq-CdC"/>
+                                    <constraint firstItem="6Ti-7l-r0d" firstAttribute="top" secondItem="J3a-4I-yVo" secondAttribute="top" constant="20" id="uSG-Im-u9H"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="J3a-4I-yVo" firstAttribute="centerY" secondItem="hmR-io-g0J" secondAttribute="centerY" id="T8P-5e-UaV"/>
+                            <constraint firstItem="J3a-4I-yVo" firstAttribute="centerX" secondItem="hmR-io-g0J" secondAttribute="centerX" id="cPy-qF-qqp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="dJE-mN-ONp"/>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="Kto-8z-cNv" id="doL-38-m02"/>
+                        <outlet property="floatingView" destination="J3a-4I-yVo" id="1JL-7q-oXq"/>
+                        <outlet property="pageControl" destination="5QP-et-FaO" id="nLz-6S-KNn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zcY-LD-lBV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="296" y="542"/>
         </scene>
     </scenes>
     <resources>
