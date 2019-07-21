@@ -44,7 +44,7 @@ class SingleItemViewController: UIViewController {
     @IBOutlet weak var mapSearchBar: UISearchBar!
     @IBOutlet weak var nearMeButton: UIButton!
     
-    @IBOutlet weak var saveItemButton: UIButton!
+    @IBOutlet weak var saveItemButton: RoundedButton!
     
     @IBOutlet var imageTapGesture: UITapGestureRecognizer!
     @IBOutlet var mapHoldGesture: UILongPressGestureRecognizer!
@@ -117,15 +117,13 @@ class SingleItemViewController: UIViewController {
         mapSearchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
         // Setup the Near Me Button
-        nearMeButton.layer.cornerRadius           = Constants.View.CornerRadius.smallButton
         nearMeButton.backgroundColor              = Constants.Color.primary
         
         // Setup the Save Item Button
-        saveItemButton.layer.cornerRadius         = Constants.View.CornerRadius.bigButton
         saveItemButton.backgroundColor            = Constants.Color.primary
         saveItemButton.setTitle("", for: .disabled)
         saveItemButton.setTitle("Save Item", for: .normal)
-        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+        saveItemButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Show the items properties
         showItemProperties()
@@ -605,24 +603,16 @@ extension SingleItemViewController {
         
     }
     
-    func activateButton (isActivated: Bool, color: UIColor) {
-        
-        // Activate the add item button and change its color
-        saveItemButton.isEnabled       = isActivated
-        saveItemButton.backgroundColor = color
-        
-    }
-    
     func checkToActivateButton() {
         
         // Check that the required properties have been filled
         guard itemName != nil, itemName!.count > 0, itemCoordinates != nil else {
-            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            saveItemButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
             return
         }
         
         // Activate the button
-        activateButton(isActivated: true, color: Constants.Color.primary)
+        saveItemButton.activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     
@@ -651,7 +641,7 @@ extension SingleItemViewController {
             mapSearchBar.isHidden             = false
             mapHoldGesture.isEnabled          = true
             
-            activateButton(isActivated: true, color: Constants.Color.primary)
+            saveItemButton.activateButton(isActivated: true, color: Constants.Color.primary)
             saveItemButton.setTitle("Save Item", for: .normal)
             
             checkLocationAuthorization()
@@ -673,7 +663,7 @@ extension SingleItemViewController {
             mapHoldGesture.isEnabled          = false
             nearMeButton.isHidden             = true
             
-            activateButton(isActivated: true, color: Constants.Color.deleteButton)
+            saveItemButton.activateButton(isActivated: true, color: Constants.Color.deleteButton)
             saveItemButton.setTitle("Delete Item", for: .normal)
             
             showItemProperties()

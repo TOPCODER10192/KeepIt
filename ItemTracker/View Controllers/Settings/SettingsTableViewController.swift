@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageUI
 import FirebaseAuth
 import FirebaseFirestore
 
@@ -37,7 +38,7 @@ class SettingsTableViewController: UITableViewController {
                        SectionData(isExpanded: true, header: "Premium", texts: ["Info about premium", "Upgrade to premium"],
                                    targets: ["PremiumInfoSegue", "PayPremiumSegue"]),
                        SectionData(isExpanded: true, header: "Support", texts: ["FAQ", "Write a Review", "Report a Problem"],
-                                   targets: ["FAQSegue", "WriteReviewSegue", "ReportProblemSegue"])]
+                                   targets: ["FAQSegue", "WriteReviewSegue", ""])]
     
     // MARK: - View Methods
     override func viewDidLoad() {
@@ -50,7 +51,7 @@ class SettingsTableViewController: UITableViewController {
         signOutButton.tintColor   = Constants.Color.primary
         
         // Setup the delete account button
-        deleteAccountButton.tintColor = Constants.Color.deleteButton
+        deleteAccountButton.backgroundColor = Constants.Color.deleteButton
         
     }
 
@@ -132,8 +133,14 @@ extension SettingsTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // Segue to the rows target view controller
-        performSegue(withIdentifier: sectionData[indexPath.section].targets[indexPath.row], sender: self)
+        let segueID = sectionData[indexPath.section].targets[indexPath.row]
         
+        if segueID == "" {
+            composeMail()
+        }
+        else {
+            performSegue(withIdentifier: sectionData[indexPath.section].targets[indexPath.row], sender: self)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -260,6 +267,57 @@ extension SettingsTableViewController {
             tableView.insertRows(at: indexPaths, with: .fade)
             
         }
+        
+    }
+    
+}
+
+// MARK: - Mail Methods
+extension SettingsTableViewController: MFMailComposeViewControllerDelegate {
+    
+    func composeMail() {
+        
+        // Check if the device can send mail
+        guard MFMailComposeViewController.canSendMail() else {
+            ProgressService.errorAnimation(text: "Your Device Can't Send Mail")
+            return
+        }
+        
+        // Create a mail composer and send it to the support email
+        let composer = MFMailComposeViewController()
+        composer.mailComposeDelegate = self
+        composer.setToRecipients([Constants.Email.support])
+        composer.setSubject("Problem/Suggestion")
+        
+        // Present the mail composer
+        present(composer, animated: true, completion: nil)
+        
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        
+        // Check if there was an error
+        guard error == nil else { return }
+        
+        // Switch over the results of the mail composition
+        switch result {
+        case .cancelled, .saved:
+            break
+            
+        case .failed:
+            ProgressService.errorAnimation(text: "Unable to Send Email")
+            
+        case .sent:
+            ProgressService.successAnimation(text: "Email Sent, We'll Get Back to You Soon!")
+            
+        @unknown default:
+            break
+        }
+        
+        // Dismiss the composer
+        dismiss(animated: true, completion: nil)
+        
+        
         
     }
     

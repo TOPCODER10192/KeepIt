@@ -21,7 +21,7 @@ class ChangePasswordViewController: UIViewController {
     @IBOutlet weak var confirmNewPasswordView: UIView!
     @IBOutlet weak var confirmNewPasswordTextField: UITextField!
     
-    @IBOutlet weak var saveChangesButton: UIButton!
+    @IBOutlet weak var saveChangesButton: RoundedButton!
     
     // MARK: - Properties
     var oldPassword: String?
@@ -50,8 +50,7 @@ class ChangePasswordViewController: UIViewController {
         confirmNewPasswordTextField.delegate = self
         
         // Setup the save changes button
-        saveChangesButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
-        activateButton(isActive: false, color: Constants.Color.inactiveButton)
+        saveChangesButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
     }
     
@@ -188,21 +187,13 @@ extension ChangePasswordViewController {
               newPassword != nil, newPassword!.count > 0,
               confirmNewPassword != nil, confirmNewPassword!.count > 0 else {
             
-                activateButton(isActive: false, color: Constants.Color.inactiveButton)
+                saveChangesButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
                 return
                 
         }
         
         // Activate the button if they are
-        activateButton(isActive: true, color: Constants.Color.primary)
-        
-    }
-    
-    func activateButton(isActive: Bool, color: UIColor) {
-        
-        // Set the state of the button based on the parameters
-        saveChangesButton.isEnabled = isActive
-        saveChangesButton.backgroundColor = color
+        saveChangesButton.activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     

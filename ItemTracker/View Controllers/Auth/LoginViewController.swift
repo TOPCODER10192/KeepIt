@@ -27,11 +27,11 @@ final class LoginViewController: UIViewController {
     @IBOutlet weak var floatingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var floatingViewToBottom: NSLayoutConstraint!
     
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var emailTextField: CustomTextField!
+    @IBOutlet weak var passwordTextField: CustomTextField!
     
     @IBOutlet weak var forgotPasswordButton: UIButton!
-    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var loginButton: RoundedButton!
     @IBOutlet weak var createAccountButton: UIButton!
     
     
@@ -47,8 +47,7 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
 
         // Setup the loginView
-        floatingView.backgroundColor    = Constants.Color.floatingView
-        floatingView.layer.cornerRadius = Constants.View.CornerRadius.standard
+        floatingView.backgroundColor    = UIColor.clear
         floatingViewWidth.constant      = Constants.View.Width.standard
         floatingViewHeight.constant     = Constants.View.Height.login
         floatingViewToCenterX.constant          = -UIScreen.main.bounds.width
@@ -61,19 +60,24 @@ final class LoginViewController: UIViewController {
         
         // Setup the emailTextField
         emailTextField.delegate = self
+        emailTextField.addBottomLine(color: UIColor.white, width: 0.5)
+        emailTextField.attributedPlaceholder = NSAttributedString(string: "Email Address",
+                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         
         // Setup the passwordTextField
         passwordTextField.delegate = self
+        passwordTextField.addBottomLine(color: UIColor.white, width: 0.5)
+        passwordTextField.attributedPlaceholder = NSAttributedString(string: "Password",
+                                                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         
         // Setup the forgotpasswordButton
-        forgotPasswordButton.setTitleColor(Constants.Color.primary, for: .normal)
+        forgotPasswordButton.setTitleColor(UIColor.white, for: .normal)
         
         // Setup the loginButton
-        loginButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
-        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+        loginButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Setup the createAccountButton
-        createAccountButton.setTitleColor(Constants.Color.primary, for: .normal)
+        createAccountButton.setTitleColor(UIColor.white, for: .normal)
         
         // Create a listener for the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -263,20 +267,12 @@ extension LoginViewController {
         
         // Check that both text fields are not nil and that they have at least one character
         guard email != nil && password != nil && email!.count > 0 && password!.count > 0 else {
-            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            loginButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
             return
         }
         
         // Activate the button
-        activateButton(isActivated: true, color: Constants.Color.primary)
-        
-    }
-    
-    func activateButton(isActivated: Bool, color: UIColor) {
-        
-        // Disables or Enables the button and sets the button background color
-        loginButton.isEnabled = isActivated
-        loginButton.backgroundColor = color
+        loginButton.activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     

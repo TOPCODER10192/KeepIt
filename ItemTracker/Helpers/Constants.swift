@@ -83,8 +83,6 @@ struct Constants {
         struct CornerRadius {
             
             static let standard: CGFloat    = 15
-            static let smallButton: CGFloat = 10
-            static let bigButton: CGFloat   = 20
             
         }
         
@@ -151,6 +149,12 @@ struct Constants {
     struct Map {
     
         static let defaultSpan: MKCoordinateSpan = MKCoordinateSpan.init(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        
+    }
+    
+    struct Email {
+        
+        static let support = "BrockLChelle@gmail.com"
         
     }
     

@@ -33,7 +33,7 @@ final class CreateAccountViewController: UIViewController {
     @IBOutlet weak var promptLabel: UILabel!
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
-    @IBOutlet weak var bottomButton: UIButton!
+    @IBOutlet weak var bottomButton: RoundedButton!
     
     // MARK: - CreateAccountViewController Properties
     var formIndex: Int = 0
@@ -74,8 +74,7 @@ final class CreateAccountViewController: UIViewController {
         bottomTextField.delegate    = self
         
         // Setup the button
-        bottomButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
-        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+        bottomButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Create a listener for the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -323,21 +322,13 @@ extension CreateAccountViewController {
         // Check that both text fields are not nil and that they have at least one character
         guard topTextField.text != nil && bottomTextField != nil && topTextField.text!.trimmingCharacters(in: .whitespaces).count != 0 && bottomTextField.text!.trimmingCharacters(in: .whitespaces).count != 0 else {
             
-            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            bottomButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
             return
             
         }
         
         // Otherwise, activate the button
-        activateButton(isActivated: true, color: Constants.Color.primary)
-        
-    }
-    
-    func activateButton(isActivated: Bool, color: UIColor) {
-        
-        // Disables or Enables the button and sets the button background color
-        bottomButton.isEnabled = isActivated
-        bottomButton.backgroundColor = color
+        bottomButton.activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     

@@ -29,7 +29,7 @@ final class ForgotPasswordViewController: UIViewController {
     @IBOutlet weak var backButton: UIBarButtonItem!
     
     @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var resetPasswordButton: UIButton!
+    @IBOutlet weak var resetPasswordButton: RoundedButton!
     
     // MARK: - ForgotPasswordViewController Properties
     var delegate: ForgotPasswordProtocol?
@@ -59,8 +59,7 @@ final class ForgotPasswordViewController: UIViewController {
         emailTextField.placeholder     = "Email Address"
         
         // Setup the button
-        resetPasswordButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
-        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+        resetPasswordButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
         // Create a listener for the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -152,20 +151,12 @@ extension ForgotPasswordViewController {
         
         // If the text field is empty, deactivate the button
         guard email != nil && email!.count > 0 else {
-            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            resetPasswordButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
             return
         }
         
         // Otherwise, activate it
-        activateButton(isActivated: true, color: Constants.Color.primary)
-        
-    }
-    
-    func activateButton(isActivated: Bool, color: UIColor) {
-        
-        // Disables or Enables the button and sets the button background color
-        resetPasswordButton.isEnabled = isActivated
-        resetPasswordButton.backgroundColor = color
+        resetPasswordButton.activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     

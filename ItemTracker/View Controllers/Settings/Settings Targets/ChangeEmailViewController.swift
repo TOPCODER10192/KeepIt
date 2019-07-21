@@ -27,7 +27,7 @@ class ChangeEmailViewController: UIViewController {
     @IBOutlet weak var confirmNewEmailView: UIView!
     @IBOutlet weak var confirmNewEmailTextField: UITextField!
     
-    @IBOutlet weak var saveChangesButton: UIButton!
+    @IBOutlet weak var saveChangesButton: RoundedButton!
     
     // MARK: - Properties
     var password:        String?
@@ -57,8 +57,7 @@ class ChangeEmailViewController: UIViewController {
         confirmNewEmailTextField.delegate = self
         
         // Setup the button
-        saveChangesButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
-        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+        saveChangesButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
     }
     
@@ -221,20 +220,12 @@ extension ChangeEmailViewController {
         
         // Check to see if all the text fields have been filled out
         guard password != nil, password!.count > 0, newEmail != nil, newEmail!.count > 0, confirmNewEmail != nil, confirmNewEmail!.count > 0 else {
-            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            saveChangesButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
             return
         }
         
         // Activate the button
-        activateButton(isActivated: true, color: Constants.Color.primary)
-        
-    }
-    
-    func activateButton(isActivated: Bool, color: UIColor) {
-        
-        // Set the buttons state based on the parameter passed in
-        saveChangesButton.isEnabled = isActivated
-        saveChangesButton.backgroundColor = color
+        saveChangesButton.activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     

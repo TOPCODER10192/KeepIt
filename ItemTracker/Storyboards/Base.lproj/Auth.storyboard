@@ -25,7 +25,26 @@
                     <view key="view" contentMode="scaleToFill" id="dE5-vK-AFe">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.68627450980392157" green="0.32156862745098036" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="8caf9e448b13665f7922b97ce8cadd3b--iphone-s-wallpaper-backgrounds-wallpapers" translatesAutoresizingMaskIntoConstraints="NO" id="eaf-e4-5Ds">
+                                <rect key="frame" x="0.0" y="0.0" width="414.00000000000011" height="896"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iOB-sk-75T">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="iOB-sk-75T" secondAttribute="bottom" id="Kem-7t-jNC"/>
+                            <constraint firstAttribute="bottom" secondItem="eaf-e4-5Ds" secondAttribute="bottom" id="OqG-dC-ONy"/>
+                            <constraint firstAttribute="trailing" secondItem="iOB-sk-75T" secondAttribute="trailing" id="RMs-7B-GGQ"/>
+                            <constraint firstItem="eaf-e4-5Ds" firstAttribute="top" secondItem="dE5-vK-AFe" secondAttribute="top" id="U3y-7J-8gy"/>
+                            <constraint firstItem="iOB-sk-75T" firstAttribute="top" secondItem="dE5-vK-AFe" secondAttribute="top" id="inJ-rs-Hr5"/>
+                            <constraint firstItem="eaf-e4-5Ds" firstAttribute="leading" secondItem="dE5-vK-AFe" secondAttribute="leading" id="msn-Ze-Hsd"/>
+                            <constraint firstAttribute="trailing" secondItem="eaf-e4-5Ds" secondAttribute="trailing" id="yNL-81-OSx"/>
+                            <constraint firstItem="iOB-sk-75T" firstAttribute="leading" secondItem="dE5-vK-AFe" secondAttribute="leading" id="zNi-6f-RFJ"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="KMr-Wc-iFx"/>
                     </view>
                 </viewController>
@@ -47,9 +66,11 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="133-kp-FWd" userLabel="Login Stack View">
                                         <rect key="frame" x="10" y="10" width="330" height="220"/>
                                         <subviews>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tu9-WJ-d7y" userLabel="Email Text Field" customClass="CustomTextField" customModule="ItemTracker" customModuleProvider="target">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tu9-WJ-d7y" userLabel="Email Text Field" customClass="CustomTextField" customModule="ItemTracker" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="35"/>
-                                                <nil key="textColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="username"/>
                                                 <userDefinedRuntimeAttributes>
@@ -59,9 +80,11 @@
                                                     <action selector="emailIsEditing:" destination="iR7-Nl-SyO" eventType="editingChanged" id="YDw-gg-ZSn"/>
                                                 </connections>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Qi-TE-7AF" userLabel="Password Text Field" customClass="CustomTextField" customModule="ItemTracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="46" width="330" height="35"/>
-                                                <nil key="textColor"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2Qi-TE-7AF" userLabel="Password Text Field" customClass="CustomTextField" customModule="ItemTracker" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="49" width="330" height="35"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
                                                 <textInputTraits key="textInputTraits" returnKeyType="continue" secureTextEntry="YES" textContentType="password"/>
                                                 <userDefinedRuntimeAttributes>
@@ -73,37 +96,36 @@
                                                 </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="09K-PI-TGP" userLabel="Forgot Password Button">
-                                                <rect key="frame" x="5" y="91.5" width="320" height="25"/>
+                                                <rect key="frame" x="5" y="97.5" width="320" height="25"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
                                                 <state key="normal" title="Forgot Password?">
-                                                    <color key="titleColor" red="0.68627450980392157" green="0.32156862745098036" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="forgotPasswordTapped:" destination="iR7-Nl-SyO" eventType="touchUpInside" id="56d-lN-XgG"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jrd-5t-gBB" userLabel="Login Button">
-                                                <rect key="frame" x="0.0" y="127.5" width="330" height="40"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jrd-5t-gBB" userLabel="Login Button" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
+                                                <rect key="frame" x="66" y="136.5" width="198" height="40"/>
                                                 <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
                                                 <state key="normal" title="Login">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="20"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="loginTapped:" destination="iR7-Nl-SyO" eventType="touchUpInside" id="Yi4-qs-Sub"/>
                                                 </connections>
                                             </button>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Separation Line" translatesAutoresizingMaskIntoConstraints="NO" id="inp-vv-6hS" userLabel="Horizontal Line">
-                                                <rect key="frame" x="0.0" y="178" width="330" height="1"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="1" id="xOo-KF-sPW"/>
-                                                </constraints>
-                                            </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T4C-7A-YCZ" userLabel="Create Account Button">
                                                 <rect key="frame" x="39" y="190" width="252" height="30"/>
                                                 <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="18"/>
                                                 <state key="normal" title="New user? Create an Account">
-                                                    <color key="titleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="createAccountTapped:" destination="iR7-Nl-SyO" eventType="touchUpInside" id="Xo5-oe-0gj"/>
@@ -111,8 +133,7 @@
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="inp-vv-6hS" firstAttribute="width" secondItem="133-kp-FWd" secondAttribute="width" id="2zl-AX-we9"/>
-                                            <constraint firstItem="jrd-5t-gBB" firstAttribute="width" secondItem="133-kp-FWd" secondAttribute="width" id="CBE-HC-koe"/>
+                                            <constraint firstItem="jrd-5t-gBB" firstAttribute="width" secondItem="133-kp-FWd" secondAttribute="width" multiplier="0.6" id="CBE-HC-koe"/>
                                             <constraint firstItem="09K-PI-TGP" firstAttribute="height" secondItem="133-kp-FWd" secondAttribute="height" multiplier="0.113636" id="GMc-of-nki"/>
                                             <constraint firstAttribute="trailing" secondItem="09K-PI-TGP" secondAttribute="trailing" constant="5" id="QgB-3e-gFR"/>
                                             <constraint firstItem="jrd-5t-gBB" firstAttribute="height" secondItem="133-kp-FWd" secondAttribute="height" multiplier="0.181818" id="YiD-2C-cYC"/>
@@ -124,7 +145,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="133-kp-FWd" secondAttribute="bottom" constant="10" id="NCW-6W-Sp5"/>
                                     <constraint firstItem="133-kp-FWd" firstAttribute="top" secondItem="bgK-cE-3pH" secondAttribute="top" constant="10" id="NTL-d4-ARu"/>
@@ -222,7 +243,7 @@
                                                     <action selector="bottomTextFieldEditing:" destination="Sng-kg-CmN" eventType="editingChanged" id="XFS-PO-FjC"/>
                                                 </connections>
                                             </textField>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Nm-NN-IEJ">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Nm-NN-IEJ" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="125" width="330" height="40"/>
                                                 <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
@@ -232,6 +253,11 @@
                                                 <state key="normal" title="Next">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="20"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="bottomButtonTapped:" destination="Sng-kg-CmN" eventType="touchUpInside" id="gzL-zd-s6l"/>
                                                 </connections>
@@ -317,6 +343,7 @@
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TiY-Qy-pfg" userLabel="Email Text Field" customClass="CustomTextField" customModule="ItemTracker" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="52.5" width="330" height="35"/>
+                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="35" id="Wo2-cN-ZGC"/>
                                                 </constraints>
@@ -330,7 +357,7 @@
                                                     <action selector="emailTextFieldEditing:" destination="2J2-lv-M4y" eventType="editingChanged" id="iv5-xf-akF"/>
                                                 </connections>
                                             </textField>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YhG-9d-sAk" userLabel="Reset Password Button">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YhG-9d-sAk" userLabel="Reset Password Button" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="95" width="330" height="40"/>
                                                 <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
@@ -340,6 +367,11 @@
                                                 <state key="normal" title="Reset Password">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="20"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="resetPasswordButtonTapped:" destination="2J2-lv-M4y" eventType="touchUpInside" id="ACt-Oa-cJy"/>
                                                 </connections>
@@ -397,7 +429,7 @@
                                 <rect key="frame" x="57" y="238" width="300" height="420"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's Get Started" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ti-7l-r0d">
-                                        <rect key="frame" x="58.5" y="20" width="183.5" height="25"/>
+                                        <rect key="frame" x="66" y="20" width="168" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="O98-6A-BET"/>
                                         </constraints>
@@ -478,10 +510,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="8caf9e448b13665f7922b97ce8cadd3b--iphone-s-wallpaper-backgrounds-wallpapers" width="474" height="875"/>
         <image name="EyeIcon" width="30" height="30"/>
         <image name="LockIcon" width="30" height="30"/>
         <image name="MailIcon" width="30" height="30"/>
-        <image name="Separation Line" width="289" height="1"/>
     </resources>
     <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
 </document>

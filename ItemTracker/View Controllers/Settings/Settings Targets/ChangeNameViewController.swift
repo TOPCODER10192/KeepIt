@@ -23,7 +23,7 @@ class ChangeNameViewController: UIViewController {
     @IBOutlet weak var lastNameView: UIView!
     @IBOutlet weak var lastNameTextField: UITextField!
     
-    @IBOutlet weak var saveChangesButton: UIButton!
+    @IBOutlet weak var saveChangesButton: RoundedButton!
     
     // MARK: - Properties
     var newFirstName: String?
@@ -47,8 +47,7 @@ class ChangeNameViewController: UIViewController {
         lastNameTextField.delegate = self
         
         // Setup the button
-        saveChangesButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
-        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+        saveChangesButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
     }
 
@@ -147,20 +146,12 @@ extension ChangeNameViewController {
         
         // Check that both fields have been filled out, otherwise disable the button
         guard newFirstName != nil, newFirstName!.count > 0, newLastName != nil, newLastName!.count > 0 else {
-            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            saveChangesButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
             return
         }
         
         // Activate the button
-        activateButton(isActivated: true, color: Constants.Color.primary)
-        
-    }
-    
-    func activateButton(isActivated: Bool, color: UIColor) {
-        
-        // Set the state of the button to
-        saveChangesButton.isEnabled = isActivated
-        saveChangesButton.backgroundColor = color
+        saveChangesButton.activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     

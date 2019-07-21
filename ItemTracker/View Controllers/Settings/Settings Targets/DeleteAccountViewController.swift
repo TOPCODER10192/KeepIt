@@ -15,7 +15,7 @@ class DeleteAccountViewController: UIViewController {
     // MARK: - IBOutlet Properties
     @IBOutlet weak var passwordView: UIView!
     @IBOutlet weak var passwordTextField: CustomTextField!
-    @IBOutlet weak var deleteAccountButton: UIButton!
+    @IBOutlet weak var deleteAccountButton: RoundedButton!
     
     // MARK: - Properties
     var password: String?
@@ -32,8 +32,7 @@ class DeleteAccountViewController: UIViewController {
         passwordTextField.delegate = self
         
         // Setup the delete account button
-        deleteAccountButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
-        activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+        deleteAccountButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
     }
     
@@ -104,19 +103,11 @@ extension DeleteAccountViewController {
         
         // Check if the password text field is filled
         guard password != nil, password!.count > 0 else {
-            activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            deleteAccountButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
             return
         }
         
-        activateButton(isActivated: true, color: Constants.Color.deleteButton)
-        
-    }
-    
-    func activateButton(isActivated: Bool, color: UIColor) {
-        
-        // Set the buttons properties based on the parameters
-        deleteAccountButton.isEnabled = isActivated
-        deleteAccountButton.backgroundColor = color
+        deleteAccountButton.activateButton(isActivated: true, color: Constants.Color.deleteButton)
         
     }
     

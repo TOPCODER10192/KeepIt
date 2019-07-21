@@ -30,7 +30,7 @@ class UpdateLocationViewController: UIViewController {
     
     @IBOutlet weak var updateTableView: UITableView!
     
-    @IBOutlet weak var updateButton: UIButton!
+    @IBOutlet weak var updateButton: RoundedButton!
     
     // MARK: - UpdateLoctationViewController Properties
     var boxesChecked: [Bool] = Array.init(repeating: false, count: Stored.userItems.count)
@@ -70,8 +70,6 @@ class UpdateLocationViewController: UIViewController {
             updateTableView.isScrollEnabled = false
         }
         
-        // Setup the add button
-        updateButton.layer.cornerRadius  = Constants.View.CornerRadius.bigButton
     }
     
     override func viewDidAppear(_ animated: Bool) {

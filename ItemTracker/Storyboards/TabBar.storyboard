@@ -175,7 +175,7 @@
                                         <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </searchBar>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fuh-kH-KA6" userLabel="Prev Button">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fuh-kH-KA6" userLabel="Prev Button" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
                                         <rect key="frame" x="289" y="624" width="40" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -183,11 +183,16 @@
                                             <constraint firstAttribute="width" constant="40" id="kLL-Kk-zUH"/>
                                         </constraints>
                                         <state key="normal" backgroundImage="PreviousButton"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="prevButtonTapped:" destination="mLa-WI-aFu" eventType="touchUpInside" id="Ssh-8R-Rrh"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wUD-Rp-38d" userLabel="Next Button">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wUD-Rp-38d" userLabel="Next Button" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
                                         <rect key="frame" x="334" y="624" width="40" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -195,6 +200,11 @@
                                             <constraint firstAttribute="width" constant="40" id="xhl-C0-y1w"/>
                                         </constraints>
                                         <state key="normal" backgroundImage="NextButton"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="nextButtonTapped:" destination="mLa-WI-aFu" eventType="touchUpInside" id="1GC-t9-o3x"/>
                                         </connections>

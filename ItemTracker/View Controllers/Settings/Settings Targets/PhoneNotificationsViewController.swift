@@ -18,7 +18,7 @@ class PhoneNotificationsViewController: UIViewController {
     @IBOutlet weak var weeklyPickerView: UIPickerView!
     @IBOutlet weak var noRemindersLabel: UILabel!
     
-    @IBOutlet weak var saveChangesButton: UIButton!
+    @IBOutlet weak var saveChangesButton: RoundedButton!
     
     // MARK: - Properties
     var dailyPickerViewData = [[String]]()
@@ -76,7 +76,6 @@ class PhoneNotificationsViewController: UIViewController {
         weeklyPickerView.selectRow(4980, inComponent: 2, animated: false)
         
         // Setup the save changes button
-        saveChangesButton.layer.cornerRadius = Constants.View.CornerRadius.bigButton
         saveChangesButton.backgroundColor    = Constants.Color.primary
         
     }
