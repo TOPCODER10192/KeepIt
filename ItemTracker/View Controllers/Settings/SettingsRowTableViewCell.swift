@@ -1,19 +1,15 @@
 //
-//  SettingsBodyTableViewCell.swift
+//  SettingsRowTableViewCell.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-11.
+//  Created by Bree Chelle on 2019-07-22.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 
 import UIKit
 
-class SettingsBodyTableViewCell: UITableViewCell {
+class SettingsRowTableViewCell: UITableViewCell {
 
-    
-    @IBOutlet weak var promptLabel: UILabel!
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -24,5 +20,5 @@ class SettingsBodyTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+
 }
