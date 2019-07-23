@@ -19,19 +19,29 @@ class AlertService {
         
     }
     
-    static func createLocationsAlert() -> UIAlertController{
+    static func createSettingsAlert(title: String, message: String, cancelAction: (() -> Void)?) -> UIAlertController {
         
         // Pop up a notification that tells the user how to allow location
-        let locationsAlert = UIAlertController(title: "Location Services Off", message: "Go to Settings to Turn Them On" , preferredStyle: .alert)
-        locationsAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        locationsAlert.addAction(UIAlertAction(title: "Go to Settings", style: .default, handler: { (action) in
+        let settingsAlert = UIAlertController(title: title,
+                                              message: message ,
+                                              preferredStyle: .alert)
+        
+        settingsAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in
+            
+                cancelAction?()
+                                                
+        }))
+            
+        settingsAlert.addAction(UIAlertAction(title: "Go to Settings",
+                                              style: .default,
+                                              handler: { (action) in
             
             // Go to the settings app
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             
         }))
         
-        return locationsAlert
+        return settingsAlert
     }
     
 }

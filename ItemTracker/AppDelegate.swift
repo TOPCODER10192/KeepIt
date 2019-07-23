@@ -28,7 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             LocalStorageService.listItems()
             
             // Create the Tab Bar Controller
-            let tabBarVC = UIStoryboard(name: Constants.ID.Storyboard.tabBar, bundle: .main).instantiateViewController(withIdentifier: Constants.ID.VC.tabBar)
+            let tabBarVC = UIStoryboard(name: Constants.ID.Storyboard.tabBar, bundle: .main).instantiateViewController(withIdentifier: Constants.ID.VC.tabBar) as! UITabBarController
+            
+            // Set the tint color of the tab bar
+            tabBarVC.tabBar.tintColor = Constants.Color.primary
             
             // Present the Tab Bar Controller
             window?.rootViewController = tabBarVC

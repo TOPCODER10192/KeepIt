@@ -20,14 +20,14 @@ protocol CreateAccountProtocol {
 final class CreateAccountViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
-    @IBOutlet weak var floatingView: UIView!
+    @IBOutlet weak var floatingView: FloatingView!
     @IBOutlet weak var floatingViewWidth: NSLayoutConstraint!
     @IBOutlet weak var floatingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var floatingViewX: NSLayoutConstraint!
     @IBOutlet weak var floatingViewToBottom: NSLayoutConstraint!
     
     @IBOutlet weak var backButton: UIBarButtonItem!
-    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBar: RoundedNavigationBar!
     @IBOutlet weak var navigationBarTitle: UINavigationItem!
     
     @IBOutlet weak var promptLabel: UILabel!
@@ -49,8 +49,6 @@ final class CreateAccountViewController: UIViewController {
         super.viewDidLoad()
 
         // Setup the createAccountView
-        floatingView.backgroundColor    = Constants.Color.floatingView
-        floatingView.layer.cornerRadius = Constants.View.CornerRadius.standard
         floatingViewWidth.constant      = Constants.View.Width.standard
         floatingViewHeight.constant     = Constants.View.Height.createAccount
         floatingViewX.constant          = UIScreen.main.bounds.width
@@ -58,8 +56,6 @@ final class CreateAccountViewController: UIViewController {
         
         // Setup the navigationBar
         backButton.tintColor             = Constants.Color.primary
-        navigationBar.layer.cornerRadius = Constants.View.CornerRadius.standard
-        navigationBar.clipsToBounds      = true
         navigationBarTitle.title         = "Step 1 of 2"
         
         // Setup the prompt label
@@ -67,10 +63,12 @@ final class CreateAccountViewController: UIViewController {
         
         // Setup the topTextField
         topTextField.placeholder = "First Name"
+        topTextField.tintColor   = Constants.Color.primary
         topTextField.delegate    = self
         
         // Setup the bottomTextField
         bottomTextField.placeholder = "Last Name"
+        bottomTextField.tintColor   = Constants.Color.primary
         bottomTextField.delegate    = self
         
         // Setup the button
@@ -342,6 +340,9 @@ extension CreateAccountViewController {
         if formIndex == 0 {
             slideViewOut(finalX: UIScreen.main.bounds.width) {
                 
+                // Deactivate the button once it has slid out
+                self.bottomButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+                
                 // Load the first form
                 self.loadFirstForm()
                 
@@ -349,6 +350,9 @@ extension CreateAccountViewController {
         }
         else if formIndex == 1 {
             slideViewOut(finalX: -UIScreen.main.bounds.width) {
+                
+                // Deactivate the button once it has slid out
+                self.bottomButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
                 
                 // Load the second form
                 self.loadSecondForm()

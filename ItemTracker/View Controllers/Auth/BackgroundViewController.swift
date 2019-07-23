@@ -10,12 +10,17 @@ import UIKit
 
 final class BackgroundViewController: UIViewController {
     
+    // MARK: - IBOutlet Properties
+    @IBOutlet weak var tintView: UIView!
+    
     // MARK: - BackgroundViewController Properties
     var justLaunched = true
     
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tintView.backgroundColor = Constants.Color.softPrimary
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -73,7 +78,9 @@ extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, Forgot
     func goToInApp() {
         
         let tabBarVC = UIStoryboard(name: Constants.ID.Storyboard.tabBar, bundle: .main)
-                                    .instantiateViewController(withIdentifier: Constants.ID.VC.tabBar)
+                                    .instantiateViewController(withIdentifier: Constants.ID.VC.tabBar) as! UITabBarController
+        
+        tabBarVC.tabBar.tintColor = Constants.Color.primary
         
         view.window?.rootViewController = tabBarVC
         view.window?.makeKeyAndVisible()

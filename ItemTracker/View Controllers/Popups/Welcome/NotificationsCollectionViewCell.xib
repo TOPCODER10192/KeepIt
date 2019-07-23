@@ -27,20 +27,12 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C40-ir-94l">
                         <rect key="frame" x="0.0" y="0.0" width="240" height="280"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Bell" translatesAutoresizingMaskIntoConstraints="NO" id="1pL-Eh-fdH">
-                                <rect key="frame" x="43" y="10" width="154" height="154"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="1pL-Eh-fdH" secondAttribute="height" multiplier="1:1" id="fmp-tV-c2s"/>
-                                </constraints>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DdA-EE-BlD">
                                 <rect key="frame" x="12" y="189" width="216" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="L2c-O9-O72"/>
                                 </constraints>
-                                <state key="normal" title="Enable Notifications">
-                                    <color key="titleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
+                                <state key="normal" title="Enable Notifications"/>
                                 <connections>
                                     <action selector="notificationsButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="B30-6u-iQ4"/>
                                 </connections>
@@ -51,17 +43,33 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yfw-oi-aNG">
+                                <rect key="frame" x="43" y="10" width="154" height="154"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kMQ-F5-ZKZ">
+                                        <rect key="frame" x="23" y="23" width="108" height="108"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="kMQ-F5-ZKZ" firstAttribute="height" secondItem="Yfw-oi-aNG" secondAttribute="height" multiplier="0.7" id="3U4-oN-eUR"/>
+                                    <constraint firstItem="kMQ-F5-ZKZ" firstAttribute="centerY" secondItem="Yfw-oi-aNG" secondAttribute="centerY" id="LZP-SC-Q40"/>
+                                    <constraint firstAttribute="width" secondItem="Yfw-oi-aNG" secondAttribute="height" multiplier="1:1" id="SIX-MW-ZFp"/>
+                                    <constraint firstItem="kMQ-F5-ZKZ" firstAttribute="centerX" secondItem="Yfw-oi-aNG" secondAttribute="centerX" id="tQa-cD-wgm"/>
+                                    <constraint firstItem="kMQ-F5-ZKZ" firstAttribute="width" secondItem="Yfw-oi-aNG" secondAttribute="width" multiplier="0.7" id="vV3-vi-2T5"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="Yfw-oi-aNG" firstAttribute="height" secondItem="C40-ir-94l" secondAttribute="height" multiplier="0.55" id="47T-ln-cCI"/>
                             <constraint firstItem="DdA-EE-BlD" firstAttribute="width" secondItem="C40-ir-94l" secondAttribute="width" multiplier="0.9" id="6b3-0c-RfP"/>
-                            <constraint firstItem="1pL-Eh-fdH" firstAttribute="top" secondItem="C40-ir-94l" secondAttribute="top" constant="10" id="Dmn-go-3ad"/>
-                            <constraint firstItem="DdA-EE-BlD" firstAttribute="top" secondItem="1pL-Eh-fdH" secondAttribute="bottom" constant="25" id="Fyd-C9-F7C"/>
+                            <constraint firstItem="Yfw-oi-aNG" firstAttribute="centerX" secondItem="C40-ir-94l" secondAttribute="centerX" id="PuN-xb-4Wz"/>
                             <constraint firstAttribute="bottom" secondItem="d3e-oG-277" secondAttribute="bottom" constant="5" id="Wj9-yp-UAI"/>
                             <constraint firstItem="d3e-oG-277" firstAttribute="width" secondItem="C40-ir-94l" secondAttribute="width" multiplier="0.9" id="aiR-QA-cfj"/>
-                            <constraint firstItem="1pL-Eh-fdH" firstAttribute="height" secondItem="C40-ir-94l" secondAttribute="height" multiplier="0.55" id="c5K-sN-Dm3"/>
-                            <constraint firstItem="1pL-Eh-fdH" firstAttribute="centerX" secondItem="C40-ir-94l" secondAttribute="centerX" id="hJA-QX-Fug"/>
+                            <constraint firstItem="Yfw-oi-aNG" firstAttribute="top" secondItem="C40-ir-94l" secondAttribute="top" constant="10" id="hLg-WP-0UX"/>
                             <constraint firstItem="DdA-EE-BlD" firstAttribute="centerX" secondItem="C40-ir-94l" secondAttribute="centerX" id="hgN-gm-BJk"/>
+                            <constraint firstItem="DdA-EE-BlD" firstAttribute="top" secondItem="Yfw-oi-aNG" secondAttribute="bottom" constant="25" id="vB4-Gy-Aty"/>
                             <constraint firstItem="d3e-oG-277" firstAttribute="centerX" secondItem="C40-ir-94l" secondAttribute="centerX" id="x5n-ks-lPe"/>
                         </constraints>
                     </view>
@@ -76,12 +84,11 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="240" height="280"/>
             <connections>
+                <outlet property="imageView" destination="kMQ-F5-ZKZ" id="Bm0-A5-l0k"/>
+                <outlet property="imageViewContainer" destination="Yfw-oi-aNG" id="pFe-EH-Pqp"/>
                 <outlet property="notificationsButton" destination="DdA-EE-BlD" id="LTe-X8-ygd"/>
             </connections>
             <point key="canvasLocation" x="-5.7971014492753632" y="193.52678571428569"/>
         </collectionViewCell>
     </objects>
-    <resources>
-        <image name="Bell" width="100" height="100"/>
-    </resources>
 </document>

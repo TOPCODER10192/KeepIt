@@ -10,6 +10,10 @@ import UIKit
 
 class SettingsRowTableViewCell: UITableViewCell {
 
+    // MARK: - IBOutlet Properties
+    @IBOutlet weak var iconImageView: UIImageView!
+    @IBOutlet weak var label: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

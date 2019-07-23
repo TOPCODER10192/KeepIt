@@ -34,6 +34,7 @@ class PhoneNotificationsViewController: UIViewController {
         
         // Setup the segmented control
         segmentedControl.selectedSegmentIndex = 1
+        segmentedControl.tintColor = Constants.Color.primary
         dailyPickerView.isHidden  = false
         weeklyPickerView.isHidden = true
         noRemindersLabel.isHidden = true
@@ -77,6 +78,10 @@ class PhoneNotificationsViewController: UIViewController {
         
         // Setup the save changes button
         saveChangesButton.backgroundColor    = Constants.Color.primary
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         
     }
 

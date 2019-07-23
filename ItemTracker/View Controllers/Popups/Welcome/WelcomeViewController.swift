@@ -20,15 +20,13 @@ class WelcomeViewController: UIViewController {
     @IBOutlet weak var floatingView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
+    @IBOutlet weak var continueButton: UIButton!
     
     // MARK: - Properties
     var delegate: WelcomeProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Setup the floating view
-        floatingView.layer.cornerRadius = Constants.View.CornerRadius.standard
         
         // Setup the collection view
         collectionView.delegate = self
@@ -39,6 +37,13 @@ class WelcomeViewController: UIViewController {
         
         let notificationCell = UINib(nibName: "NotificationsCollectionViewCell", bundle: .main)
         collectionView.register(notificationCell, forCellWithReuseIdentifier: "NotificationsCell")
+        
+        // Setup the pageControl
+        pageControl.pageIndicatorTintColor = Constants.Color.softPrimary
+        pageControl.currentPageIndicatorTintColor = Constants.Color.primary
+        
+        // Setup the continue button
+        continueButton.tintColor = Constants.Color.primary
         
     }
     
@@ -99,14 +104,16 @@ extension WelcomeViewController: UICollectionViewDelegate, UICollectionViewDataS
         // Page 0 is the locations page
         if indexPath.row == 0 {
 
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LocationsCell", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LocationsCell", for: indexPath) as! LocationsCollectionViewCell
+            cell.delegate = self
             return cell
             
         }
         // Page 1 is the notifications page
         else {
             
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NotificationsCell", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NotificationsCell", for: indexPath) as! NotificationsCollectionViewCell
+            cell.delegate = self
             return cell
             
         }
@@ -127,6 +134,64 @@ extension WelcomeViewController: UICollectionViewDelegate, UICollectionViewDataS
         let currentPage = collectionView.contentOffset.x / pageWidth;
         
         pageControl.currentPage = Int(currentPage)
+        
+    }
+    
+}
+
+// MARK: - Custom Protocol Methods
+extension WelcomeViewController: LocationProtocol, NotificationsProtocol {
+    
+    func locationTapped(access: Bool?) {
+        
+        // Create an alert
+        var alert: UIAlertController
+        
+        guard access != nil else {
+            // Move to the next page
+            self.pageControl.currentPage = 1
+            self.collectionView.scrollToItem(at: IndexPath(row: self.pageControl.currentPage, section: 0), at: .left, animated: true)
+            return
+        }
+        
+        // Create the controller based on the notification access
+        if access == true {
+            alert = AlertService.createGeneralAlert(description: "Locations Are On!")
+        }
+        else {
+            alert = AlertService.createSettingsAlert(title: "Locations Are Off",
+                                                     message: "Go to settings to turn them on",
+                                                     cancelAction: nil)
+        }
+        
+        // Present the alert
+        present(alert, animated: true) {
+            
+            // Move to the next page
+            self.pageControl.currentPage = 1
+            self.collectionView.scrollToItem(at: IndexPath(row: self.pageControl.currentPage, section: 0), at: .left, animated: true)
+            
+        }
+        
+    }
+    
+    func notificationsTapped(access: Bool) {
+        
+        // Create an alert
+        var alert: UIAlertController
+        
+        // Create the controller based on the notification access
+        if access == true {
+             alert = AlertService.createGeneralAlert(description: "Notifications Are On!")
+        }
+        else {
+            alert = AlertService.createSettingsAlert(title: "Notifications Are Off",
+                                                     message: "Go to settings to turn them on",
+                                                     cancelAction: nil)
+        }
+        
+        // Present the alert
+        present(alert, animated: true, completion: nil)
         
     }
     

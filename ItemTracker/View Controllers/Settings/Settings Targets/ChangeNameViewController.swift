@@ -43,8 +43,11 @@ class ChangeNameViewController: UIViewController {
         lastNameView.layer.borderWidth = 0.5
 
         // Setup the text fields
-        firstNameTextField.delegate = self
-        lastNameTextField.delegate = self
+        firstNameTextField.delegate  = self
+        firstNameTextField.tintColor = Constants.Color.primary
+        
+        lastNameTextField.delegate   = self
+        lastNameTextField.tintColor  = Constants.Color.primary
         
         // Setup the button
         saveChangesButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)

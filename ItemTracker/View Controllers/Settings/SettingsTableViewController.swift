@@ -8,15 +8,15 @@
 
 import UIKit
 import MessageUI
+
 import FirebaseAuth
 import FirebaseFirestore
 
-struct SectionData {
+struct CellData {
     
-    var isExpanded = true
-    let header: String
-    var texts: [String]
-    let targets: [String]
+    var text: String
+    let icon: UIImage
+    let target: String
     
 }
 
@@ -26,29 +26,35 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var closeButton: UIBarButtonItem!
     @IBOutlet weak var signOutButton: UIBarButtonItem!
     
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
+    
     @IBOutlet weak var deleteAccountButton: UIButton!
     
     // MARK: - Properties
-    var sectionData = [SectionData(isExpanded: true, header: "Your Information",
-                                   texts: ["Full Name: \(Stored.user!.firstName) \(Stored.user!.lastName)",
-                                           "Email: \(Stored.user!.email)", "Change Password", "Quick Locations"],
-                                   targets: ["ChangeNameSegue", "ChangeEmailSegue", "ChangePasswordSegue", "QuickLocationsSegue"]),
-                       SectionData(isExpanded: true, header: "Notifications", texts: ["Email Notifications", "Phone Notifications"],
-                                   targets: ["EmailNotificationsSegue", "PhoneNotificationsSegue"]),
-                       SectionData(isExpanded: true, header: "Premium", texts: ["Info about premium", "Upgrade to premium"],
-                                   targets: ["PremiumInfoSegue", "PayPremiumSegue"]),
-                       SectionData(isExpanded: true, header: "Support", texts: ["FAQ", "Write a Review", "Report a Problem"],
-                                   targets: ["FAQSegue", "WriteReviewSegue", ""])]
+    var tableData = [CellData(text: "Change Name", icon: UIImage(named: "NameIcon")!, target: "ChangeNameSegue"),
+                     CellData(text: "Change Email", icon: UIImage(named: "MailIcon")!, target: "ChangeEmailSegue"),
+                     CellData(text: "Change Password", icon: UIImage(named: "LockIcon")!, target: "ChangePasswordSegue"),
+                     CellData(text: "Notifications", icon: UIImage(named: "BellIcon")!, target: "PhoneNotificationsSegue"),
+                     CellData(text: "Report a Problem", icon: UIImage(named: "ErrorIcon")!, target: ""),
+                     CellData(text: "Credits", icon: UIImage(named: "CreditIcon")!, target: "CreditsSegue")]
     
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Setup the navigation controller
+        self.navigationController?.navigationBar.tintColor = Constants.Color.primary
         
         // Setup the closeButton
         closeButton.tintColor = Constants.Color.primary
         
         // Setup the signOutButton
         signOutButton.tintColor   = Constants.Color.primary
+        
+        // Setup the name label and the email label
+        nameLabel.text  = "\(Stored.user!.firstName) \(Stored.user!.lastName)"
+        emailLabel.text = "\(Stored.user!.email)"
         
         // Setup the delete account button
         deleteAccountButton.backgroundColor = Constants.Color.deleteButton
@@ -63,83 +69,46 @@ extension SettingsTableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         
         // Return the number of sections
-        return sectionData.count
+        return 1
         
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        // Return the number of rows in the section
-        if sectionData[section].isExpanded == true {
-            return sectionData[section].texts.count
-        }
-        // If the section is collapsed then return 0
-        else {
-            return 0
-        }
+        return tableData.count
         
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Let the cell be a settings bodyCell
-        let cell = Bundle.main.loadNibNamed(Constants.ID.Nib.settingsBody, owner: self, options: nil)?.first as! SettingsBodyTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.ID.Cell.settingsRow) as! SettingsRowTableViewCell
         
         // Set the label to match the section and row in the sectionData
-        cell.promptLabel.text = sectionData[indexPath.section].texts[indexPath.row]
+        cell.iconImageView.image = tableData[indexPath.row].icon
+        cell.label.text          = tableData[indexPath.row].text
         
         return cell
         
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let headerButton = UIButton()
-        
-        // Set the header buttons text
-        headerButton.setTitle(sectionData[section].header, for: .normal)
-        headerButton.setTitleColor(UIColor.white, for: .normal)
-        headerButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        
-        // Setup a border for the header
-        headerButton.layer.borderWidth = 0.3
-        headerButton.layer.borderColor = UIColor.white.cgColor
-        
-        // Set the header buttons color
-        headerButton.backgroundColor = Constants.Color.primary
-        
-        // Add a target for the button
-        headerButton.addTarget(self, action: #selector(headerTapped), for: .touchUpInside)
-        headerButton.tag = section
-        
-        return headerButton
-        
-    }
-    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        // Let the row height be 40
-        return 40
-        
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        // Let the header height be 40
-        return 40
+        // Let the row height be 44
+        return 44
         
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // Segue to the rows target view controller
-        let segueID = sectionData[indexPath.section].targets[indexPath.row]
+        let segueID = tableData[indexPath.row].target
         
         if segueID == "" {
             composeMail()
         }
         else {
-            performSegue(withIdentifier: sectionData[indexPath.section].targets[indexPath.row], sender: self)
+            performSegue(withIdentifier: segueID, sender: self)
         }
     }
     
@@ -232,46 +201,6 @@ extension SettingsTableViewController {
     
 }
 
-// MARK: - Heading Button Methods
-extension SettingsTableViewController {
-    
-    @objc func headerTapped(button: UIButton) {
-        
-        // Recover the section from the buttons tag
-        let section = button.tag
-        
-        // Invert the state of the sections expansion
-        sectionData[section].isExpanded = !sectionData[section].isExpanded
-        
-        // Create an empty array of index paths
-        var indexPaths = [IndexPath]()
-        
-        // Collect all the index paths to be removed or added
-        for row in 0 ..< sectionData[section].texts.count {
-            
-            indexPaths.append(IndexPath(row: row, section: section))
-            
-        }
-        
-        // Collapse the table view
-        if sectionData[section].isExpanded == false {
-            
-            // Remove all the rows in the section
-            tableView.deleteRows(at: indexPaths, with: .fade)
-            
-        }
-        // Expand the table view
-        else {
-            
-            // Add the rows back into the section
-            tableView.insertRows(at: indexPaths, with: .fade)
-            
-        }
-        
-    }
-    
-}
-
 // MARK: - Mail Methods
 extension SettingsTableViewController: MFMailComposeViewControllerDelegate {
     
@@ -329,20 +258,14 @@ extension SettingsTableViewController: NameChangedProtocol, EmailChangedProtocol
     func nameWasChanged(name: String) {
         
         // Change the name that is displayed
-        sectionData[0].texts[0] = "First Name: \(name)"
-        
-        // Reload the tableView
-        self.tableView.reloadData()
+        nameLabel.text = name
         
     }
     
     func emailWasChanged(email: String) {
         
         // Change the email that is displayed
-        sectionData[0].texts[1] = "Email: \(email)"
-        
-        // Reload the tableView
-        self.tableView.reloadData()
+        emailLabel.text = email
         
     }
     

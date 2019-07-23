@@ -183,7 +183,7 @@ extension LoginViewController {
         loginButton.isEnabled = false
         
         // Start the progress animation
-        ProgressService.progressAnimation(text: "Trying to log you in")
+        ProgressService.progressAnimation(text: "Trying to Log You In")
         
         // Attempt to login the user
         Auth.auth().signIn(withEmail: email!, password: password!) { [weak self] authResult, error in

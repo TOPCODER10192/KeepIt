@@ -26,10 +26,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rVt-sQ-oBo" userLabel="Floating View">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rVt-sQ-oBo" userLabel="Floating View" customClass="FloatingView" customModule="ItemTracker" customModuleProvider="target">
                                 <rect key="frame" x="32" y="328" width="350" height="240"/>
                                 <subviews>
-                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dFD-tJ-u7P">
+                                    <navigationBar clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dFD-tJ-u7P" customClass="RoundedNavigationBar" customModule="ItemTracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="VWi-ux-2SS"/>
@@ -37,13 +37,17 @@
                                         <items>
                                             <navigationItem title="Update Locations" id="hM1-HU-HAt">
                                                 <barButtonItem key="leftBarButtonItem" title="Back" id="Pdy-2l-XBh">
-                                                    <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="backButtonTapped:" destination="jdv-gi-yVb" id="oip-Gn-Sgh"/>
                                                     </connections>
                                                 </barButtonItem>
                                             </navigationItem>
                                         </items>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </navigationBar>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="RB5-lc-bgU">
                                         <rect key="frame" x="10" y="55" width="330" height="175"/>
@@ -134,7 +138,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="Euh-nb-7or"/>
                                     <constraint firstItem="dFD-tJ-u7P" firstAttribute="leading" secondItem="rVt-sQ-oBo" secondAttribute="leading" id="KTN-de-nZp"/>
@@ -146,6 +150,11 @@
                                     <constraint firstItem="RB5-lc-bgU" firstAttribute="leading" secondItem="rVt-sQ-oBo" secondAttribute="leading" constant="10" id="o7C-YI-yxM"/>
                                     <constraint firstItem="dFD-tJ-u7P" firstAttribute="top" secondItem="rVt-sQ-oBo" secondAttribute="top" id="u5L-wk-cxs"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
@@ -179,10 +188,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v4P-IE-kGM" userLabel="Floating View">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v4P-IE-kGM" userLabel="Floating View" customClass="FloatingView" customModule="ItemTracker" customModuleProvider="target">
                                 <rect key="frame" x="32" y="183" width="350" height="530"/>
                                 <subviews>
-                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qQA-rn-pwZ">
+                                    <navigationBar clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qQA-rn-pwZ" customClass="RoundedNavigationBar" customModule="ItemTracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="GGz-DP-nNC"/>
@@ -190,19 +199,22 @@
                                         <items>
                                             <navigationItem title="Title" id="MuN-X7-cAY">
                                                 <barButtonItem key="leftBarButtonItem" systemItem="stop" id="iba-lv-kFB">
-                                                    <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="closeButtonTapped:" destination="pLH-vu-elk" id="dAt-To-vUO"/>
                                                     </connections>
                                                 </barButtonItem>
                                                 <barButtonItem key="rightBarButtonItem" title="Edit" id="ihN-gt-185">
-                                                    <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="editButtonTapped:" destination="pLH-vu-elk" id="S4z-Sh-iOl"/>
                                                     </connections>
                                                 </barButtonItem>
                                             </navigationItem>
                                         </items>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </navigationBar>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="f2P-2O-t51" userLabel="Super SV">
                                         <rect key="frame" x="10" y="55" width="330" height="465"/>
@@ -277,13 +289,18 @@
                                                                     <outletCollection property="gestureRecognizers" destination="WfW-Ao-GQI" appends="YES" id="H5a-E0-f36"/>
                                                                 </connections>
                                                             </mapView>
-                                                            <searchBar contentMode="redraw" placeholder="Search for a location" translatesAutoresizingMaskIntoConstraints="NO" id="HFz-5n-HNo">
+                                                            <searchBar contentMode="redraw" placeholder="Search for a location" translatesAutoresizingMaskIntoConstraints="NO" id="HFz-5n-HNo" customClass="RoundedSearchBar" customModule="ItemTracker" customModuleProvider="target">
                                                                 <rect key="frame" x="16.5" y="5" width="297" height="35"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="35" id="Bro-KV-3Bm"/>
                                                                 </constraints>
                                                                 <textInputTraits key="textInputTraits"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="15"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
                                                             </searchBar>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K2k-YN-jO1" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
                                                                 <rect key="frame" x="105" y="180" width="120" height="35"/>
@@ -357,7 +374,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="f2P-2O-t51" firstAttribute="top" secondItem="qQA-rn-pwZ" secondAttribute="bottom" constant="10" id="84n-qP-siQ"/>
                                     <constraint firstAttribute="trailing" secondItem="f2P-2O-t51" secondAttribute="trailing" constant="10" id="Gxy-ry-V5D"/>
@@ -369,6 +386,11 @@
                                     <constraint firstAttribute="height" constant="530" id="msH-19-3pS"/>
                                     <constraint firstItem="f2P-2O-t51" firstAttribute="leading" secondItem="v4P-IE-kGM" secondAttribute="leading" constant="10" id="vgr-gd-LXo"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -419,5 +441,4 @@
     <resources>
         <image name="Wallet" width="100" height="100"/>
     </resources>
-    <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
 </document>

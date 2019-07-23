@@ -19,13 +19,13 @@ protocol ForgotPasswordProtocol {
 final class ForgotPasswordViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
-    @IBOutlet weak var floatingView: UIView!
+    @IBOutlet weak var floatingView: FloatingView!
     @IBOutlet weak var floatingViewWidth: NSLayoutConstraint!
     @IBOutlet weak var floatingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var floatingViewX: NSLayoutConstraint!
     @IBOutlet weak var floatingViewToBottom: NSLayoutConstraint!
     
-    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBar: RoundedNavigationBar!
     @IBOutlet weak var backButton: UIBarButtonItem!
     
     @IBOutlet weak var emailTextField: UITextField!
@@ -41,22 +41,20 @@ final class ForgotPasswordViewController: UIViewController {
         super.viewDidLoad()
 
         // Setup the forgotPasswordVIew
-        floatingView.backgroundColor    = Constants.Color.floatingView
-        floatingView.layer.cornerRadius = Constants.View.CornerRadius.standard
         floatingViewWidth.constant      = Constants.View.Width.standard
         floatingViewX.constant          = UIScreen.main.bounds.width
-        floatingViewHeight.constant           = Constants.View.Height.forgotPassword
-        floatingViewToBottom.constant         = UIScreen.main.bounds.height * 0.3
+        floatingViewHeight.constant     = Constants.View.Height.forgotPassword
+        floatingViewToBottom.constant   = UIScreen.main.bounds.height * 0.3
         
         // Setup the navigation bar
-        backButton.tintColor             = Constants.Color.primary
-        navigationBar.layer.cornerRadius = Constants.View.CornerRadius.standard
-        navigationBar.clipsToBounds      = true
+        backButton.tintColor            = Constants.Color.primary
         
         // Setup the text field
-        emailTextField.keyboardType    = .emailAddress
-        emailTextField.textContentType = .emailAddress
-        emailTextField.placeholder     = "Email Address"
+        emailTextField.tintColor           = Constants.Color.primary
+        emailTextField.leftView?.tintColor = UIColor.black
+        emailTextField.keyboardType        = .emailAddress
+        emailTextField.textContentType     = .emailAddress
+        emailTextField.placeholder         = "Email Address"
         
         // Setup the button
         resetPasswordButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
@@ -93,7 +91,7 @@ final class ForgotPasswordViewController: UIViewController {
         slideViewIn()
         
     }
-
+    
     // MARK: - IBAction Methods
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         

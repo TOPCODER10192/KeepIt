@@ -72,15 +72,11 @@ class SingleItemViewController: UIViewController {
         dimView.backgroundColor                   = UIColor.clear
 
         // Setup the Floating View
-        floatingView.layer.cornerRadius           = Constants.View.CornerRadius.standard
         floatingViewHeight.constant               = Constants.View.Height.singleItem
         floatingViewWidth.constant                = Constants.View.Width.standard
         floatingViewYConstraint.constant          = UIScreen.main.bounds.height
-        floatingView.backgroundColor              = Constants.Color.floatingView
         
         // Setup the Navigation Bar
-        navigationBar.layer.cornerRadius          = Constants.View.CornerRadius.standard
-        navigationBar.clipsToBounds               = true
         navigationBarTitle.title                  = "Add an Item"
         closeButton.tintColor                     = Constants.Color.primary
         editButton.tintColor                      = Constants.Color.primary
@@ -94,9 +90,11 @@ class SingleItemViewController: UIViewController {
         // Setup the Image Prompt
         imagePrompt.adjustsFontSizeToFitWidth     = true
         imagePrompt.text                          = "Tap to Add Image"
+        imagePrompt.textColor                     = Constants.Color.primary
         
         // Setup the Item Name Text Field
         itemNameTextField.delegate                = self
+        itemNameTextField.tintColor               = Constants.Color.primary
         
         // Setup the Location Prompt
         locationPrompt.text                       = "Place a pin on your items location"
@@ -113,7 +111,6 @@ class SingleItemViewController: UIViewController {
         mapSearchBar.delegate                     = self
         mapSearchBar.layer.borderWidth            = 1
         mapSearchBar.layer.borderColor            = Constants.Color.primary.cgColor
-        mapSearchBar.layer.cornerRadius           = Constants.View.CornerRadius.standard
         mapSearchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
         // Setup the Near Me Button
@@ -121,9 +118,15 @@ class SingleItemViewController: UIViewController {
         
         // Setup the Save Item Button
         saveItemButton.backgroundColor            = Constants.Color.primary
-        saveItemButton.setTitle("", for: .disabled)
-        saveItemButton.setTitle("Save Item", for: .normal)
         saveItemButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+        if existingItem == nil {
+            saveItemButton.setTitle("Save Item", for: .disabled)
+            saveItemButton.setTitle("Save Item", for: .normal)
+        }
+        else if existingItem == nil {
+            saveItemButton.setTitle("Delete Item", for: .normal)
+            saveItemButton.setTitle("Save Changes", for: .disabled)
+        }
         
         // Show the items properties
         showItemProperties()
@@ -365,11 +368,13 @@ extension SingleItemViewController: MKMapViewDelegate {
         
         // If the annotation view is nil, then create it
         if annotationView == nil {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: Constants.ID.Annotation.item)
+            annotationView = MKAnnotationView(annotation: annotation,
+                                              reuseIdentifier: Constants.ID.Annotation.item)
         }
         
         // Set the image, draggability, and ability to show a callout for the annotation
         annotationView?.image          = UIImage(named: "ItemAnnotation")
+        annotationView?.tintColor      = Constants.Color.primary
         annotationView?.canShowCallout = false
         
         if inEditMode == true {

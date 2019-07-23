@@ -14,12 +14,8 @@ final class ProgressService {
     private static func setupSVProgressHUD() {
         
         // Set the colors
-        SVProgressHUD.setBackgroundColor(Constants.Color.floatingView)
+        SVProgressHUD.setBackgroundColor(Constants.Color.notificationView)
         SVProgressHUD.setForegroundColor(Constants.Color.primary)
-        
-        // Set the border
-        SVProgressHUD.setBorderColor(UIColor.lightGray)
-        SVProgressHUD.setBorderWidth(1)
         
         // Set the font
         SVProgressHUD.setFont(UIFont(name: "SF Pro Text", size: 16) ?? UIFont.systemFont(ofSize: 16))

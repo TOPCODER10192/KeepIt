@@ -52,9 +52,15 @@ class ChangeEmailViewController: UIViewController {
         confirmNewEmailView.layer.borderWidth = 0.5
         
         // Setup the text fields
-        passwordTextField.delegate = self
-        newEmailTextField.delegate = self
-        confirmNewEmailTextField.delegate = self
+        passwordTextField.delegate            = self
+        passwordTextField.tintColor           = Constants.Color.primary
+        passwordTextField.leftView?.tintColor = UIColor.black
+        
+        newEmailTextField.delegate            = self
+        newEmailTextField.tintColor           = Constants.Color.primary
+        
+        confirmNewEmailTextField.delegate     = self
+        confirmNewEmailTextField.tintColor    = Constants.Color.primary
         
         // Setup the button
         saveChangesButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)

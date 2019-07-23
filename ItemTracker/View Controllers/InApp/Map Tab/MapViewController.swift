@@ -13,6 +13,7 @@ import SDWebImage
 final class MapViewController: UIViewController {
 
     // MARK: - IBOutlet Properties
+    @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var mapView: MKMapView!
     
     @IBOutlet weak var mapSearchBar: UISearchBar!
@@ -27,30 +28,36 @@ final class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Setup the navigationBar
+        navigationBar.tintColor = Constants.Color.primary
+        
         // Check the location services
         checkLocationServices()
         
         // Setup the mapView
         mapView.delegate                        = self
+        mapView.tintColor                       = Constants.Color.primary
         
         // Setup the map search bar
         mapSearchBar.layer.borderWidth          = 1
         mapSearchBar.layer.borderColor          = Constants.Color.primary.cgColor
-        mapSearchBar.layer.cornerRadius         = Constants.View.CornerRadius.standard
         mapSearchBar.delegate                   = self
+        mapSearchBar.tintColor                  = Constants.Color.primary
         mapSearchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
         // Setup the prev and next annotation buttons
         prevAnnotationButton.layer.borderWidth  = 1
         prevAnnotationButton.layer.borderColor  = Constants.Color.primary.cgColor
+        prevAnnotationButton.tintColor          = Constants.Color.primary
         
         nextAnnotationButton.layer.borderWidth  = 1
         nextAnnotationButton.layer.borderColor  = Constants.Color.primary.cgColor
+        nextAnnotationButton.tintColor          = Constants.Color.primary
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         // Set the maps annotations
         reloadAnnotations()
@@ -140,7 +147,7 @@ final class MapViewController: UIViewController {
         centerMapOnItem(annotation: mapView.annotations[itemIndex], span: mapView.region.span)
         
     }
-
+    
 }
 
 // MARK: - Map Methods
@@ -281,7 +288,9 @@ extension MapViewController: CLLocationManagerDelegate {
         }
         else {
             // Let the user know that they have to turn location services on
-            present(AlertService.createLocationsAlert(), animated: true, completion: nil)
+            present(AlertService.createSettingsAlert(title: "Locations Off", message: "Go to settings to turn your location on", cancelAction: nil),
+                    animated: true,
+                    completion: nil)
         }
         
     }
@@ -302,7 +311,10 @@ extension MapViewController: CLLocationManagerDelegate {
             
         // Case if no authorization
         case .restricted, .denied:
-            present(AlertService.createLocationsAlert(), animated: true, completion: nil)
+            // Let the user know that they have to turn location services on
+            present(AlertService.createSettingsAlert(title: "Locations Off", message: "Go to settings to turn your location on",            cancelAction: nil),
+                    animated: true,
+                    completion: nil)
             
             mapView.showsUserLocation = false
             

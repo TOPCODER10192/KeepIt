@@ -156,6 +156,7 @@ final class LocalStorageService {
     static func clearUser() {
         
         // Clear the users information
+        defaults.set(nil, forKey: Constants.Key.User.id)
         defaults.set(nil, forKey: Constants.Key.User.firstName)
         defaults.set(nil, forKey: Constants.Key.User.lastName)
         defaults.set(nil, forKey: Constants.Key.User.email)

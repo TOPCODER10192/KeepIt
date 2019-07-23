@@ -32,20 +32,17 @@
                                     <navigationItem title="Title" id="dSI-Wm-tKp">
                                         <leftBarButtonItems>
                                             <barButtonItem systemItem="add" id="5vS-JJ-Qlz">
-                                                <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
                                                     <action selector="addButtonTapped:" destination="HIL-Jd-BGQ" id="rkP-Os-Sv8"/>
                                                 </connections>
                                             </barButtonItem>
                                             <barButtonItem systemItem="refresh" id="AOW-Wu-tZu">
-                                                <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
                                                     <action selector="updateButtonTapped:" destination="HIL-Jd-BGQ" id="HCd-RZ-st3"/>
                                                 </connections>
                                             </barButtonItem>
                                         </leftBarButtonItems>
                                         <barButtonItem key="rightBarButtonItem" title="Item" image="Settings Icon" id="0Zf-lz-oW5">
-                                            <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
                                                 <action selector="settingsButtonTapped:" destination="HIL-Jd-BGQ" id="bax-qB-giB"/>
                                             </connections>
@@ -92,6 +89,11 @@
                                             <constraint firstItem="U0G-Zi-cgi" firstAttribute="centerX" secondItem="CbT-dW-c36" secondAttribute="centerX" id="XjY-nF-AxP"/>
                                             <constraint firstAttribute="bottom" secondItem="U0G-Zi-cgi" secondAttribute="bottom" multiplier="1.05" id="a1g-fi-hkx"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="itemImage" destination="G5y-vE-urM" id="2eh-qJ-e27"/>
                                             <outlet property="itemLabel" destination="U0G-Zi-cgi" id="WJe-w8-0m3"/>
@@ -115,6 +117,7 @@
                     <tabBarItem key="tabBarItem" title="Items" image="KeyIcon" id="yce-jv-gnP"/>
                     <connections>
                         <outlet property="itemsCollectionView" destination="RjZ-G3-0nw" id="n8P-mW-LAP"/>
+                        <outlet property="navigationBar" destination="qMe-sF-HLx" id="fc3-Rw-XwD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vrt-MN-Hyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -138,20 +141,17 @@
                                     <navigationItem title="Title" id="ppg-yW-YOo">
                                         <leftBarButtonItems>
                                             <barButtonItem systemItem="add" id="Pen-SO-x1c">
-                                                <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
                                                     <action selector="addButtonTapped:" destination="mLa-WI-aFu" id="Dw8-Xe-eKU"/>
                                                 </connections>
                                             </barButtonItem>
                                             <barButtonItem systemItem="refresh" id="h8i-lH-Sql">
-                                                <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
                                                     <action selector="updateLocationButtonTapped:" destination="mLa-WI-aFu" id="CHK-Gc-5re"/>
                                                 </connections>
                                             </barButtonItem>
                                         </leftBarButtonItems>
                                         <barButtonItem key="rightBarButtonItem" title="Item" image="Settings Icon" id="mrb-Rt-mZr">
-                                            <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
                                                 <action selector="settingsButtonTapped:" destination="mLa-WI-aFu" id="Rer-GH-KDf"/>
                                             </connections>
@@ -166,7 +166,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="724"/>
                                         <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                     </mapView>
-                                    <searchBar contentMode="redraw" placeholder="Search for an item" translatesAutoresizingMaskIntoConstraints="NO" id="AKu-D1-C9b">
+                                    <searchBar contentMode="redraw" placeholder="Search for an item" translatesAutoresizingMaskIntoConstraints="NO" id="AKu-D1-C9b" customClass="RoundedSearchBar" customModule="ItemTracker" customModuleProvider="target">
                                         <rect key="frame" x="20.5" y="20" width="373" height="40"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -174,6 +174,11 @@
                                         </constraints>
                                         <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </searchBar>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fuh-kH-KA6" userLabel="Prev Button" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
                                         <rect key="frame" x="289" y="624" width="40" height="60"/>
@@ -242,6 +247,7 @@
                     <connections>
                         <outlet property="mapSearchBar" destination="AKu-D1-C9b" id="4sQ-lq-6AA"/>
                         <outlet property="mapView" destination="pQt-in-eIq" id="d60-UE-cZC"/>
+                        <outlet property="navigationBar" destination="jTJ-Dv-OWm" id="oWe-sy-Z8Z"/>
                         <outlet property="nextAnnotationButton" destination="wUD-Rp-38d" id="FLH-MC-XXr"/>
                         <outlet property="prevAnnotationButton" destination="Fuh-kH-KA6" id="Mbt-OV-G2N"/>
                     </connections>
@@ -272,10 +278,9 @@
     </scenes>
     <resources>
         <image name="KeyIcon" width="30" height="30"/>
-        <image name="MapIcon" width="36.5" height="36"/>
+        <image name="MapIcon" width="30" height="30"/>
         <image name="NextButton" width="30" height="50"/>
         <image name="PreviousButton" width="30" height="50"/>
         <image name="Settings Icon" width="30" height="30"/>
     </resources>
-    <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
 </document>

@@ -45,9 +45,15 @@ class ChangePasswordViewController: UIViewController {
         confirmNewPasswordView.layer.borderWidth = 0.5
         
         // Setup the text fields
-        oldPasswordTextField.delegate = self
-        newPasswordTextField.delegate = self
-        confirmNewPasswordTextField.delegate = self
+        oldPasswordTextField.delegate            = self
+        oldPasswordTextField.tintColor           = Constants.Color.primary
+        oldPasswordTextField.leftView?.tintColor = UIColor.black
+        
+        newPasswordTextField.delegate            = self
+        newPasswordTextField.tintColor           = Constants.Color.primary
+        
+        confirmNewPasswordTextField.delegate     = self
+        confirmNewPasswordTextField.tintColor    = Constants.Color.primary
         
         // Setup the save changes button
         saveChangesButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)

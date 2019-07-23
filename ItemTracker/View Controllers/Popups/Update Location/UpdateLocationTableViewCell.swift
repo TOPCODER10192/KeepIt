@@ -6,7 +6,7 @@
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 
-import UIKit
+import UIKit 
 import SDWebImage
 
 protocol UpdateLocationCellProtocol {

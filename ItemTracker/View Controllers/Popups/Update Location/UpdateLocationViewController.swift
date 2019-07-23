@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import StoreKit
 
 protocol UpdateLocationProtocol {
     
@@ -49,15 +50,9 @@ class UpdateLocationViewController: UIViewController {
         dimView.backgroundColor = UIColor.clear
         
         // Setup the floating view
-        floatingView.backgroundColor     = Constants.Color.floatingView
-        floatingView.layer.cornerRadius  = Constants.View.CornerRadius.standard
         floatingViewWidth.constant       = Constants.View.Width.standard
         floatingViewHeight.constant      = Constants.View.Height.updateLocation + CGFloat(Stored.userItems.count * 50)
         floatingViewYConstraint.constant = UIScreen.main.bounds.height
-        
-        // Setup the navigation bar
-        navigationBar.layer.cornerRadius = Constants.View.CornerRadius.standard
-        navigationBar.clipsToBounds      = true
         
         // Setup the table view
         updateTableView.delegate         = self
@@ -69,6 +64,9 @@ class UpdateLocationViewController: UIViewController {
         else {
             updateTableView.isScrollEnabled = false
         }
+        
+        // Update the button
+        updateButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
     }
     
@@ -94,7 +92,12 @@ class UpdateLocationViewController: UIViewController {
         
         guard locationManager.location?.coordinate != nil else {
             updateButton.isEnabled = true
-            present(AlertService.createLocationsAlert(), animated: true, completion: nil)
+            
+            // Let the user know that they have to turn location services on
+            present(AlertService.createSettingsAlert(title: "Locations Off", message: "Go to settings to turn your location on",            cancelAction: nil),
+                    animated: true,
+                    completion: nil)
+            
             return
         }
         
@@ -135,6 +138,9 @@ class UpdateLocationViewController: UIViewController {
                 // Show that the process was successful
                 ProgressService.successAnimation(text: "Successfully Updated the Location of Your Items")
                 
+                // Check if we should ask the user for a review
+                self.checkToAskForReview()
+                
                 // Save the changes locally
                 Stored.userItems[i] = item
                 LocalStorageService.updateItem(item: item, index: i)
@@ -146,6 +152,24 @@ class UpdateLocationViewController: UIViewController {
             }
             
         }
+        
+    }
+    
+    func checkToActivateButton() {
+        
+        // Iterate through all the boxes
+        for boxChecked in boxesChecked {
+            
+            // If the box is checked, then activate the button
+            if boxChecked == true {
+                updateButton.activateButton(isActivated: true, color: Constants.Color.primary)
+                return
+            }
+            
+        }
+        
+        // If no boxes were checked then deactivate the button
+        updateButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
     }
 
@@ -217,6 +241,26 @@ extension UpdateLocationViewController {
         
     }
     
+    func checkToAskForReview() {
+        
+        // Get the user defaults
+        let defaults = UserDefaults.standard
+        let updatesPerRequest = 20
+        
+        // Get the number of times the user has updated and increment it
+        var numUpdates = defaults.value(forKey: "NumberOfUpdates") as? Int ?? 0
+        numUpdates += 1
+        
+        // If the number of times is divisible by 20 then request a review
+        if numUpdates % updatesPerRequest == 0 {
+            SKStoreReviewController.requestReview()
+        }
+        
+        // Store the new number of updates
+        defaults.set(numUpdates, forKey: "NumberOfUpdates")
+        
+    }
+    
 }
 
 // MARK: - TableView Methods
@@ -254,6 +298,8 @@ extension UpdateLocationViewController: UpdateLocationCellProtocol {
     func itemSelected(index: Int, state: Bool) {
         
         boxesChecked[index] = state
+        
+        checkToActivateButton()
         
     }
     

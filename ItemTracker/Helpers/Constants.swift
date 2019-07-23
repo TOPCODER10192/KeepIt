@@ -55,7 +55,7 @@ struct Constants {
             static let addItem              = "AddItemCell"
             static let updateLocation       = "UpdateLocationCell"
             
-            static let settingsHeader       = "SettingsHeaderCell"
+            static let settingsRow          = "SettingsRowCell"
             
         }
         
@@ -78,13 +78,6 @@ struct Constants {
     
     // MARK: - Views
     struct View {
-        
-        // MARK: - Corner Radius
-        struct CornerRadius {
-            
-            static let standard: CGFloat    = 15
-            
-        }
         
         // MARK: - Width
         struct Width {
@@ -112,9 +105,10 @@ struct Constants {
     // MARK: - Color
     struct Color {
         
-        static let floatingView     = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 255/255)
-        static let notificationView = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 255/255)
+        static let notificationView = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 255/255)
         static let primary          = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 255/255)
+        static let softPrimary      = UIColor(red: 175/255, green: 82/255, blue: 222/255, alpha: 120/255)
+        
         static let inactiveButton   = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 255/255)
         static let deleteButton     = UIColor(red: 255/255, green: 59/255, blue: 48/255, alpha: 255/255)
     

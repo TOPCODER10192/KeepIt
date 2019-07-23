@@ -13,6 +13,7 @@ final class ItemsViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var itemsCollectionView: UICollectionView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
     
     // MARK: Properties
 
@@ -26,6 +27,9 @@ final class ItemsViewController: UIViewController {
         itemsCollectionView.dataSource          = self
         itemsCollectionView.layer.masksToBounds = false
         itemsCollectionView.clipsToBounds       = true
+        
+        // Setup the navigation bar
+        navigationBar.tintColor = Constants.Color.primary
         
         // Add a refresh control for the collection view
         addRefreshControl()

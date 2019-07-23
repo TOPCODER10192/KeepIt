@@ -9,6 +9,7 @@
 import UIKit
 import SDWebImage
 
+@IBDesignable
 final class ItemCollectionViewCell: UICollectionViewCell {
     
     // MARK: - IBOutlet Properties
@@ -16,6 +17,11 @@ final class ItemCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var itemImage: UIImageView!
     
     // MARK: - ItemCollectionViewCell Properties
+    @IBInspectable var cornerRadius: CGFloat = 0 {
+        didSet {
+            self.layer.cornerRadius = cornerRadius
+        }
+    }
     
     override func awakeFromNib() {
         
@@ -25,7 +31,6 @@ final class ItemCollectionViewCell: UICollectionViewCell {
         self.layer.shadowRadius  = 1
         self.layer.shadowOpacity = 0.5
         self.layer.masksToBounds = false
-        self.layer.cornerRadius  = Constants.View.CornerRadius.standard
         
         // Setup the itemLabel
         itemLabel.adjustsFontSizeToFitWidth = true

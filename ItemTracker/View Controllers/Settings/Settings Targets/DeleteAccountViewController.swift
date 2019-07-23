@@ -29,7 +29,9 @@ class DeleteAccountViewController: UIViewController {
         passwordView.layer.borderWidth = 0.5
         
         // Setup the password text field
-        passwordTextField.delegate = self
+        passwordTextField.delegate            = self
+        passwordTextField.tintColor           = Constants.Color.primary
+        passwordTextField.leftView?.tintColor = UIColor.black
         
         // Setup the delete account button
         deleteAccountButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
