@@ -69,26 +69,31 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="330" height="50"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Wallet" translatesAutoresizingMaskIntoConstraints="NO" id="Q2x-5e-NSN">
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="KeyIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Q2x-5e-NSN">
                                                                     <rect key="frame" x="20" y="0.0" width="40" height="40"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="40" id="W2L-TN-LdC"/>
                                                                         <constraint firstAttribute="height" constant="40" id="nyH-5C-Xqy"/>
                                                                     </constraints>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wallet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Twy-oi-4cf">
-                                                                    <rect key="frame" x="80" y="9.5" width="47.5" height="21"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Keys" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Twy-oi-4cf">
+                                                                    <rect key="frame" x="80" y="9.5" width="36.5" height="21"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dxf-wl-IPS">
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dxf-wl-IPS" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
                                                                     <rect key="frame" x="270" y="5" width="30" height="30"/>
                                                                     <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="30" id="YPV-DA-luM"/>
                                                                         <constraint firstAttribute="height" constant="30" id="c6f-qE-nlD"/>
                                                                     </constraints>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                            <real key="value" value="15"/>
+                                                                        </userDefinedRuntimeAttribute>
+                                                                    </userDefinedRuntimeAttributes>
                                                                     <connections>
                                                                         <action selector="checkBoxButtonTapped:" destination="068-3N-Eub" eventType="touchUpInside" id="Pvd-1N-Cxv"/>
                                                                     </connections>
@@ -167,11 +172,9 @@
                     <connections>
                         <outlet property="backButton" destination="Pdy-2l-XBh" id="Af2-yV-MIk"/>
                         <outlet property="dimView" destination="fcZ-3Q-rnA" id="Hjc-HQ-OeG"/>
-                        <outlet property="floatingView" destination="rVt-sQ-oBo" id="lb1-hA-pmm"/>
                         <outlet property="floatingViewHeight" destination="UQl-EP-6c2" id="Ysz-a5-BCV"/>
                         <outlet property="floatingViewWidth" destination="Euh-nb-7or" id="iMg-BI-wLt"/>
                         <outlet property="floatingViewYConstraint" destination="E0S-cA-Z9n" id="cgr-NR-sAz"/>
-                        <outlet property="navigationBar" destination="dFD-tJ-u7P" id="qIJ-uR-E4o"/>
                         <outlet property="updateButton" destination="wHR-1p-TsG" id="QgB-Wv-TNp"/>
                         <outlet property="updateTableView" destination="UWF-ez-dna" id="l9t-eI-byh"/>
                     </connections>
@@ -404,7 +407,6 @@
                         <outlet property="closeButton" destination="iba-lv-kFB" id="GPx-Tn-Lf6"/>
                         <outlet property="dimView" destination="4pV-CS-3Oj" id="tXN-Df-yuI"/>
                         <outlet property="editButton" destination="ihN-gt-185" id="yne-BU-cEK"/>
-                        <outlet property="floatingView" destination="v4P-IE-kGM" id="MIg-9R-1zA"/>
                         <outlet property="floatingViewHeight" destination="msH-19-3pS" id="Zdo-xs-0u2"/>
                         <outlet property="floatingViewWidth" destination="ZP2-Cr-T4n" id="dUu-Yw-fov"/>
                         <outlet property="floatingViewYConstraint" destination="QGn-wl-Lj4" id="eoC-bR-ahG"/>
@@ -437,8 +439,243 @@
             </objects>
             <point key="canvasLocation" x="-684" y="137"/>
         </scene>
+        <!--Add Hot Spot View Controller-->
+        <scene sceneID="9qs-oT-H6q">
+            <objects>
+                <viewController storyboardIdentifier="AddHotSpotVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Koj-W6-654" customClass="AddHotSpotViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="A9D-31-0cZ" userLabel="Dim View">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m0m-f5-J8k" userLabel="Floating View" customClass="FloatingView" customModule="ItemTracker" customModuleProvider="target">
+                                <rect key="frame" x="32" y="168" width="350" height="560"/>
+                                <subviews>
+                                    <navigationBar clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eeW-gd-hJM" customClass="RoundedNavigationBar" customModule="ItemTracker" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="45"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="g99-h9-37g"/>
+                                        </constraints>
+                                        <items>
+                                            <navigationItem title="Add a Hot Spot" id="ao0-Ag-eGU">
+                                                <barButtonItem key="leftBarButtonItem" title="Back" id="SQl-Iw-VfO">
+                                                    <connections>
+                                                        <action selector="backButtonTapped:" destination="Koj-W6-654" id="OmS-gd-RGt"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                            </navigationItem>
+                                        </items>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </navigationBar>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="sBw-RQ-yzZ" userLabel="Super SV">
+                                        <rect key="frame" x="10" y="55" width="330" height="495"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="7q8-Vc-ldy" userLabel="Name SV">
+                                                <rect key="frame" x="0.0" y="0.0" width="330" height="60"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's the name of your hot spot?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cVp-5B-9JZ">
+                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="20" id="oBW-0m-loE"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Hotspot Name (Home, Work, etc...) " textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qyz-BA-zLA">
+                                                        <rect key="frame" x="0.0" y="25" width="330" height="35"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="35" id="lBA-3x-3Fh"/>
+                                                        </constraints>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="17"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                        <connections>
+                                                            <action selector="hotSpotNameTextFieldEditing:" destination="Koj-W6-654" eventType="editingChanged" id="HAo-1Y-uaU"/>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="iom-3L-EvA"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="gfG-NK-Nn2" userLabel="Reminder SV">
+                                                <rect key="frame" x="0.0" y="78.5" width="330" height="55"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When would you like to be reminded?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ojt-Km-9Zs">
+                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="20" id="WnV-hX-lvz"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="X6j-jc-Brz">
+                                                        <rect key="frame" x="0.0" y="25" width="330" height="31"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="EWs-Ld-kDa"/>
+                                                        </constraints>
+                                                        <segments>
+                                                            <segment title="When Entering"/>
+                                                            <segment title="When Leaving"/>
+                                                            <segment title="Both"/>
+                                                        </segments>
+                                                        <connections>
+                                                            <action selector="segmentedControlValueChanged:" destination="Koj-W6-654" eventType="valueChanged" id="yGc-vp-X7X"/>
+                                                        </connections>
+                                                    </segmentedControl>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="55" id="v0h-i2-EmD"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="wh2-xn-VbV" userLabel="Map SV">
+                                                <rect key="frame" x="0.0" y="151.5" width="330" height="285"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Move the hot spot to your desired location" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XOA-eQ-J9i">
+                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="20" id="vlW-9s-40h"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tEN-mb-Gfe">
+                                                        <rect key="frame" x="0.0" y="25" width="330" height="260"/>
+                                                        <subviews>
+                                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsCompass="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MGG-Y0-8rM">
+                                                                <rect key="frame" x="0.0" y="0.0" width="330" height="260"/>
+                                                                <gestureRecognizers/>
+                                                                <connections>
+                                                                    <outletCollection property="gestureRecognizers" destination="4sR-1V-EGd" appends="YES" id="WbN-Gg-kuj"/>
+                                                                </connections>
+                                                            </mapView>
+                                                            <searchBar contentMode="redraw" placeholder="Search for a location" translatesAutoresizingMaskIntoConstraints="NO" id="S0W-M4-hWJ" customClass="RoundedSearchBar" customModule="ItemTracker" customModuleProvider="target">
+                                                                <rect key="frame" x="5" y="10" width="245" height="30"/>
+                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="30" id="Fij-CV-uK7"/>
+                                                                </constraints>
+                                                                <textInputTraits key="textInputTraits"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="15"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </searchBar>
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Radius" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c8z-hh-5DV">
+                                                                <rect key="frame" x="255" y="10" width="70" height="30"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="70" id="Ubn-rj-J3J"/>
+                                                                    <constraint firstAttribute="height" constant="30" id="ayX-dt-C0N"/>
+                                                                </constraints>
+                                                                <nil key="textColor"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                                <connections>
+                                                                    <action selector="radiusTextFieldDoneEditing:" destination="Koj-W6-654" eventType="editingDidEnd" id="fKi-HB-UdC"/>
+                                                                </connections>
+                                                            </textField>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstItem="MGG-Y0-8rM" firstAttribute="top" secondItem="tEN-mb-Gfe" secondAttribute="top" id="1aO-my-iw4"/>
+                                                            <constraint firstAttribute="bottom" secondItem="MGG-Y0-8rM" secondAttribute="bottom" id="9ha-Ah-vgc"/>
+                                                            <constraint firstItem="c8z-hh-5DV" firstAttribute="leading" secondItem="S0W-M4-hWJ" secondAttribute="trailing" constant="5" id="OzJ-kR-axN"/>
+                                                            <constraint firstAttribute="trailing" secondItem="c8z-hh-5DV" secondAttribute="trailing" constant="5" id="Rdw-I9-gKF"/>
+                                                            <constraint firstItem="S0W-M4-hWJ" firstAttribute="top" secondItem="tEN-mb-Gfe" secondAttribute="top" constant="10" id="cmx-wZ-PNO"/>
+                                                            <constraint firstItem="MGG-Y0-8rM" firstAttribute="leading" secondItem="tEN-mb-Gfe" secondAttribute="leading" id="mJP-0l-IPe"/>
+                                                            <constraint firstItem="S0W-M4-hWJ" firstAttribute="leading" secondItem="tEN-mb-Gfe" secondAttribute="leading" constant="5" id="scX-Le-OKB"/>
+                                                            <constraint firstAttribute="trailing" secondItem="MGG-Y0-8rM" secondAttribute="trailing" id="t6E-Rf-5jK"/>
+                                                            <constraint firstItem="c8z-hh-5DV" firstAttribute="top" secondItem="tEN-mb-Gfe" secondAttribute="top" constant="10" id="xyW-Bx-4B8"/>
+                                                            <constraint firstAttribute="height" constant="260" id="zrd-U9-y6F"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="285" id="245-E1-z2U"/>
+                                                    <constraint firstItem="XOA-eQ-J9i" firstAttribute="width" secondItem="wh2-xn-VbV" secondAttribute="width" id="pTe-79-Ltr"/>
+                                                    <constraint firstItem="XOA-eQ-J9i" firstAttribute="centerX" secondItem="wh2-xn-VbV" secondAttribute="centerX" id="qsP-0d-wFi"/>
+                                                </constraints>
+                                            </stackView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lVg-53-7Cg" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="455" width="330" height="40"/>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="DWd-a4-360"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
+                                                <state key="normal" title="Add Item">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="20"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="addHotSpotButtonTapped:" destination="Koj-W6-654" eventType="touchUpInside" id="PTC-Hx-z9d"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="560" id="77a-ph-K2G"/>
+                                    <constraint firstItem="sBw-RQ-yzZ" firstAttribute="top" secondItem="eeW-gd-hJM" secondAttribute="bottom" constant="10" id="SG0-bE-yRb"/>
+                                    <constraint firstAttribute="bottom" secondItem="sBw-RQ-yzZ" secondAttribute="bottom" constant="10" id="bmP-7w-S2F"/>
+                                    <constraint firstItem="sBw-RQ-yzZ" firstAttribute="leading" secondItem="m0m-f5-J8k" secondAttribute="leading" constant="10" id="ekg-7z-jwE"/>
+                                    <constraint firstItem="eeW-gd-hJM" firstAttribute="leading" secondItem="m0m-f5-J8k" secondAttribute="leading" id="gDK-mn-zBH"/>
+                                    <constraint firstAttribute="trailing" secondItem="eeW-gd-hJM" secondAttribute="trailing" id="gfq-kG-AND"/>
+                                    <constraint firstAttribute="width" constant="350" id="n4I-Oz-azt"/>
+                                    <constraint firstItem="eeW-gd-hJM" firstAttribute="top" secondItem="m0m-f5-J8k" secondAttribute="top" id="uX1-2d-sKb"/>
+                                    <constraint firstAttribute="trailing" secondItem="sBw-RQ-yzZ" secondAttribute="trailing" constant="10" id="vCn-WB-MeT"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="m0m-f5-J8k" firstAttribute="centerX" secondItem="A9D-31-0cZ" secondAttribute="centerX" id="dPr-FZ-Q6a"/>
+                            <constraint firstItem="m0m-f5-J8k" firstAttribute="centerY" secondItem="A9D-31-0cZ" secondAttribute="centerY" id="gUU-OA-eea"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ogA-Nt-SnD"/>
+                    </view>
+                    <connections>
+                        <outlet property="addHotSpotButton" destination="lVg-53-7Cg" id="2Jj-8G-sP1"/>
+                        <outlet property="backButton" destination="SQl-Iw-VfO" id="XOg-ya-MzU"/>
+                        <outlet property="dimView" destination="A9D-31-0cZ" id="v95-CN-UbD"/>
+                        <outlet property="floatingViewHeight" destination="77a-ph-K2G" id="A5F-17-pOl"/>
+                        <outlet property="floatingViewWidth" destination="n4I-Oz-azt" id="eex-8P-8Dx"/>
+                        <outlet property="floatingViewY" destination="gUU-OA-eea" id="P9K-U9-FAn"/>
+                        <outlet property="hotSpotNameTextField" destination="Qyz-BA-zLA" id="UzK-ho-qqj"/>
+                        <outlet property="mapSearchBar" destination="S0W-M4-hWJ" id="2d0-RF-mej"/>
+                        <outlet property="mapView" destination="MGG-Y0-8rM" id="iWk-6C-T4J"/>
+                        <outlet property="radiusTextField" destination="c8z-hh-5DV" id="87Z-t6-MHq"/>
+                        <outlet property="segmentedControl" destination="X6j-jc-Brz" id="F1q-yH-BSY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AnD-ne-Ej3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.20000000000000001" id="4sR-1V-EGd">
+                    <connections>
+                        <action selector="mapViewHeld:" destination="Koj-W6-654" id="XAI-UU-tbv"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-39.130434782608695" y="136.60714285714286"/>
+        </scene>
     </scenes>
     <resources>
-        <image name="Wallet" width="100" height="100"/>
+        <image name="KeyIcon" width="30" height="30"/>
     </resources>
 </document>

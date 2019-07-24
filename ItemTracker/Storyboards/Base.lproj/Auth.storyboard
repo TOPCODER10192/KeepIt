@@ -148,7 +148,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="133-kp-FWd" secondAttribute="bottom" constant="10" id="NCW-6W-Sp5"/>
                                     <constraint firstItem="133-kp-FWd" firstAttribute="top" secondItem="bgK-cE-3pH" secondAttribute="top" constant="10" id="NTL-d4-ARu"/>
@@ -503,7 +503,9 @@
                                     <constraint firstAttribute="width" constant="300" id="H9s-7r-lHT"/>
                                     <constraint firstAttribute="trailing" secondItem="Kto-8z-cNv" secondAttribute="trailing" constant="30" id="HXk-aP-O5n"/>
                                     <constraint firstItem="Kto-8z-cNv" firstAttribute="leading" secondItem="J3a-4I-yVo" secondAttribute="leading" constant="30" id="HY6-Fj-woJ"/>
+                                    <constraint firstItem="bq5-uF-CO4" firstAttribute="leading" secondItem="5QP-et-FaO" secondAttribute="trailing" constant="45.5" id="NGu-Zm-UPj"/>
                                     <constraint firstItem="5QP-et-FaO" firstAttribute="centerX" secondItem="J3a-4I-yVo" secondAttribute="centerX" id="aQV-jf-47S"/>
+                                    <constraint firstItem="5QP-et-FaO" firstAttribute="leading" secondItem="FyW-Kn-tUP" secondAttribute="trailing" constant="24.5" id="iAE-2U-7AN"/>
                                     <constraint firstAttribute="height" constant="420" id="jyj-ld-VVT"/>
                                     <constraint firstItem="FyW-Kn-tUP" firstAttribute="leading" secondItem="J3a-4I-yVo" secondAttribute="leading" constant="20" id="laY-Ag-bla"/>
                                     <constraint firstAttribute="bottom" secondItem="FyW-Kn-tUP" secondAttribute="bottom" constant="10" id="ld0-FB-Q2Z"/>

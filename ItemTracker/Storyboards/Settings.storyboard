@@ -125,7 +125,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kSE-zS-EXr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-880" y="-265"/>
+            <point key="canvasLocation" x="-1501" y="-265"/>
         </scene>
         <!--Change Email-->
         <scene sceneID="mpo-WX-SK7">
@@ -273,7 +273,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xOz-Tz-26r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-146" y="-265"/>
+            <point key="canvasLocation" x="-787" y="-265"/>
         </scene>
         <!--Change Password-->
         <scene sceneID="ZBS-5d-pgf">
@@ -418,7 +418,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q80-t4-tLW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="632" y="-265"/>
+            <point key="canvasLocation" x="-114" y="-265"/>
         </scene>
         <!--Phone Notifications-->
         <scene sceneID="OnI-fD-69w">
@@ -516,7 +516,95 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YH8-Lg-GeI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1388" y="-265"/>
+            <point key="canvasLocation" x="632" y="-265"/>
+        </scene>
+        <!--Location Reminders-->
+        <scene sceneID="h5I-Dp-sfI">
+            <objects>
+                <viewController title="Location Reminders" id="4CA-Yj-1Ue" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xIV-E9-GvQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="feY-aX-a4L">
+                                <rect key="frame" x="10" y="196" width="394" height="666"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="uKP-AR-w5F" userLabel="Header View">
+                                    <rect key="frame" x="0.0" y="0.0" width="394" height="25"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p4C-PJ-82E">
+                                            <rect key="frame" x="354" y="-4.5" width="32" height="34"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <state key="normal" title="Edit"/>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="p4C-PJ-82E" firstAttribute="centerY" secondItem="uKP-AR-w5F" secondAttribute="centerY" id="lhh-mB-vLX"/>
+                                        <constraint firstAttribute="trailing" secondItem="p4C-PJ-82E" secondAttribute="trailing" constant="8" id="wuZ-4G-gvO"/>
+                                    </constraints>
+                                </view>
+                                <view key="tableFooterView" contentMode="scaleToFill" id="plU-Qk-24i" userLabel="Footer View">
+                                    <rect key="frame" x="0.0" y="153" width="394" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </view>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="A" id="TlZ-wr-lAx">
+                                        <rect key="frame" x="0.0" y="53" width="394" height="100"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TlZ-wr-lAx" id="eLj-E2-zMH">
+                                            <rect key="frame" x="0.0" y="0.0" width="394" height="99.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="b3K-CH-G0D">
+                                                    <rect key="frame" x="15" y="10" width="80" height="80"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="b3K-CH-G0D" secondAttribute="height" id="9ok-vw-xVP"/>
+                                                        <constraint firstAttribute="height" constant="80" id="vIm-8p-0g2"/>
+                                                    </constraints>
+                                                </mapView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Home" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="um1-VF-Ljg">
+                                                    <rect key="frame" x="135" y="36.5" width="63.5" height="26.5"/>
+                                                    <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="22"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="um1-VF-Ljg" firstAttribute="leading" secondItem="b3K-CH-G0D" secondAttribute="trailing" constant="40" id="5oh-Q2-SOR"/>
+                                                <constraint firstItem="b3K-CH-G0D" firstAttribute="leading" secondItem="eLj-E2-zMH" secondAttribute="leading" constant="15" id="Hza-ID-e6Y"/>
+                                                <constraint firstItem="b3K-CH-G0D" firstAttribute="centerY" secondItem="eLj-E2-zMH" secondAttribute="centerY" id="liP-ax-6go"/>
+                                                <constraint firstItem="um1-VF-Ljg" firstAttribute="centerY" secondItem="eLj-E2-zMH" secondAttribute="centerY" id="mbc-ki-Uxd"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shown below are the locations that we'll send you reminders at" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpg-2v-HdR">
+                                <rect key="frame" x="20.5" y="118" width="373" height="48"/>
+                                <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="PhP-J5-f8e" firstAttribute="bottom" secondItem="feY-aX-a4L" secondAttribute="bottom" id="5l4-RR-H0E"/>
+                            <constraint firstItem="Kpg-2v-HdR" firstAttribute="width" secondItem="xIV-E9-GvQ" secondAttribute="width" multiplier="0.9" id="85r-Fh-0Og"/>
+                            <constraint firstItem="Kpg-2v-HdR" firstAttribute="centerX" secondItem="xIV-E9-GvQ" secondAttribute="centerX" id="8ZN-zi-rsg"/>
+                            <constraint firstItem="Kpg-2v-HdR" firstAttribute="top" secondItem="PhP-J5-f8e" secondAttribute="top" constant="30" id="YFT-2g-84a"/>
+                            <constraint firstItem="PhP-J5-f8e" firstAttribute="trailing" secondItem="feY-aX-a4L" secondAttribute="trailing" constant="10" id="dLo-hN-Xpm"/>
+                            <constraint firstItem="feY-aX-a4L" firstAttribute="leading" secondItem="PhP-J5-f8e" secondAttribute="leading" constant="10" id="dUi-E0-K8P"/>
+                            <constraint firstItem="feY-aX-a4L" firstAttribute="top" secondItem="Kpg-2v-HdR" secondAttribute="bottom" constant="30" id="fol-hG-Sxg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="PhP-J5-f8e"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ES3-Fi-lvW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1358" y="-265"/>
         </scene>
         <!--Delete Account-->
         <scene sceneID="u7k-ON-krJ">
@@ -591,7 +679,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Fi-T2-Rvr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2133" y="-265"/>
+            <point key="canvasLocation" x="2852" y="-265"/>
         </scene>
         <!--Settings-->
         <scene sceneID="2Yd-s8-M2r">
@@ -728,6 +816,7 @@
                         <segue destination="0Ff-O0-qdl" kind="show" identifier="PhoneNotificationsSegue" id="gb9-1q-Vhg"/>
                         <segue destination="Kw6-Lq-zbb" kind="show" identifier="DeleteAccountSegue" id="ltK-kP-8ec"/>
                         <segue destination="feS-qE-CJQ" kind="show" identifier="CreditsSegue" id="4xJ-QL-XgW"/>
+                        <segue destination="4CA-Yj-1Ue" kind="show" identifier="LocationRemindersSegue" id="wlT-oT-Thy"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="69e-yS-uBa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -755,13 +844,27 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="&quot;Location Icon&quot; by designillustration10 from the Noun Project" translatesAutoresizingMaskIntoConstraints="NO" id="3KE-ZN-NU9">
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3KE-ZN-NU9">
                                             <rect key="frame" x="15" y="0.0" width="384" height="60"/>
                                             <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="60" id="rRi-Ms-4Lv"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
+                                            <attributedString key="attributedText">
+                                                <fragment content="&quot;Location&quot; ">
+                                                    <attributes>
+                                                        <color key="NSBackgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="0.0" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                        <font key="NSFont" metaFont="system" size="17"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    </attributes>
+                                                </fragment>
+                                                <fragment content=" by designillustration10 from the Noun Project">
+                                                    <attributes>
+                                                        <font key="NSFont" metaFont="system" size="17"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                         </textView>
@@ -787,7 +890,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qeG-v4-ihS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1386.9565217391305" y="-994.41964285714278"/>
+            <point key="canvasLocation" x="2103" y="-265"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1kN-hu-VYm">

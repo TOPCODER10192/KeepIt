@@ -41,6 +41,7 @@ struct Constants {
             static let welcome        = "WelcomeVC"
             static let singleItem     = "SingleItemVC"
             static let updateLocation = "UpdateLocationVC"
+            static let addHotSpot     = "AddHotSpotVC"
             
             static let settings       = "SettingsVC"
             
@@ -97,6 +98,7 @@ struct Constants {
             static let annotation: CGFloat     = 40
             static let updateLocation: CGFloat = 150
             static let itemHeader: CGFloat     = 200
+            static let addHotSpot: CGFloat     = min(550, UIScreen.main.bounds.height - 60)
             
         }
         
@@ -135,6 +137,16 @@ struct Constants {
             static let lastUpdateDate = "itemLastUpdated"
             static let location       = "itemLocation"
             static let imageURL       = "imageURL"
+            
+        }
+        
+        struct GeoFence {
+            
+            static let name           = "fenceName"
+            static let center         = "fenceCenter"
+            static let radius         = "fenceRadius"
+            static let triggerOnEntry = "fenceTriggerOnEntry"
+            static let triggerOnExit  = "fenceTriggerOnExit"
             
         }
     

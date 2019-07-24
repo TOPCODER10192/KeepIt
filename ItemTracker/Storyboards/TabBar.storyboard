@@ -13,6 +13,9 @@
         <array key="SF-Pro-Text-Regular.otf">
             <string>SFProText-Regular</string>
         </array>
+        <array key="SF-Pro-Text-Semibold.otf">
+            <string>SFProText-Semibold</string>
+        </array>
     </customFonts>
     <scenes>
         <!--Items-->
@@ -167,7 +170,7 @@
                                         <color key="tintColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                     </mapView>
                                     <searchBar contentMode="redraw" placeholder="Search for an item" translatesAutoresizingMaskIntoConstraints="NO" id="AKu-D1-C9b" customClass="RoundedSearchBar" customModule="ItemTracker" customModuleProvider="target">
-                                        <rect key="frame" x="20.5" y="20" width="373" height="40"/>
+                                        <rect key="frame" x="20.5" y="10" width="373" height="40"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="ywn-cM-mND"/>
@@ -181,7 +184,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </searchBar>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fuh-kH-KA6" userLabel="Prev Button" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
-                                        <rect key="frame" x="289" y="624" width="40" height="60"/>
+                                        <rect key="frame" x="289" y="634" width="40" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="TYs-JL-wNr"/>
@@ -198,7 +201,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wUD-Rp-38d" userLabel="Next Button" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
-                                        <rect key="frame" x="334" y="624" width="40" height="60"/>
+                                        <rect key="frame" x="334" y="634" width="40" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="Jp1-GV-luZ"/>
@@ -214,19 +217,60 @@
                                             <action selector="nextButtonTapped:" destination="mLa-WI-aFu" eventType="touchUpInside" id="1GC-t9-o3x"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qQS-sg-kqc" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
+                                        <rect key="frame" x="223.5" y="55" width="170" height="35"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="1p6-YL-TcJ"/>
+                                            <constraint firstAttribute="width" constant="170" id="yiM-iJ-pCp"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
+                                        <state key="normal" title="Add Hot Spot">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="17.5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="addHotSpotButtonTapped:" destination="mLa-WI-aFu" eventType="touchUpInside" id="xfd-uV-jst"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vhd-JD-hQW" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
+                                        <rect key="frame" x="40" y="634" width="60" height="60"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="vhd-JD-hQW" secondAttribute="height" id="7gX-8e-DQI"/>
+                                            <constraint firstAttribute="height" constant="60" id="VfP-rR-HiC"/>
+                                        </constraints>
+                                        <state key="normal" image="ZoomIcon"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="30"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="zoomToUserButtonTapped:" destination="mLa-WI-aFu" eventType="touchUpInside" id="rf6-Be-SbL"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="qQS-sg-kqc" firstAttribute="top" secondItem="AKu-D1-C9b" secondAttribute="bottom" constant="5" id="17C-G4-CRL"/>
+                                    <constraint firstItem="vhd-JD-hQW" firstAttribute="bottom" secondItem="Fuh-kH-KA6" secondAttribute="bottom" id="4tW-IP-i2q"/>
                                     <constraint firstAttribute="trailing" secondItem="wUD-Rp-38d" secondAttribute="trailing" constant="40" id="BiN-kX-oJ2"/>
-                                    <constraint firstItem="AKu-D1-C9b" firstAttribute="top" secondItem="Gd8-XR-K5U" secondAttribute="top" constant="20" id="IPo-fg-OoM"/>
+                                    <constraint firstItem="qQS-sg-kqc" firstAttribute="trailing" secondItem="AKu-D1-C9b" secondAttribute="trailing" id="EQE-fm-c7q"/>
+                                    <constraint firstItem="AKu-D1-C9b" firstAttribute="top" secondItem="Gd8-XR-K5U" secondAttribute="top" constant="10" id="IPo-fg-OoM"/>
                                     <constraint firstAttribute="bottom" secondItem="pQt-in-eIq" secondAttribute="bottom" id="KQQ-b5-R3k"/>
                                     <constraint firstItem="AKu-D1-C9b" firstAttribute="width" secondItem="Gd8-XR-K5U" secondAttribute="width" multiplier="0.9" id="LdU-dp-xUK"/>
                                     <constraint firstItem="AKu-D1-C9b" firstAttribute="centerX" secondItem="Gd8-XR-K5U" secondAttribute="centerX" id="cFH-jZ-M2n"/>
-                                    <constraint firstAttribute="bottom" secondItem="wUD-Rp-38d" secondAttribute="bottom" constant="40" id="ggl-gC-LYg"/>
+                                    <constraint firstAttribute="bottom" secondItem="wUD-Rp-38d" secondAttribute="bottom" constant="30" id="ggl-gC-LYg"/>
                                     <constraint firstItem="pQt-in-eIq" firstAttribute="top" secondItem="Gd8-XR-K5U" secondAttribute="top" id="iYm-VB-XNA"/>
                                     <constraint firstAttribute="trailing" secondItem="pQt-in-eIq" secondAttribute="trailing" id="il6-Hp-bFl"/>
                                     <constraint firstItem="pQt-in-eIq" firstAttribute="leading" secondItem="Gd8-XR-K5U" secondAttribute="leading" id="nMZ-yv-FJR"/>
                                     <constraint firstItem="wUD-Rp-38d" firstAttribute="leading" secondItem="Fuh-kH-KA6" secondAttribute="trailing" constant="5" id="ozk-NX-IhP"/>
+                                    <constraint firstItem="vhd-JD-hQW" firstAttribute="leading" secondItem="Gd8-XR-K5U" secondAttribute="leading" constant="40" id="pQo-vR-lL6"/>
                                     <constraint firstItem="Fuh-kH-KA6" firstAttribute="centerY" secondItem="wUD-Rp-38d" secondAttribute="centerY" id="vyi-iQ-nJv"/>
                                 </constraints>
                             </view>
@@ -245,11 +289,13 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="MapIcon" id="VMN-8s-dBZ"/>
                     <connections>
+                        <outlet property="addHotSpotButton" destination="qQS-sg-kqc" id="J5Z-sk-7ch"/>
                         <outlet property="mapSearchBar" destination="AKu-D1-C9b" id="4sQ-lq-6AA"/>
                         <outlet property="mapView" destination="pQt-in-eIq" id="d60-UE-cZC"/>
                         <outlet property="navigationBar" destination="jTJ-Dv-OWm" id="oWe-sy-Z8Z"/>
                         <outlet property="nextAnnotationButton" destination="wUD-Rp-38d" id="FLH-MC-XXr"/>
                         <outlet property="prevAnnotationButton" destination="Fuh-kH-KA6" id="Mbt-OV-G2N"/>
+                        <outlet property="zoomToUserButton" destination="vhd-JD-hQW" id="7T8-uw-L6h"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="459-rB-BZh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -282,5 +328,6 @@
         <image name="NextButton" width="30" height="50"/>
         <image name="PreviousButton" width="30" height="50"/>
         <image name="Settings Icon" width="30" height="30"/>
+        <image name="ZoomIcon" width="42" height="42"/>
     </resources>
 </document>

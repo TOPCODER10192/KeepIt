@@ -8,11 +8,15 @@
 
 import UIKit
 import Firebase
+import CoreLocation
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    let locationManager = CLLocationManager()
+
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -26,6 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if Stored.user != nil {
             
             LocalStorageService.listItems()
+            LocalStorageService.listGeoFences()
             
             // Create the Tab Bar Controller
             let tabBarVC = UIStoryboard(name: Constants.ID.Storyboard.tabBar, bundle: .main).instantiateViewController(withIdentifier: Constants.ID.VC.tabBar) as! UITabBarController
@@ -38,6 +43,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.makeKeyAndVisible()
             
         }
+        
+        locationManager.delegate = self
+        
+        let options: UNAuthorizationOptions = [.badge, .sound, .alert]
+        UNUserNotificationCenter.current()
+            .requestAuthorization(options: options) { success, error in
+                if let error = error {
+                    print("Error: \(error)")
+                }
+        }
+
         
         return true
     }
@@ -58,6 +74,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+        application.applicationIconBadgeNumber = 0
+        
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -65,5 +84,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
+}
+
+extension AppDelegate: CLLocationManagerDelegate {
+    
+    func handleEvent(for region: CLRegion!) {
+        
+        // Otherwise present a local notification
+        guard let body = note(from: region.identifier) else { return }
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.body = body
+        notificationContent.sound = UNNotificationSound.default
+        notificationContent.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: "location_change",
+                                            content: notificationContent,
+                                            trigger: trigger)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error: \(error)")
+            }
+        }
+        
+    }
+
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        
+        if region is CLCircularRegion {
+            handleEvent(for: region)
+        }
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        
+        if region is CLCircularRegion {
+            handleEvent(for: region)
+        }
+        
+    }
+    
+    func note(from identifier: String) -> String? {
+        
+        return "You've crossed a geofence"
+        
+    }
 }
 

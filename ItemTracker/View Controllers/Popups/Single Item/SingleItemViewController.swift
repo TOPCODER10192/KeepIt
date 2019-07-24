@@ -24,7 +24,6 @@ class SingleItemViewController: UIViewController {
     // MARK: - IBOutlet Properties
     @IBOutlet var dimView: UIView!
     
-    @IBOutlet weak var floatingView: UIView!
     @IBOutlet weak var floatingViewWidth: NSLayoutConstraint!
     @IBOutlet weak var floatingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var floatingViewYConstraint: NSLayoutConstraint!

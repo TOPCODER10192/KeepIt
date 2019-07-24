@@ -71,6 +71,31 @@ final class LocalStorageService {
         
     }
     
+    static func createGeoFence(geoFence: GeoFence) {
+        
+        // Pull all the existing array from local storage
+        var names         = defaults.value(forKey: Constants.Key.GeoFence.name)           as? [String]   ?? [String]()
+        var centers       = defaults.value(forKey: Constants.Key.GeoFence.center)         as? [[Double]] ?? [[Double]]()
+        var radii         = defaults.value(forKey: Constants.Key.GeoFence.radius)         as? [Double]   ?? [Double]()
+        var entryTriggers = defaults.value(forKey: Constants.Key.GeoFence.triggerOnEntry) as? [Bool]     ?? [Bool]()
+        var exitTriggers  = defaults.value(forKey: Constants.Key.GeoFence.triggerOnExit)  as? [Bool]     ?? [Bool]()
+        
+        // Append the new  geofence
+        names         += [geoFence.name]
+        centers       += [geoFence.centreCoordinate]
+        radii         += [geoFence.radius]
+        entryTriggers += [geoFence.triggerOnEntrance]
+        exitTriggers  += [geoFence.triggerOnExit]
+        
+        // Place the arrays back in local storage
+        defaults.set(names, forKey: Constants.Key.GeoFence.name)
+        defaults.set(centers, forKey: Constants.Key.GeoFence.center)
+        defaults.set(radii, forKey: Constants.Key.GeoFence.radius)
+        defaults.set(entryTriggers, forKey: Constants.Key.GeoFence.triggerOnEntry)
+        defaults.set(exitTriggers, forKey: Constants.Key.GeoFence.triggerOnExit)
+        
+    }
+    
     // MARK: - Read Methods
     static func getUser() {
         
@@ -123,6 +148,34 @@ final class LocalStorageService {
         
         // Store the user and their items in a variable
         Stored.userItems = items
+        
+    }
+    
+    static func listGeoFences() {
+        
+        // Pull all the existing array from local storage
+        var names         = defaults.value(forKey: Constants.Key.GeoFence.name)           as? [String]   ?? [String]()
+        var centers       = defaults.value(forKey: Constants.Key.GeoFence.center)         as? [[Double]] ?? [[Double]]()
+        var radii         = defaults.value(forKey: Constants.Key.GeoFence.radius)         as? [Double]   ?? [Double]()
+        var entryTriggers = defaults.value(forKey: Constants.Key.GeoFence.triggerOnEntry) as? [Bool]     ?? [Bool]()
+        var exitTriggers  = defaults.value(forKey: Constants.Key.GeoFence.triggerOnExit)  as? [Bool]     ?? [Bool]()
+        
+        var geoFences = [GeoFence]()
+        
+        // Iterate through the arrays
+        for i in 0 ..< names.count {
+            
+            // Append a geofence
+            geoFences.append(GeoFence(name: names[i],
+                                      centreCoordinate: centers[i],
+                                      radius: radii[i],
+                                      triggerOnEntrance: entryTriggers[i],
+                                      triggerOnExit: exitTriggers[i]))
+            
+        }
+        
+        // Store it in the stored variables
+        Stored.geoFences = geoFences
         
     }
     

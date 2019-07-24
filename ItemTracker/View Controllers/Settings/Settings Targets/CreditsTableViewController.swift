@@ -48,7 +48,10 @@ class CreditsTableViewController: UITableViewController {
                                url: "https://thenounproject.com/search/?q=map&i=1173392"),
                     CreditCell(title: "\"call\"",
                                text: "\"call\"\n by Gregor Cresnar from the Noun Project",
-                               url: "https://thenounproject.com/search/?q=phone%20notification&i=625941")]
+                               url: "https://thenounproject.com/search/?q=phone%20notification&i=625941"),
+                    CreditCell(title: "\"direction pointer\"",
+                               text: "\"direction pointer\" by Andrejs Kirma from the Noun Project",
+                               url: "https://thenounproject.com/search/?q=user%20location%20arrow&i=2692610")]
     
     // MARK: - View Methods
     override func viewDidLoad() {

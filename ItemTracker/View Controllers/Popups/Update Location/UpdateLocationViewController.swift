@@ -21,12 +21,10 @@ class UpdateLocationViewController: UIViewController {
     // MARK: - IBOutlet Properties
     @IBOutlet var dimView: UIView!
     
-    @IBOutlet weak var floatingView: UIView!
     @IBOutlet weak var floatingViewWidth: NSLayoutConstraint!
     @IBOutlet weak var floatingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var floatingViewYConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var backButton: UIBarButtonItem!
     
     @IBOutlet weak var updateTableView: UITableView!
@@ -48,6 +46,9 @@ class UpdateLocationViewController: UIViewController {
 
         // Setup the dim view
         dimView.backgroundColor = UIColor.clear
+        
+        // Setup the back button
+        backButton.tintColor = Constants.Color.primary
         
         // Setup the floating view
         floatingViewWidth.constant       = Constants.View.Width.standard
