@@ -15,5 +15,6 @@ struct GeoFence {
     let radius: Double
     let triggerOnEntrance: Bool
     let triggerOnExit: Bool
+    let id: String
     
 }

@@ -79,6 +79,7 @@ final class LocalStorageService {
         var radii         = defaults.value(forKey: Constants.Key.GeoFence.radius)         as? [Double]   ?? [Double]()
         var entryTriggers = defaults.value(forKey: Constants.Key.GeoFence.triggerOnEntry) as? [Bool]     ?? [Bool]()
         var exitTriggers  = defaults.value(forKey: Constants.Key.GeoFence.triggerOnExit)  as? [Bool]     ?? [Bool]()
+        var ids           = defaults.value(forKey: Constants.Key.GeoFence.id)             as? [String]   ?? [String]()
         
         // Append the new  geofence
         names         += [geoFence.name]
@@ -86,6 +87,7 @@ final class LocalStorageService {
         radii         += [geoFence.radius]
         entryTriggers += [geoFence.triggerOnEntrance]
         exitTriggers  += [geoFence.triggerOnExit]
+        ids           += [geoFence.id]
         
         // Place the arrays back in local storage
         defaults.set(names, forKey: Constants.Key.GeoFence.name)
@@ -93,6 +95,7 @@ final class LocalStorageService {
         defaults.set(radii, forKey: Constants.Key.GeoFence.radius)
         defaults.set(entryTriggers, forKey: Constants.Key.GeoFence.triggerOnEntry)
         defaults.set(exitTriggers, forKey: Constants.Key.GeoFence.triggerOnExit)
+        defaults.set(ids, forKey: Constants.Key.GeoFence.id)
         
     }
     
@@ -159,6 +162,7 @@ final class LocalStorageService {
         var radii         = defaults.value(forKey: Constants.Key.GeoFence.radius)         as? [Double]   ?? [Double]()
         var entryTriggers = defaults.value(forKey: Constants.Key.GeoFence.triggerOnEntry) as? [Bool]     ?? [Bool]()
         var exitTriggers  = defaults.value(forKey: Constants.Key.GeoFence.triggerOnExit)  as? [Bool]     ?? [Bool]()
+        var ids           = defaults.value(forKey: Constants.Key.GeoFence.id)             as? [String]   ?? [String]()
         
         var geoFences = [GeoFence]()
         
@@ -170,7 +174,8 @@ final class LocalStorageService {
                                       centreCoordinate: centers[i],
                                       radius: radii[i],
                                       triggerOnEntrance: entryTriggers[i],
-                                      triggerOnExit: exitTriggers[i]))
+                                      triggerOnExit: exitTriggers[i],
+                                      id: ids[i]))
             
         }
         

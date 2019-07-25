@@ -1,5 +1,5 @@
 //
-//  AddHotSpotViewController.swift
+//  AddGeoFenceViewController.swift
 //  ItemTracker
 //
 //  Created by Brock Chelle on 2019-07-24.
@@ -16,7 +16,7 @@ protocol AddGeoFenceProtocol {
     
 }
 
-class AddHotSpotViewController: UIViewController {
+class AddGeoFenceViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet var dimView: UIView!
@@ -27,14 +27,18 @@ class AddHotSpotViewController: UIViewController {
     @IBOutlet weak var floatingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var floatingViewY: NSLayoutConstraint!
     
-    @IBOutlet weak var hotSpotNameTextField: UITextField!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var geoFenceNameTextField: UITextField!
+    
+    @IBOutlet weak var remindersLabel: UILabel!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
+    @IBOutlet weak var mapLabel: UILabel!
     @IBOutlet weak var mapSearchBar: RoundedSearchBar!
     @IBOutlet weak var radiusTextField: UITextField!
     @IBOutlet weak var mapView: MKMapView!
     
-    @IBOutlet weak var addHotSpotButton: RoundedButton!
+    @IBOutlet weak var addGeoFenceButton: RoundedButton!
     
     // MARK: - Properties
     let locationManager = CLLocationManager()
@@ -45,6 +49,7 @@ class AddHotSpotViewController: UIViewController {
     var radius: Double = 200
     var triggerOnEntrance: Bool = true
     var triggerOnExit: Bool = false
+    let uid: String = UUID().uuidString
     
     
     // MARK: - View Methods
@@ -59,12 +64,17 @@ class AddHotSpotViewController: UIViewController {
         
         // Setup the floatingView
         floatingViewWidth.constant     = Constants.View.Width.standard
-        floatingViewHeight.constant    = Constants.View.Height.addHotSpot
+        floatingViewHeight.constant    = Constants.View.Height.addGeoFence
         floatingViewY.constant         = UIScreen.main.bounds.height
         
+        // Setup the labels
+        nameLabel.adjustsFontSizeToFitWidth = true
+        remindersLabel.adjustsFontSizeToFitWidth = true
+        mapLabel.adjustsFontSizeToFitWidth = true
+        
         // Setup the text field
-        hotSpotNameTextField.delegate  = self
-        hotSpotNameTextField.tintColor = Constants.Color.primary
+        geoFenceNameTextField.delegate  = self
+        geoFenceNameTextField.tintColor = Constants.Color.primary
         
         // Set up the segmented control
         segmentedControl.tintColor     = Constants.Color.primary
@@ -76,6 +86,7 @@ class AddHotSpotViewController: UIViewController {
         mapView.layer.borderColor      = Constants.Color.primary.cgColor
         mapView.tintColor              = Constants.Color.primary
         mapView.showsUserLocation      = false
+        centerMapOnUser(span: Constants.Map.defaultSpan)
         
         // Setup the Map Search Bar
         mapSearchBar.delegate          = self
@@ -87,8 +98,8 @@ class AddHotSpotViewController: UIViewController {
         radiusTextField.delegate       = self
         radiusTextField.tintColor      = Constants.Color.primary
         
-        // Set up the add hot spot button
-        addHotSpotButton.activateButton(isActivated: false , color: Constants.Color.inactiveButton)
+        // Set up the add geoFence button
+        addGeoFenceButton.activateButton(isActivated: false , color: Constants.Color.inactiveButton)
         
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
@@ -96,13 +107,13 @@ class AddHotSpotViewController: UIViewController {
         toolBar.setItems([doneButton], animated: false)
         radiusTextField.inputAccessoryView = toolBar
         
-        // Check Location Services
-        setupLocationManager()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        // Check Location Services
+        setupLocationManager()
         
         // Slide the view in
         slideViewIn()
@@ -111,7 +122,7 @@ class AddHotSpotViewController: UIViewController {
 }
 
 // MARK: - Navigation Bar Methods
-extension AddHotSpotViewController {
+extension AddGeoFenceViewController {
     
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         
@@ -123,12 +134,12 @@ extension AddHotSpotViewController {
 }
 
 // MARK: - Text Field Methods
-extension AddHotSpotViewController: UITextFieldDelegate {
+extension AddGeoFenceViewController: UITextFieldDelegate {
     
-    @IBAction func hotSpotNameTextFieldEditing(_ sender: Any) {
+    @IBAction func geoFenceNameTextFieldEditing(_ sender: UITextField) {
         
         // Get the name from the text field
-        name = hotSpotNameTextField.text?.trimmingCharacters(in: .whitespaces)
+        name = geoFenceNameTextField.text?.trimmingCharacters(in: .whitespaces)
         
         // Check to see if the button should be activated
         checkToActivateButton()
@@ -136,6 +147,8 @@ extension AddHotSpotViewController: UITextFieldDelegate {
     }
     
     @IBAction func radiusTextFieldDoneEditing(_ sender: UITextField) {
+        
+        guard mapView.overlays.count > 0 else { return }
         
         drawGeoFence(center: mapView.overlays[0].coordinate)
         
@@ -173,7 +186,7 @@ extension AddHotSpotViewController: UITextFieldDelegate {
 }
 
 // MARK: - Segmented Control Methods
-extension AddHotSpotViewController {
+extension AddGeoFenceViewController {
     
     @IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         
@@ -197,7 +210,7 @@ extension AddHotSpotViewController {
 }
 
 // MARK: - Map Methods
-extension AddHotSpotViewController: MKMapViewDelegate {
+extension AddGeoFenceViewController: MKMapViewDelegate {
     
     @IBAction func mapViewHeld(_ sender: UILongPressGestureRecognizer) {
         
@@ -225,6 +238,16 @@ extension AddHotSpotViewController: MKMapViewDelegate {
         
     }
     
+    func centerMapOnGeoFence(coordinates: CLLocationCoordinate2D) {
+        
+        // Get the region
+        let region = MKCoordinateRegion(center: coordinates, span: Constants.Map.defaultSpan)
+        
+        // Center the map on the region
+        mapView.setRegion(region, animated: true)
+        
+    }
+    
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
         // Check if the overlay can be cast as an MKCircle
@@ -234,7 +257,7 @@ extension AddHotSpotViewController: MKMapViewDelegate {
         
         circleRenderer.strokeColor = Constants.Color.primary
         circleRenderer.lineWidth   = 5
-        circleRenderer.fillColor   = Constants.Color.primary
+        circleRenderer.fillColor   = Constants.Color.softPrimary
         circleRenderer.alpha       = 0.5
         
         return circleRenderer
@@ -243,11 +266,10 @@ extension AddHotSpotViewController: MKMapViewDelegate {
     func centerMapOnUser(span: MKCoordinateSpan) {
         
         // Get the users location
-        let location = locationManager.location?.coordinate
-        guard location != nil else { return }
+        guard let location = locationManager.location?.coordinate else { return }
         
         // Get the center and the region
-        let center = location!
+        let center = location
         let region = MKCoordinateRegion.init(center: center, span: span)
         
         // Set the region
@@ -258,7 +280,7 @@ extension AddHotSpotViewController: MKMapViewDelegate {
 }
 
 // MARK: - Location Methods
-extension AddHotSpotViewController: CLLocationManagerDelegate {
+extension AddGeoFenceViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
@@ -317,32 +339,75 @@ extension AddHotSpotViewController: CLLocationManagerDelegate {
 }
 
 // MARK: - Search Bar Methods
-extension AddHotSpotViewController: UISearchBarDelegate {
+extension AddGeoFenceViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        // Lower the keyboard
+        searchBar.resignFirstResponder()
+        
+        // Create the search request
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = searchBar.text
+        
+        // Create an active search based off the search request and start the search
+        let activeSearch = MKLocalSearch(request: searchRequest)
+        activeSearch.start { (response, error) in
+            
+            // If the search was unsuccessful then present an error message
+            guard response != nil && error == nil else { return }
+            
+            // Get the coordinates of the location searched
+            let latitude = response?.boundingRegion.center.latitude
+            let longitude = response?.boundingRegion.center.longitude
+            
+            // Check that the coordinates are not nil
+            guard latitude != nil && longitude != nil else { return }
+            let coordinates = CLLocationCoordinate2DMake(latitude!, longitude!)
+            
+            // Create the annotation for the item
+            self.drawGeoFence(center: coordinates)
+            self.centerMapOnGeoFence(coordinates: coordinates)
+            
+            // Check to see if the item should be activated
+            self.checkToActivateButton()
+            
+        }
+        
+    }
     
 }
 
 // MARK: - Add Button Methods
-extension AddHotSpotViewController {
+extension AddGeoFenceViewController {
     
     func checkToActivateButton() {
         
         // Check if all the info is filled
         guard name != nil, name!.count > 0, center != nil else {
-            addHotSpotButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+            addGeoFenceButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
             return
         }
         
-        addHotSpotButton.activateButton(isActivated: true, color: Constants.Color.primary)
+        addGeoFenceButton.activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
     
-    @IBAction func addHotSpotButtonTapped(_ sender: RoundedButton) {
+    @IBAction func addGeoFenceButtonTapped(_ sender: RoundedButton) {
+
+        // Check if the device supports geofencing
+        if CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) == false {
+            present(AlertService.createGeneralAlert(description: "Geofencing Not Available On This Device"),
+                    animated: true, completion: nil)
+            return
+        }
         
         let geoFence = GeoFence(name: name!,
                                 centreCoordinate: center!,
                                 radius: radius,
                                 triggerOnEntrance: triggerOnEntrance,
-                                triggerOnExit: triggerOnExit)
+                                triggerOnExit: triggerOnExit,
+                                id: uid)
         
         LocalStorageService.createGeoFence(geoFence: geoFence)
         Stored.geoFences.append(geoFence)
@@ -356,7 +421,7 @@ extension AddHotSpotViewController {
 }
 
 // MARK: - Animation Methods
-extension AddHotSpotViewController {
+extension AddGeoFenceViewController {
     
     func slideViewIn() {
         
@@ -406,14 +471,9 @@ extension AddHotSpotViewController {
     
     func lowerKeyboard() {
         
-        hotSpotNameTextField.resignFirstResponder()
+        geoFenceNameTextField.resignFirstResponder()
         mapSearchBar.resignFirstResponder()
         
     }
-    
-}
-
-// MARK: - Helper Methods
-extension AddHotSpotViewController {
     
 }

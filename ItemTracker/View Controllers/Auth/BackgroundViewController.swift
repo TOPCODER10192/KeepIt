@@ -60,8 +60,7 @@ extension BackgroundViewController {
             vc.delegate = self
         }
         else if let vc = vc as? WelcomeViewController {
-            // Set the delegate for the WelcomeViewController
-            vc.delegate = self
+            
         }
         
         // Set the presentation style for the VC and present the VC
@@ -73,7 +72,7 @@ extension BackgroundViewController {
 }
 
 // MARK:- Methods that conform to the LoginProtocol
-extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, ForgotPasswordProtocol, WelcomeProtocol {
+extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, ForgotPasswordProtocol {
     
     func goToInApp() {
         

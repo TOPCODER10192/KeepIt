@@ -276,6 +276,26 @@ extension LoginViewController {
         
     }
     
+    func checkIfFirstLaunch() {
+        
+        guard UserDefaults.standard.value(forKey: "IsFirstLaunch") == nil else { return }
+        
+        // Present the welcomeVC
+        loadWelcomeVC()
+        
+    }
+    
+    func loadWelcomeVC(){
+        
+        guard let welcomeVC = storyboard?.instantiateViewController(withIdentifier: Constants.ID.VC.welcome) as? WelcomeViewController else {
+            return
+        }
+        
+        welcomeVC.modalPresentationStyle = .overCurrentContext
+        present(welcomeVC, animated: true, completion: nil)
+        
+    }
+    
 }
 
 // MARK: - Animation Methods
@@ -286,10 +306,15 @@ extension LoginViewController {
         // Slide the view in to the center
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             
-            self.floatingViewToCenterX.constant = 0
-            self.view.layoutIfNeeded()
+                self.floatingViewToCenterX.constant = 0
+                self.view.layoutIfNeeded()
             
-        }, completion: nil)
+        }) { (true) in
+            
+            // Check if the first time launching the app
+            self.checkIfFirstLaunch()
+            
+        }
         
     }
     

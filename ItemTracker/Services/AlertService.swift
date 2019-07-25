@@ -25,12 +25,6 @@ class AlertService {
         let settingsAlert = UIAlertController(title: title,
                                               message: message ,
                                               preferredStyle: .alert)
-        
-        settingsAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in
-            
-                cancelAction?()
-                                                
-        }))
             
         settingsAlert.addAction(UIAlertAction(title: "Go to Settings",
                                               style: .default,
@@ -41,7 +35,34 @@ class AlertService {
             
         }))
         
+        settingsAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in
+            
+            cancelAction?()
+            
+        }))
+        
         return settingsAlert
+    }
+    
+    static func createLocationServicesAlert() -> UIAlertController {
+        
+        // Pop up a notification that tells the user how to allow location
+        let locationAlert = UIAlertController(title: "Turn On Location Services to Allow \"ItemTracker\" to Determine Your Location",
+                                              message: nil,
+                                              preferredStyle: .alert)
+        
+        locationAlert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (action) in
+                                                
+            // Go to the settings app
+            UIApplication.shared.open(URL(string: "App-prefs:root=LOCATION_SERVICES")!)
+                                                
+                                                
+        }))
+        
+        locationAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        
+        return locationAlert
+        
     }
     
 }

@@ -41,7 +41,7 @@ struct Constants {
             static let welcome        = "WelcomeVC"
             static let singleItem     = "SingleItemVC"
             static let updateLocation = "UpdateLocationVC"
-            static let addHotSpot     = "AddHotSpotVC"
+            static let addGeoFence     = "AddGeoFenceVC"
             
             static let settings       = "SettingsVC"
             
@@ -83,7 +83,7 @@ struct Constants {
         // MARK: - Width
         struct Width {
             
-            static let standard: CGFloat   = min(420, UIScreen.main.bounds.width - 20)
+            static let standard: CGFloat   = min(450, UIScreen.main.bounds.width - 20)
             static let annotation: CGFloat = 40
             
         }
@@ -98,7 +98,7 @@ struct Constants {
             static let annotation: CGFloat     = 40
             static let updateLocation: CGFloat = 150
             static let itemHeader: CGFloat     = 200
-            static let addHotSpot: CGFloat     = min(550, UIScreen.main.bounds.height - 60)
+            static let addGeoFence: CGFloat     = min(700, UIScreen.main.bounds.height - 60)
             
         }
         
@@ -142,6 +142,7 @@ struct Constants {
         
         struct GeoFence {
             
+            static let id             = "fenceID"
             static let name           = "fenceName"
             static let center         = "fenceCenter"
             static let radius         = "fenceRadius"

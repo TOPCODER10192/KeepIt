@@ -8,6 +8,7 @@
 
 import Foundation
 import UserNotifications
+import CoreLocation
 
 class NotificationService {
     
@@ -23,6 +24,7 @@ class NotificationService {
             
             // Create the notification content
             let content = UNMutableNotificationContent()
+            content.sound = UNNotificationSound.default
             content.title = "Time to update your item locations!"
             
             // Create the notification trigger
@@ -50,6 +52,24 @@ class NotificationService {
                 guard error == nil else { return }
                 
             })
+            
+        }
+        
+    }
+    
+    static func createLocationNotification() {
+        
+        // Create the notification content
+        let content = UNMutableNotificationContent()
+        content.sound = UNNotificationSound.default
+        content.title = "Time to update your item locations!"
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: "LocationNotification", content: content, trigger: trigger)
+        
+        center.add(request) { (error) in
+            
+            guard error == nil else { return }
             
         }
         

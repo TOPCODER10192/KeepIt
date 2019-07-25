@@ -11,7 +11,7 @@ import CoreLocation
 
 protocol LocationProtocol {
     
-    func locationTapped(access: Bool?)
+    func locationTapped()
     
 }
 
@@ -22,11 +22,18 @@ class LocationsCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var locationButton: UIButton!
     
+    // MARK: - Properties
     let locationManager = CLLocationManager()
     var delegate: LocationProtocol?
     
+    var buttonTapped = false
+    
+    // MARK: - View Methods
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        // Setup the location manager
+        locationManager.delegate = self
         
         // Setup the imageViewContainer
         imageViewContainer.layer.cornerRadius = imageViewContainer.bounds.width / 2
@@ -53,8 +60,10 @@ extension LocationsCollectionViewCell {
     
     @IBAction func locationButtonTapped(_ sender: UIButton) {
         
+        buttonTapped = true
+        
         // Check location services first
-        checkLocationServices()
+        locationManager.requestAlwaysAuthorization()
         
     }
     
@@ -69,48 +78,47 @@ extension LocationsCollectionViewCell {
 }
 
 // MARK: - Location Authorization Methods
-extension LocationsCollectionViewCell {
+extension LocationsCollectionViewCell: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        // Check if the user allowed or denied the location request
+        if buttonTapped == true {
+            checkLocationServices()
+        }
+        
+    }
     
     func checkLocationServices() {
         
-        // If the user has location services enabled then setup the location manager and check authorization
-        if CLLocationManager.locationServicesEnabled() {
+        if CLLocationManager.locationServicesEnabled() == true {
+            // Check the location authorization
             checkLocationAuthorization()
         }
         else {
-            // Let the user know that they have to turn location services on
-            delegate?.locationTapped(access: false)
-            activateButton(isActivated: true, color: UIColor.white)
+            activateButton(isActivated: false, color: Constants.Color.primary)
+            delegate?.locationTapped()
         }
         
     }
     
     func checkLocationAuthorization() {
         
-        // Determine the level of authorization the user has given you
         switch CLLocationManager.authorizationStatus() {
             
-        // Case if its authorized
-        case .authorizedAlways, .authorizedWhenInUse:
-            delegate?.locationTapped(access: true)
+        case .authorizedAlways, .authorizedWhenInUse, .denied, .restricted:
+            // Move to the next page
             activateButton(isActivated: false, color: Constants.Color.primary)
+            delegate?.locationTapped()
             
-        // Case if its not determined
         case .notDetermined:
-            locationManager.requestAlwaysAuthorization()
-            delegate?.locationTapped(access: nil)
-            activateButton(isActivated: false, color: Constants.Color.primary)
-            
-        // Case if no authorization
-        case .restricted, .denied:
-            // Let the user know that they have to turn location services on
-            delegate?.locationTapped(access: false)
-            activateButton(isActivated: true, color: UIColor.white)
+            break
             
         @unknown default:
             break
+            
         }
         
     }
-    
+
 }

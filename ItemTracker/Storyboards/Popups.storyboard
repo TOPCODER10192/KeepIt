@@ -439,10 +439,10 @@
             </objects>
             <point key="canvasLocation" x="-684" y="137"/>
         </scene>
-        <!--Add Hot Spot View Controller-->
+        <!--Add Geo Fence View Controller-->
         <scene sceneID="9qs-oT-H6q">
             <objects>
-                <viewController storyboardIdentifier="AddHotSpotVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Koj-W6-654" customClass="AddHotSpotViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddGeoFenceVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Koj-W6-654" customClass="AddGeoFenceViewController" customModule="ItemTracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="A9D-31-0cZ" userLabel="Dim View">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -456,7 +456,7 @@
                                             <constraint firstAttribute="height" constant="45" id="g99-h9-37g"/>
                                         </constraints>
                                         <items>
-                                            <navigationItem title="Add a Hot Spot" id="ao0-Ag-eGU">
+                                            <navigationItem title="Add a GeoFence" id="ao0-Ag-eGU" userLabel="Add a GeoFence">
                                                 <barButtonItem key="leftBarButtonItem" title="Back" id="SQl-Iw-VfO">
                                                     <connections>
                                                         <action selector="backButtonTapped:" destination="Koj-W6-654" id="OmS-gd-RGt"/>
@@ -476,30 +476,25 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="7q8-Vc-ldy" userLabel="Name SV">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="60"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's the name of your hot spot?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cVp-5B-9JZ">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's the name of your GeoFence?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cVp-5B-9JZ">
                                                         <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="20" id="oBW-0m-loE"/>
-                                                        </constraints>
                                                         <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Hotspot Name (Home, Work, etc...) " textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qyz-BA-zLA">
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="GeoFence Name (Home, Work, etc...) " textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qyz-BA-zLA">
                                                         <rect key="frame" x="0.0" y="25" width="330" height="35"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="35" id="lBA-3x-3Fh"/>
-                                                        </constraints>
                                                         <nil key="textColor"/>
                                                         <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="17"/>
                                                         <textInputTraits key="textInputTraits"/>
                                                         <connections>
-                                                            <action selector="hotSpotNameTextFieldEditing:" destination="Koj-W6-654" eventType="editingChanged" id="HAo-1Y-uaU"/>
+                                                            <action selector="geoFenceNameTextFieldEditing:" destination="Koj-W6-654" eventType="editingChanged" id="jPB-R8-1rk"/>
                                                         </connections>
                                                     </textField>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="60" id="iom-3L-EvA"/>
+                                                    <constraint firstItem="cVp-5B-9JZ" firstAttribute="height" secondItem="7q8-Vc-ldy" secondAttribute="height" multiplier="0.333333" id="Oc1-n5-xW3"/>
+                                                    <constraint firstItem="Qyz-BA-zLA" firstAttribute="height" secondItem="7q8-Vc-ldy" secondAttribute="height" multiplier="0.583333" id="sfp-9n-VVZ"/>
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="gfG-NK-Nn2" userLabel="Reminder SV">
@@ -507,18 +502,12 @@
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When would you like to be reminded?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ojt-Km-9Zs">
                                                         <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="20" id="WnV-hX-lvz"/>
-                                                        </constraints>
                                                         <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="X6j-jc-Brz">
                                                         <rect key="frame" x="0.0" y="25" width="330" height="31"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="EWs-Ld-kDa"/>
-                                                        </constraints>
                                                         <segments>
                                                             <segment title="When Entering"/>
                                                             <segment title="When Leaving"/>
@@ -530,18 +519,16 @@
                                                     </segmentedControl>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="55" id="v0h-i2-EmD"/>
+                                                    <constraint firstItem="X6j-jc-Brz" firstAttribute="height" secondItem="gfG-NK-Nn2" secondAttribute="height" multiplier="0.545455" id="VYI-WL-TkC"/>
+                                                    <constraint firstItem="Ojt-Km-9Zs" firstAttribute="height" secondItem="gfG-NK-Nn2" secondAttribute="height" multiplier="0.363636" id="oxc-fQ-LGK"/>
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="wh2-xn-VbV" userLabel="Map SV">
                                                 <rect key="frame" x="0.0" y="151.5" width="330" height="285"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Move the hot spot to your desired location" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XOA-eQ-J9i">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Move the GeoFence to your desired location" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XOA-eQ-J9i">
                                                         <rect key="frame" x="0.0" y="0.0" width="330" height="20"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="20" id="vlW-9s-40h"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="16"/>
+                                                        <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="15"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -555,8 +542,8 @@
                                                                     <outletCollection property="gestureRecognizers" destination="4sR-1V-EGd" appends="YES" id="WbN-Gg-kuj"/>
                                                                 </connections>
                                                             </mapView>
-                                                            <searchBar contentMode="redraw" placeholder="Search for a location" translatesAutoresizingMaskIntoConstraints="NO" id="S0W-M4-hWJ" customClass="RoundedSearchBar" customModule="ItemTracker" customModuleProvider="target">
-                                                                <rect key="frame" x="5" y="10" width="245" height="30"/>
+                                                            <searchBar contentMode="redraw" placeholder="Search for location" translatesAutoresizingMaskIntoConstraints="NO" id="S0W-M4-hWJ" customClass="RoundedSearchBar" customModule="ItemTracker" customModuleProvider="target">
+                                                                <rect key="frame" x="5" y="10" width="235" height="30"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="30" id="Fij-CV-uK7"/>
@@ -568,14 +555,14 @@
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
                                                             </searchBar>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Radius" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c8z-hh-5DV">
-                                                                <rect key="frame" x="255" y="10" width="70" height="30"/>
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Radius(m)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c8z-hh-5DV">
+                                                                <rect key="frame" x="245" y="10" width="80" height="30"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="70" id="Ubn-rj-J3J"/>
+                                                                    <constraint firstAttribute="width" constant="80" id="Ubn-rj-J3J"/>
                                                                     <constraint firstAttribute="height" constant="30" id="ayX-dt-C0N"/>
                                                                 </constraints>
                                                                 <nil key="textColor"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                                                 <connections>
                                                                     <action selector="radiusTextFieldDoneEditing:" destination="Koj-W6-654" eventType="editingDidEnd" id="fKi-HB-UdC"/>
@@ -593,24 +580,21 @@
                                                             <constraint firstItem="S0W-M4-hWJ" firstAttribute="leading" secondItem="tEN-mb-Gfe" secondAttribute="leading" constant="5" id="scX-Le-OKB"/>
                                                             <constraint firstAttribute="trailing" secondItem="MGG-Y0-8rM" secondAttribute="trailing" id="t6E-Rf-5jK"/>
                                                             <constraint firstItem="c8z-hh-5DV" firstAttribute="top" secondItem="tEN-mb-Gfe" secondAttribute="top" constant="10" id="xyW-Bx-4B8"/>
-                                                            <constraint firstAttribute="height" constant="260" id="zrd-U9-y6F"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="285" id="245-E1-z2U"/>
+                                                    <constraint firstItem="tEN-mb-Gfe" firstAttribute="height" secondItem="wh2-xn-VbV" secondAttribute="height" multiplier="0.912281" id="O3o-me-agR"/>
                                                     <constraint firstItem="XOA-eQ-J9i" firstAttribute="width" secondItem="wh2-xn-VbV" secondAttribute="width" id="pTe-79-Ltr"/>
                                                     <constraint firstItem="XOA-eQ-J9i" firstAttribute="centerX" secondItem="wh2-xn-VbV" secondAttribute="centerX" id="qsP-0d-wFi"/>
+                                                    <constraint firstItem="XOA-eQ-J9i" firstAttribute="height" secondItem="wh2-xn-VbV" secondAttribute="height" multiplier="0.0701754" id="yqN-do-hAm"/>
                                                 </constraints>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lVg-53-7Cg" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="455" width="330" height="40"/>
                                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="DWd-a4-360"/>
-                                                </constraints>
                                                 <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
-                                                <state key="normal" title="Add Item">
+                                                <state key="normal" title="Add GeoFence">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
@@ -619,10 +603,16 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="addHotSpotButtonTapped:" destination="Koj-W6-654" eventType="touchUpInside" id="PTC-Hx-z9d"/>
+                                                    <action selector="addGeoFenceButtonTapped:" destination="Koj-W6-654" eventType="touchUpInside" id="wbL-RV-qDK"/>
                                                 </connections>
                                             </button>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstItem="7q8-Vc-ldy" firstAttribute="height" secondItem="sBw-RQ-yzZ" secondAttribute="height" multiplier="0.121212" id="4Gg-e3-Jcd"/>
+                                            <constraint firstItem="gfG-NK-Nn2" firstAttribute="height" secondItem="sBw-RQ-yzZ" secondAttribute="height" multiplier="0.111111" id="ViQ-81-1wB"/>
+                                            <constraint firstItem="lVg-53-7Cg" firstAttribute="height" secondItem="sBw-RQ-yzZ" secondAttribute="height" multiplier="0.0808081" id="bdN-Ac-AKp"/>
+                                            <constraint firstItem="wh2-xn-VbV" firstAttribute="height" secondItem="sBw-RQ-yzZ" secondAttribute="height" multiplier="0.575758" id="jid-0n-z6V"/>
+                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -652,16 +642,19 @@
                         <viewLayoutGuide key="safeArea" id="ogA-Nt-SnD"/>
                     </view>
                     <connections>
-                        <outlet property="addHotSpotButton" destination="lVg-53-7Cg" id="2Jj-8G-sP1"/>
-                        <outlet property="backButton" destination="SQl-Iw-VfO" id="XOg-ya-MzU"/>
-                        <outlet property="dimView" destination="A9D-31-0cZ" id="v95-CN-UbD"/>
+                        <outlet property="addGeoFenceButton" destination="lVg-53-7Cg" id="pHf-QQ-t4I"/>
+                        <outlet property="backButton" destination="SQl-Iw-VfO" id="eDO-JU-Flg"/>
+                        <outlet property="dimView" destination="A9D-31-0cZ" id="f79-11-oNT"/>
                         <outlet property="floatingViewHeight" destination="77a-ph-K2G" id="A5F-17-pOl"/>
                         <outlet property="floatingViewWidth" destination="n4I-Oz-azt" id="eex-8P-8Dx"/>
                         <outlet property="floatingViewY" destination="gUU-OA-eea" id="P9K-U9-FAn"/>
-                        <outlet property="hotSpotNameTextField" destination="Qyz-BA-zLA" id="UzK-ho-qqj"/>
+                        <outlet property="geoFenceNameTextField" destination="Qyz-BA-zLA" id="2TB-Xn-KJt"/>
+                        <outlet property="mapLabel" destination="XOA-eQ-J9i" id="Mpk-Rp-yjT"/>
                         <outlet property="mapSearchBar" destination="S0W-M4-hWJ" id="2d0-RF-mej"/>
                         <outlet property="mapView" destination="MGG-Y0-8rM" id="iWk-6C-T4J"/>
+                        <outlet property="nameLabel" destination="cVp-5B-9JZ" id="Aw4-Mv-hfg"/>
                         <outlet property="radiusTextField" destination="c8z-hh-5DV" id="87Z-t6-MHq"/>
+                        <outlet property="remindersLabel" destination="Ojt-Km-9Zs" id="f9I-U1-hRL"/>
                         <outlet property="segmentedControl" destination="X6j-jc-Brz" id="F1q-yH-BSY"/>
                     </connections>
                 </viewController>

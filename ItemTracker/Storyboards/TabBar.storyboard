@@ -217,15 +217,15 @@
                                             <action selector="nextButtonTapped:" destination="mLa-WI-aFu" eventType="touchUpInside" id="1GC-t9-o3x"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qQS-sg-kqc" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qQS-sg-kqc" userLabel="Add GeoFence Button" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
                                         <rect key="frame" x="223.5" y="55" width="170" height="35"/>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="1p6-YL-TcJ"/>
                                             <constraint firstAttribute="width" constant="170" id="yiM-iJ-pCp"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="20"/>
-                                        <state key="normal" title="Add Hot Spot">
+                                        <state key="normal" title="Add GeoFence">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <userDefinedRuntimeAttributes>
@@ -234,7 +234,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="addHotSpotButtonTapped:" destination="mLa-WI-aFu" eventType="touchUpInside" id="xfd-uV-jst"/>
+                                            <action selector="addGeoFenceButtonTapped:" destination="mLa-WI-aFu" eventType="touchUpInside" id="1ah-Vh-lJw"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vhd-JD-hQW" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
@@ -289,7 +289,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="MapIcon" id="VMN-8s-dBZ"/>
                     <connections>
-                        <outlet property="addHotSpotButton" destination="qQS-sg-kqc" id="J5Z-sk-7ch"/>
+                        <outlet property="addGeoFenceButton" destination="qQS-sg-kqc" id="QpD-TB-Vax"/>
                         <outlet property="mapSearchBar" destination="AKu-D1-C9b" id="4sQ-lq-6AA"/>
                         <outlet property="mapView" destination="pQt-in-eIq" id="d60-UE-cZC"/>
                         <outlet property="navigationBar" destination="jTJ-Dv-OWm" id="oWe-sy-Z8Z"/>

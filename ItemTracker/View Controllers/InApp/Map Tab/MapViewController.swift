@@ -18,7 +18,7 @@ final class MapViewController: UIViewController {
     
     @IBOutlet weak var mapSearchBar: UISearchBar!
     
-    @IBOutlet weak var addHotSpotButton: RoundedButton!
+    @IBOutlet weak var addGeoFenceButton: RoundedButton!
     
     @IBOutlet weak var zoomToUserButton: RoundedButton!
     @IBOutlet weak var prevAnnotationButton: UIButton!
@@ -38,6 +38,7 @@ final class MapViewController: UIViewController {
         // Setup the mapView
         mapView.delegate                        = self
         mapView.tintColor                       = Constants.Color.primary
+        mapView.showsUserLocation               = true
         
         // Setup the map search bar
         mapSearchBar.layer.borderWidth          = 1
@@ -46,9 +47,9 @@ final class MapViewController: UIViewController {
         mapSearchBar.tintColor                  = Constants.Color.primary
         mapSearchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
-        // Setup the addHotSpot button
-        addHotSpotButton.activateButton(isActivated: true, color: Constants.Color.primary)
-        addHotSpotButton.isHidden = Stored.geoFences.count >= 20
+        // Setup the add geo fence button
+        addGeoFenceButton.activateButton(isActivated: true, color: Constants.Color.primary)
+        addGeoFenceButton.isHidden = Stored.geoFences.count >= 20
         
         // Setup the zoom to user button
         zoomToUserButton.layer.borderWidth      = 1
@@ -65,7 +66,7 @@ final class MapViewController: UIViewController {
         nextAnnotationButton.tintColor          = Constants.Color.primary
         
         // Check the location services
-        setupLocationManager()
+        checkLocationServices()
         
     }
     
@@ -110,9 +111,9 @@ final class MapViewController: UIViewController {
         
     }
     
-    @IBAction func addHotSpotButtonTapped(_ sender: RoundedButton) {
+    @IBAction func addGeoFenceButtonTapped(_ sender: RoundedButton) {
         
-        loadVC(ID: Constants.ID.VC.addHotSpot,
+        loadVC(ID: Constants.ID.VC.addGeoFence,
                sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
                animate: false)
         
@@ -292,7 +293,7 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
         
         circleRenderer.strokeColor = Constants.Color.primary
         circleRenderer.lineWidth   = 5
-        circleRenderer.fillColor   = Constants.Color.primary
+        circleRenderer.fillColor   = Constants.Color.softPrimary
         circleRenderer.alpha       = 0.5
         
         return circleRenderer
@@ -317,13 +318,14 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
         
         let region = CLCircularRegion(center: center,
                                       radius: geoFence.radius,
-                                      identifier: geoFence.name)
+                                      identifier: geoFence.id)
         
         // Get the notification conditions for the geofence
         region.notifyOnEntry = geoFence.triggerOnEntrance
         region.notifyOnExit = geoFence.triggerOnExit
         
         return region
+        
     }
     
 }
@@ -368,9 +370,9 @@ extension MapViewController: CLLocationManagerDelegate {
         }
         else {
             
-            // Hides the zoom to user button and add hot spot button
+            // Hides the zoom to user button and add geofence button
             zoomToUserButton.isHidden = true
-            addHotSpotButton.isHidden = true
+            addGeoFenceButton.isHidden = true
             
             // Let the user know that they have to turn location services on
             present(AlertService.createSettingsAlert(title: "Locations Off", message: "Go to settings to turn your location on", cancelAction: nil),
@@ -388,7 +390,6 @@ extension MapViewController: CLLocationManagerDelegate {
         // Case if its authorized
         case .authorizedAlways, .authorizedWhenInUse:
             zoomToUserButton.isHidden = false
-            mapView.showsUserLocation = true
             centerMapOnUser(span: Constants.Map.defaultSpan)
             
         // Case if its not determined
@@ -402,9 +403,8 @@ extension MapViewController: CLLocationManagerDelegate {
                     animated: true,
                     completion: nil)
             
-            addHotSpotButton.isHidden = true
+            addGeoFenceButton.isHidden = true
             zoomToUserButton.isHidden = true
-            mapView.showsUserLocation = false
             
             // If the user has at least 1 item, center the map over the first one
             guard mapView.annotations.count > 0 else { return }
@@ -418,18 +418,9 @@ extension MapViewController: CLLocationManagerDelegate {
     
     func startMonitoring(geoFence: GeoFence) {
         
-        // Check if the device supports geofencing
-        if CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) == false {
-            present(AlertService.createGeneralAlert(description: "Geofencing Not Available On This Device"),
-                    animated: true, completion: nil)
-            return
-        }
-        
         // Check if the user always allows location access
         if CLLocationManager.authorizationStatus() != .authorizedAlways {
-            
-            present(AlertService.createGeneralAlert(description: "Your GeoFence Has Been Saved But Won't Be Activated Until You Turn On Location Access To Always"), animated: true, completion: nil)
-            
+            print("Location access not equal to always, so geofences wont work")
         }
         
         // Get the fence region for the geofence
@@ -437,17 +428,6 @@ extension MapViewController: CLLocationManagerDelegate {
         
         // Start monitoring for the geofence
         locationManager.startMonitoring(for: fenceRegion)
-    }
-    
-    func stopMonitoring(geoFence: GeoFence) {
-        
-        for region in locationManager.monitoredRegions {
-            
-            guard let circularRegion = region as? CLCircularRegion, circularRegion.identifier == geoFence.name else { continue }
-            locationManager.stopMonitoring(for: circularRegion)
-            
-        }
-        
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?,
@@ -563,7 +543,7 @@ extension MapViewController {
         else if let vc = vc as? UpdateLocationViewController {
             vc.delegate = self
         }
-        else if let vc = vc as? AddHotSpotViewController {
+        else if let vc = vc as? AddGeoFenceViewController {
             vc.delegate = self
         }
         

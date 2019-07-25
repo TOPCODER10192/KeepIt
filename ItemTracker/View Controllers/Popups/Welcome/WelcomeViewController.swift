@@ -8,12 +8,6 @@
 
 import UIKit
 
-protocol WelcomeProtocol {
-    
-    func goToInApp()
-    
-}
-
 class WelcomeViewController: UIViewController {
 
     // MARK: - IBOutlet Properties
@@ -22,9 +16,7 @@ class WelcomeViewController: UIViewController {
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var continueButton: UIButton!
     
-    // MARK: - Properties
-    var delegate: WelcomeProtocol?
-    
+    // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,13 +46,8 @@ extension WelcomeViewController {
     
     @IBAction func setupLaterButtonTapped(_ sender: UIButton) {
         
-        // Dismiss the current view
-        self.dismiss(animated: true) {
-            
-            // Go into the app
-            self.delegate?.goToInApp()
-            
-        }
+        UserDefaults.standard.set(false, forKey: "IsFirstLaunch")
+        self.dismiss(animated: true, completion: nil)
         
     }
     
@@ -76,12 +63,9 @@ extension WelcomeViewController {
         else {
             
             // Dismiss the current view
-            self.dismiss(animated: true) {
-                
-                // Go into the app
-                self.delegate?.goToInApp()
-                
-            }
+            UserDefaults.standard.set(false, forKey: "IsFirstLaunch") 
+            self.dismiss(animated: true, completion: nil)
+            
         }
         
     }
@@ -142,37 +126,12 @@ extension WelcomeViewController: UICollectionViewDelegate, UICollectionViewDataS
 // MARK: - Custom Protocol Methods
 extension WelcomeViewController: LocationProtocol, NotificationsProtocol {
     
-    func locationTapped(access: Bool?) {
+    func locationTapped() {
         
-        // Create an alert
-        var alert: UIAlertController
-        
-        guard access != nil else {
-            // Move to the next page
-            self.pageControl.currentPage = 1
-            self.collectionView.scrollToItem(at: IndexPath(row: self.pageControl.currentPage, section: 0), at: .left, animated: true)
-            return
-        }
-        
-        // Create the controller based on the notification access
-        if access == true {
-            alert = AlertService.createGeneralAlert(description: "Locations Are On!")
-        }
-        else {
-            alert = AlertService.createSettingsAlert(title: "Locations Are Off",
-                                                     message: "Go to settings to turn them on",
-                                                     cancelAction: nil)
-        }
-        
-        // Present the alert
-        present(alert, animated: true) {
-            
-            // Move to the next page
-            self.pageControl.currentPage = 1
-            self.collectionView.scrollToItem(at: IndexPath(row: self.pageControl.currentPage, section: 0), at: .left, animated: true)
-            
-        }
-        
+        // Move to the next page of the welcome form
+        self.pageControl.currentPage = 1
+        self.collectionView.scrollToItem(at: IndexPath(row: self.pageControl.currentPage, section: 0), at: .left, animated: true)
+
     }
     
     func notificationsTapped(access: Bool) {
