@@ -8,12 +8,14 @@
 
 import UIKit
 import SDWebImage
+import GoogleMobileAds
 
 final class ItemsViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var itemsCollectionView: UICollectionView!
     @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var bannerView: GADBannerView!
     
     // MARK: Properties
 
@@ -30,6 +32,11 @@ final class ItemsViewController: UIViewController {
         
         // Setup the navigation bar
         navigationBar.tintColor = Constants.Color.primary
+        
+        // Setup the ad View
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
         
         // Add a refresh control for the collection view
         addRefreshControl()

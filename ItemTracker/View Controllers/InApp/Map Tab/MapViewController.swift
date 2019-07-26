@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import SDWebImage
+import GoogleMobileAds
 
 final class MapViewController: UIViewController {
 
@@ -23,6 +24,8 @@ final class MapViewController: UIViewController {
     @IBOutlet weak var zoomToUserButton: RoundedButton!
     @IBOutlet weak var prevAnnotationButton: UIButton!
     @IBOutlet weak var nextAnnotationButton: UIButton!
+    
+    @IBOutlet weak var bannerView: GADBannerView!
     
     // MARK: - AddItemViewController Properties
     let locationManager = CLLocationManager()
@@ -64,6 +67,11 @@ final class MapViewController: UIViewController {
         nextAnnotationButton.layer.borderWidth  = 1
         nextAnnotationButton.layer.borderColor  = Constants.Color.primary.cgColor
         nextAnnotationButton.tintColor          = Constants.Color.primary
+        
+        // Setup the ad View
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
         
         // Check the location services
         checkLocationServices()

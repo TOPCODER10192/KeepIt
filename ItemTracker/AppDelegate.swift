@@ -19,8 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // Override point for customization after application launch.
+        // Setup Firebase
         FirebaseApp.configure()
+        
+        // Setup AdMob
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
 
         // Attempt to load the current user
         LocalStorageService.getUser()
