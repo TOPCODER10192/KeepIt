@@ -20,6 +20,13 @@ struct CellData {
     
 }
 
+protocol SettingsProtocol {
+    
+    func settingsClosed()
+    func showWalkthrough()
+    
+}
+
 class SettingsTableViewController: UITableViewController {
 
     // MARK: - IBOutlet Properties
@@ -35,9 +42,13 @@ class SettingsTableViewController: UITableViewController {
     var tableData = [CellData(text: "Change Name", icon: UIImage(named: "NameIcon")!, target: "ChangeNameSegue"),
                      CellData(text: "Change Email", icon: UIImage(named: "MailIcon")!, target: "ChangeEmailSegue"),
                      CellData(text: "Change Password", icon: UIImage(named: "LockIcon")!, target: "ChangePasswordSegue"),
-                     CellData(text: "Notifications", icon: UIImage(named: "BellIcon")!, target: "PhoneNotificationsSegue"),
-                     CellData(text: "Report a Problem", icon: UIImage(named: "ErrorIcon")!, target: ""),
+                     CellData(text: "Timed Reminders", icon: UIImage(named: "TimedNotificationIcon")!, target: "TimedRemindersSegue"),
+                     CellData(text: "Location Reminders", icon: UIImage(named: "LocationNotificationIcon")!, target: "LocationRemindersSegue"),
+                     CellData(text: "Show Walkthrough Again", icon: UIImage(named: "WalkthroughIcon")!, target: "Walkthrough"),
+                     CellData(text: "Report a Problem", icon: UIImage(named: "ErrorIcon")!, target: "Mail"),
                      CellData(text: "Credits", icon: UIImage(named: "CreditIcon")!, target: "CreditsSegue")]
+    
+    var delegate: SettingsProtocol?
     
     // MARK: - View Methods
     override func viewDidLoad() {
@@ -104,12 +115,28 @@ extension SettingsTableViewController {
         // Segue to the rows target view controller
         let segueID = tableData[indexPath.row].target
         
-        if segueID == "" {
+        if segueID == "Mail" {
+            
             composeMail()
+            
+        }
+        else if segueID == "Walkthrough" {
+            
+            // Tell the delegate that the settings will be closed and present the walkthrough
+            delegate?.settingsClosed()
+            
+            // Close the settings tab
+            self.dismiss(animated: true) {
+                self.delegate?.showWalkthrough()
+            }
+            
         }
         else {
+            
             performSegue(withIdentifier: segueID, sender: self)
+            
         }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -134,6 +161,9 @@ extension SettingsTableViewController {
 extension SettingsTableViewController {
     
     @IBAction func closeButtonTapped(_ sender: UIBarButtonItem) {
+        
+        // Tell the delegate that the settings has been closed
+        delegate?.settingsClosed()
         
         // Dismiss the settings vc
         self.dismiss(animated: true, completion: nil)

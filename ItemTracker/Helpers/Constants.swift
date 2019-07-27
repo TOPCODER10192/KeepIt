@@ -57,6 +57,7 @@ struct Constants {
             static let updateLocation       = "UpdateLocationCell"
             
             static let settingsRow          = "SettingsRowCell"
+            static let geoFence             = "GeoFenceCell"
             
         }
         
@@ -150,6 +151,9 @@ struct Constants {
             static let triggerOnExit  = "fenceTriggerOnExit"
             
         }
+        
+        static let firstLaunch = "isFirstLaunch"
+        static let firstLogin  = "isFirstLogin"
     
     }
     

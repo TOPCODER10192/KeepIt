@@ -34,6 +34,7 @@ class UpdateLocationTableViewCell: UITableViewCell {
         itemImage.layer.cornerRadius = itemImage.bounds.width / 2
         itemImage.layer.borderWidth  = 1
         itemImage.layer.borderColor  = Constants.Color.primary.cgColor
+        itemImage.clipsToBounds      = true
         
         // Setup the check button
         checkBoxButton.backgroundColor    = UIColor.clear
@@ -75,4 +76,5 @@ class UpdateLocationTableViewCell: UITableViewCell {
         checkBoxState = !checkBoxState
         delegate!.itemSelected(index: cellIndex!, state: checkBoxState)
     }
+    
 }

@@ -69,21 +69,21 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="330" height="50"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="KeyIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Q2x-5e-NSN">
-                                                                    <rect key="frame" x="20" y="0.0" width="40" height="40"/>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultImage" translatesAutoresizingMaskIntoConstraints="NO" id="Q2x-5e-NSN">
+                                                                    <rect key="frame" x="15" y="5" width="40" height="40"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="40" id="W2L-TN-LdC"/>
                                                                         <constraint firstAttribute="height" constant="40" id="nyH-5C-Xqy"/>
                                                                     </constraints>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Keys" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Twy-oi-4cf">
-                                                                    <rect key="frame" x="80" y="9.5" width="36.5" height="21"/>
+                                                                    <rect key="frame" x="75" y="14.5" width="36.5" height="21"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dxf-wl-IPS" customClass="RoundedButton" customModule="ItemTracker" customModuleProvider="target">
-                                                                    <rect key="frame" x="270" y="5" width="30" height="30"/>
+                                                                    <rect key="frame" x="270" y="10" width="30" height="30"/>
                                                                     <color key="backgroundColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="30" id="YPV-DA-luM"/>
@@ -105,8 +105,8 @@
                                                                 <constraint firstAttribute="trailingMargin" secondItem="dxf-wl-IPS" secondAttribute="trailing" constant="10" id="1oz-cz-Q5m"/>
                                                                 <constraint firstItem="Twy-oi-4cf" firstAttribute="centerY" secondItem="Q2x-5e-NSN" secondAttribute="centerY" id="D1d-gw-hWR"/>
                                                                 <constraint firstItem="dxf-wl-IPS" firstAttribute="centerY" secondItem="Q2x-5e-NSN" secondAttribute="centerY" id="DBC-hR-46T"/>
-                                                                <constraint firstItem="Q2x-5e-NSN" firstAttribute="leading" secondItem="i14-Os-XE5" secondAttribute="leading" constant="20" id="f0W-7Y-QQi"/>
-                                                                <constraint firstItem="Q2x-5e-NSN" firstAttribute="top" secondItem="i14-Os-XE5" secondAttribute="top" id="qq0-ln-PYJ"/>
+                                                                <constraint firstItem="Q2x-5e-NSN" firstAttribute="leading" secondItem="i14-Os-XE5" secondAttribute="leading" constant="15" id="f0W-7Y-QQi"/>
+                                                                <constraint firstItem="Q2x-5e-NSN" firstAttribute="centerY" secondItem="i14-Os-XE5" secondAttribute="centerY" id="oX4-Pu-oDg"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -669,6 +669,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="KeyIcon" width="30" height="30"/>
+        <image name="DefaultImage" width="70" height="70"/>
     </resources>
 </document>

@@ -13,14 +13,16 @@ final class BackgroundViewController: UIViewController {
     // MARK: - IBOutlet Properties
     @IBOutlet weak var tintView: UIView!
     
-    // MARK: - BackgroundViewController Properties
+    // MARK: - Properties
     var justLaunched = true
     
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Setup the tintColor
         tintView.backgroundColor = Constants.Color.softPrimary
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,28 +61,33 @@ extension BackgroundViewController {
             // Set the delegate for the ForgotPasswordVC
             vc.delegate = self
         }
-        else if let vc = vc as? WelcomeViewController {
-            
-        }
         
         // Set the presentation style for the VC and present the VC
         vc?.modalPresentationStyle = .overCurrentContext
+        
+        // Check that the vc isn't nil
+        guard vc != nil else { return }
+        
+        // Present the vc
         present(vc!, animated: animate, completion: nil)
         
     }
     
 }
 
-// MARK:- Methods that conform to the LoginProtocol
+// MARK: - Custom Protocol Methods
 extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, ForgotPasswordProtocol {
     
     func goToInApp() {
         
+        // Create a tab bar controller
         let tabBarVC = UIStoryboard(name: Constants.ID.Storyboard.tabBar, bundle: .main)
                                     .instantiateViewController(withIdentifier: Constants.ID.VC.tabBar) as! UITabBarController
         
+        // Setup the tab bar controller
         tabBarVC.tabBar.tintColor = Constants.Color.primary
         
+        // Present the tab bar controller
         view.window?.rootViewController = tabBarVC
         view.window?.makeKeyAndVisible()
         
@@ -110,6 +117,7 @@ extension BackgroundViewController: LoginProtocol, CreateAccountProtocol, Forgot
     
     func goToWelcome() {
         
+        // Present the WelcomeVC
         presentVC(id: Constants.ID.VC.welcome, animate: true)
         
     }

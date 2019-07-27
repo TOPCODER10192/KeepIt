@@ -20,7 +20,6 @@ protocol CreateAccountProtocol {
 final class CreateAccountViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
-    @IBOutlet weak var floatingView: FloatingView!
     @IBOutlet weak var floatingViewWidth: NSLayoutConstraint!
     @IBOutlet weak var floatingViewHeight: NSLayoutConstraint!
     @IBOutlet weak var floatingViewX: NSLayoutConstraint!
@@ -35,7 +34,7 @@ final class CreateAccountViewController: UIViewController {
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var bottomButton: RoundedButton!
     
-    // MARK: - CreateAccountViewController Properties
+    // MARK: - Properties
     var formIndex: Int = 0
     var delegate: CreateAccountProtocol?
     
@@ -52,11 +51,11 @@ final class CreateAccountViewController: UIViewController {
         floatingViewWidth.constant      = Constants.View.Width.standard
         floatingViewHeight.constant     = Constants.View.Height.createAccount
         floatingViewX.constant          = UIScreen.main.bounds.width
-        floatingViewToBottom.constant        = UIScreen.main.bounds.height * 0.3
+        floatingViewToBottom.constant   = UIScreen.main.bounds.height * 0.3
         
         // Setup the navigationBar
-        backButton.tintColor             = Constants.Color.primary
-        navigationBarTitle.title         = "Step 1 of 2"
+        backButton.tintColor     = Constants.Color.primary
+        navigationBarTitle.title = "Step 1 of 2"
         
         // Setup the prompt label
         promptLabel.text = "What is your name?"
@@ -193,6 +192,7 @@ extension CreateAccountViewController {
                         
                     }
                     
+                    // Show that the process was successful
                     ProgressService.successAnimation(text: "Successfully Created Your Account")
                     
                     // Store the users information locally
@@ -202,6 +202,7 @@ extension CreateAccountViewController {
                     // Go into the main app
                     self.dismiss(animated: true, completion: {
                         
+                        // Tell the delegate to go into the app
                         self.delegate?.goToInApp()
                         
                     })
@@ -377,11 +378,8 @@ extension CreateAccountViewController {
         self.bottomButton.setTitle("Next", for: .disabled)
         
         // Adjust the text fields
-        self.topTextField.textContentType = .givenName
         self.topTextField.keyboardType = .default
-        self.bottomTextField.textContentType = .familyName
         self.bottomTextField.isSecureTextEntry = false
-        self.bottomTextField.passwordRules = nil
         
         self.floatingViewX.constant = -UIScreen.main.bounds.width
         self.view.layoutIfNeeded()
@@ -408,11 +406,8 @@ extension CreateAccountViewController {
         self.bottomButton.setTitle("Create Account", for: .disabled)
         
         // Adjust the text fields
-        topTextField.textContentType = .emailAddress
         topTextField.keyboardType = .emailAddress
-        bottomTextField.textContentType = .password
         bottomTextField.isSecureTextEntry = true
-        bottomTextField.passwordRules = UITextInputPasswordRules(descriptor: "required: upper; required: digit; minlength: 8;")
         
         // Move the view to the opposite side so it can slide back in
         floatingViewX.constant = UIScreen.main.bounds.width

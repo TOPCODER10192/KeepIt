@@ -12,7 +12,7 @@ import CoreLocation
 
 protocol AddGeoFenceProtocol {
     
-    func geoFenceAdded(geofence: GeoFence)
+    func geoFenceAdded(geoFence: GeoFence)
     
 }
 
@@ -336,6 +336,48 @@ extension AddGeoFenceViewController: CLLocationManagerDelegate {
         
     }
     
+    func startMonitoring(geoFence: GeoFence) -> Bool {
+        
+        // Check if the device supports geofencing
+        if CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) == false {
+            present(AlertService.createGeneralAlert(description: "Geofencing Not Available On This Device"),
+                    animated: true, completion: nil)
+            return false
+        }
+        
+        // Check if the user always allows location access
+        if CLLocationManager.authorizationStatus() != .authorizedAlways {
+            present(AlertService.createSettingsAlert(title: "GeoFence Saved but It Won't Be Activated Until Your Location Authorization Permissions Are \"Always\"", message: "", cancelAction: nil), animated: true, completion: nil)
+        }
+        
+        // Get the fence region for the geofence
+        let fenceRegion = createRegion(with: geoFence)
+        
+        // Start monitoring for the geofence
+        locationManager.startMonitoring(for: fenceRegion)
+        
+        return true
+    }
+    
+    func createRegion(with geoFence: GeoFence) -> CLCircularRegion {
+        
+        // Set the region for the geofence
+        let latitude = geoFence.centreCoordinate[0] as CLLocationDegrees
+        let longitude = geoFence.centreCoordinate[1] as CLLocationDegrees
+        let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        
+        let region = CLCircularRegion(center: center,
+                                      radius: geoFence.radius,
+                                      identifier: geoFence.id)
+        
+        // Get the notification conditions for the geofence
+        region.notifyOnEntry = geoFence.triggerOnEntrance
+        region.notifyOnExit = geoFence.triggerOnExit
+        
+        return region
+        
+    }
+    
 }
 
 // MARK: - Search Bar Methods
@@ -394,14 +436,8 @@ extension AddGeoFenceViewController {
     }
     
     @IBAction func addGeoFenceButtonTapped(_ sender: RoundedButton) {
-
-        // Check if the device supports geofencing
-        if CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) == false {
-            present(AlertService.createGeneralAlert(description: "Geofencing Not Available On This Device"),
-                    animated: true, completion: nil)
-            return
-        }
         
+        // Creata a geofence object
         let geoFence = GeoFence(name: name!,
                                 centreCoordinate: center!,
                                 radius: radius,
@@ -409,10 +445,15 @@ extension AddGeoFenceViewController {
                                 triggerOnExit: triggerOnExit,
                                 id: uid)
         
+        // Check if the device can monitor for geofences
+        guard startMonitoring(geoFence: geoFence) == true else { return }
+        
+        // Store the geofence locally
         LocalStorageService.createGeoFence(geoFence: geoFence)
         Stored.geoFences.append(geoFence)
         
-        delegate?.geoFenceAdded(geofence: geoFence)
+        // Tell the delegate that a geofence was added
+        delegate?.geoFenceAdded(geoFence: geoFence)
         
         slideViewOut()
         

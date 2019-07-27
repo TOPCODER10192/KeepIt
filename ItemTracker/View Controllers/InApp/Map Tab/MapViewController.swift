@@ -16,6 +16,7 @@ final class MapViewController: UIViewController {
     // MARK: - IBOutlet Properties
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapViewToBottom: NSLayoutConstraint!
     
     @IBOutlet weak var mapSearchBar: UISearchBar!
     
@@ -25,7 +26,7 @@ final class MapViewController: UIViewController {
     @IBOutlet weak var prevAnnotationButton: UIButton!
     @IBOutlet weak var nextAnnotationButton: UIButton!
     
-    @IBOutlet weak var bannerView: GADBannerView!
+    var bannerView: GADBannerView!
     
     // MARK: - AddItemViewController Properties
     let locationManager = CLLocationManager()
@@ -69,6 +70,9 @@ final class MapViewController: UIViewController {
         nextAnnotationButton.tintColor          = Constants.Color.primary
         
         // Setup the ad View
+        bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
+        bannerView.delegate = self
+        
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
@@ -305,41 +309,26 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
         circleRenderer.alpha       = 0.5
         
         return circleRenderer
+        
     }
     
     func reloadGeoFences() {
         
+        // Remove all the geofences
+        mapView.removeOverlays(mapView.overlays)
+        
         for geofence in Stored.geoFences {
             
-            geoFenceAdded(geofence: geofence)
+            geoFenceAdded(geoFence: geofence)
             
         }
-        
-    }
-    
-    func region(with geoFence: GeoFence) -> CLCircularRegion {
-        
-        // Set the region for the geofence
-        let latitude = geoFence.centreCoordinate[0] as CLLocationDegrees
-        let longitude = geoFence.centreCoordinate[1] as CLLocationDegrees
-        let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        
-        let region = CLCircularRegion(center: center,
-                                      radius: geoFence.radius,
-                                      identifier: geoFence.id)
-        
-        // Get the notification conditions for the geofence
-        region.notifyOnEntry = geoFence.triggerOnEntrance
-        region.notifyOnExit = geoFence.triggerOnExit
-        
-        return region
         
     }
     
 }
 
 // MARK: - Location Methods
-extension MapViewController: CLLocationManagerDelegate {
+extension MapViewController: CLLocationManagerDelegate, AddGeoFenceProtocol {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
@@ -424,20 +413,6 @@ extension MapViewController: CLLocationManagerDelegate {
         
     }
     
-    func startMonitoring(geoFence: GeoFence) {
-        
-        // Check if the user always allows location access
-        if CLLocationManager.authorizationStatus() != .authorizedAlways {
-            print("Location access not equal to always, so geofences wont work")
-        }
-        
-        // Get the fence region for the geofence
-        let fenceRegion = region(with: geoFence)
-        
-        // Start monitoring for the geofence
-        locationManager.startMonitoring(for: fenceRegion)
-    }
-    
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?,
                          withError error: Error) {
         
@@ -450,12 +425,24 @@ extension MapViewController: CLLocationManagerDelegate {
         present(AlertService.createGeneralAlert(description: "Monitoring for GeoFence Failed"), animated: true, completion: nil)
         
     }
+    
+    func geoFenceAdded(geoFence: GeoFence) {
+        
+        let latitude  = geoFence.centreCoordinate[0] as CLLocationDegrees
+        let longitude = geoFence.centreCoordinate[1] as CLLocationDegrees
+        
+        let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let radius = geoFence.radius as CLLocationDistance
+        
+        drawGeoFence(center: center, radius: radius)
+        
+    }
 
     
 }
 
 // MARK: - Custom Protocol Methods
-extension MapViewController: SingleItemProtocol, UpdateLocationProtocol, AddGeoFenceProtocol {
+extension MapViewController: SingleItemProtocol, UpdateLocationProtocol, SettingsProtocol {
     
     func itemSaved(item: Item) {
         
@@ -502,16 +489,17 @@ extension MapViewController: SingleItemProtocol, UpdateLocationProtocol, AddGeoF
         }
     }
     
-    func geoFenceAdded(geofence: GeoFence) {
+    func settingsClosed() {
         
-        let latitude  = geofence.centreCoordinate[0] as CLLocationDegrees
-        let longitude = geofence.centreCoordinate[1] as CLLocationDegrees
+        // Reload all the geoFences
+        reloadGeoFences()
         
-        let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let radius = geofence.radius as CLLocationDistance
+    }
+    
+    func showWalkthrough() {
         
-        drawGeoFence(center: center, radius: radius)
-        startMonitoring(geoFence: geofence)
+        // Show the walkthrough
+        WalkthroughService.showCTHelp(vc: self)
         
     }
     
@@ -554,11 +542,98 @@ extension MapViewController {
         else if let vc = vc as? AddGeoFenceViewController {
             vc.delegate = self
         }
+        else if let vc = vc as? UINavigationController {
+            
+            if let rootVC = vc.viewControllers[0] as? SettingsTableViewController {
+                rootVC.delegate = self
+            }
+            
+        }
         
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: animate, completion: nil)
         
         
     }
+    
+}
+
+// MARK: - Advertisement Methods
+extension MapViewController: GADBannerViewDelegate {
+    
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        
+        // Add the banner view to the view
+        addBannerViewToView(bannerView)
+        
+        // Shift the buttons at the bottom of the screen to be relative to the ad
+        shiftMapUp()
+        
+    }
+    
+    func shiftMapUp() {
+        
+        // Shift the map bottom to equal the top of the banner view
+        self.mapViewToBottom.constant = self.bannerView.bounds.height
+        
+    }
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        
+        if #available(iOS 11.0, *) {
+            // In iOS 11, we need to constrain the view to the safe area.
+            positionBannerViewFullWidthAtBottomOfSafeArea(bannerView)
+        }
+        else {
+            // In lower iOS versions, safe area is not available so we use
+            // bottom layout guide and view edges.
+            positionBannerViewFullWidthAtBottomOfView(bannerView)
+        }
+        
+    }
+    
+    @available (iOS 11, *)
+    func positionBannerViewFullWidthAtBottomOfSafeArea(_ bannerView: UIView) {
+        // Position the banner. Stick it to the bottom of the Safe Area.
+        // Make it constrained to the edges of the safe area.
+        let guide = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            guide.leftAnchor.constraint(equalTo: bannerView.leftAnchor),
+            guide.rightAnchor.constraint(equalTo: bannerView.rightAnchor),
+            guide.bottomAnchor.constraint(equalTo: bannerView.bottomAnchor)
+            ])
+    }
+    
+    func positionBannerViewFullWidthAtBottomOfView(_ bannerView: UIView) {
+        
+        // Add Constraints to stick it to the bottom of the view and equal width to the screen
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .leading,
+                                              relatedBy: .equal,
+                                              toItem: view,
+                                              attribute: .leading,
+                                              multiplier: 1,
+                                              constant: 0))
+        
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .trailing,
+                                              relatedBy: .equal,
+                                              toItem: view,
+                                              attribute: .trailing,
+                                              multiplier: 1,
+                                              constant: 0))
+        
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .bottom,
+                                              relatedBy: .equal,
+                                              toItem: view.safeAreaLayoutGuide,
+                                              attribute: .bottom,
+                                              multiplier: 1,
+                                              constant: 0))
+    }
+    
     
 }

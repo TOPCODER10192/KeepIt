@@ -15,10 +15,7 @@ final class ItemsViewController: UIViewController {
     // MARK: - IBOutlet Properties
     @IBOutlet weak var itemsCollectionView: UICollectionView!
     @IBOutlet weak var navigationBar: UINavigationBar!
-    @IBOutlet weak var bannerView: GADBannerView!
-    
-    // MARK: Properties
-
+    var bannerView: GADBannerView!
     
     // MARK: - View Methods
     override func viewDidLoad() {
@@ -33,7 +30,10 @@ final class ItemsViewController: UIViewController {
         // Setup the navigation bar
         navigationBar.tintColor = Constants.Color.primary
         
-        // Setup the ad View
+        // Setup the Banner View
+        bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
+        addBannerViewToView(bannerView)
+        
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
@@ -53,6 +53,13 @@ final class ItemsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        // Check if its the users first time being logged in
+        if UserDefaults.standard.value(forKey: "IsFirstLogin") == nil {
+            WalkthroughService.showCTHelp(vc: self)
+        }
+        
+        UserDefaults.standard.set(false, forKey: "IsFirstLogin")
         
     }
     
@@ -169,7 +176,7 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
             cell.setPhoto(url: url)
         }
         else {
-            cell.itemImage.image = UIImage(named: "Default")
+            cell.itemImage.image = UIImage(named: "DefaultImage")
         }
             
         return cell
@@ -193,6 +200,25 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         loadVC(ID: Constants.ID.VC.singleItem,
                sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
                animated: false)
+        
+    }
+    
+}
+
+// MARK: - Custom Protocol Methods
+extension ItemsViewController: SettingsProtocol {
+    
+    func settingsClosed() {
+        
+        // Reload the collection view
+        itemsCollectionView.reloadData()
+        
+    }
+    
+    func showWalkthrough() {
+        
+        // Show the walkthrough
+        WalkthroughService.showCTHelp(vc: self)
         
     }
     
@@ -240,6 +266,13 @@ extension ItemsViewController  {
             
             vc.delegate = self
         }
+        else if let vc = vc as? UINavigationController {
+            
+            if let rootVC = vc.viewControllers[0] as? SettingsTableViewController {
+                rootVC.delegate = self
+            }
+            
+        }
         
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: animated, completion: nil)
@@ -280,3 +313,65 @@ extension UICollectionView {
     
 }
 
+// MARK: - Advertisement Methods
+extension ItemsViewController: GADBannerViewDelegate {
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        
+        if #available(iOS 11.0, *) {
+            // In iOS 11, we need to constrain the view to the safe area.
+            positionBannerViewFullWidthAtBottomOfSafeArea(bannerView)
+        }
+        else {
+            // In lower iOS versions, safe area is not available so we use
+            // bottom layout guide and view edges.
+            positionBannerViewFullWidthAtBottomOfView(bannerView)
+        }
+        
+    }
+    
+    @available (iOS 11, *)
+    func positionBannerViewFullWidthAtBottomOfSafeArea(_ bannerView: UIView) {
+        // Position the banner. Stick it to the bottom of the Safe Area.
+        // Make it constrained to the edges of the safe area.
+        let guide = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            guide.leftAnchor.constraint(equalTo: bannerView.leftAnchor),
+            guide.rightAnchor.constraint(equalTo: bannerView.rightAnchor),
+            guide.bottomAnchor.constraint(equalTo: bannerView.bottomAnchor)
+            ])
+    }
+    
+    func positionBannerViewFullWidthAtBottomOfView(_ bannerView: UIView) {
+        
+        // Add Constraints to stick it to the bottom of the view and equal width to the screen
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .leading,
+                                              relatedBy: .equal,
+                                              toItem: view,
+                                              attribute: .leading,
+                                              multiplier: 1,
+                                              constant: 0))
+        
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .trailing,
+                                              relatedBy: .equal,
+                                              toItem: view,
+                                              attribute: .trailing,
+                                              multiplier: 1,
+                                              constant: 0))
+        
+        view.addConstraint(NSLayoutConstraint(item: bannerView,
+                                              attribute: .bottom,
+                                              relatedBy: .equal,
+                                              toItem: view.safeAreaLayoutGuide,
+                                              attribute: .bottom,
+                                              multiplier: 1,
+                                              constant: 0))
+    }
+    
+    
+}

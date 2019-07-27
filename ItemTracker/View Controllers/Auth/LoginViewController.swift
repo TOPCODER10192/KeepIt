@@ -47,11 +47,11 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
 
         // Setup the loginView
-        floatingView.backgroundColor    = UIColor.clear
-        floatingViewWidth.constant      = Constants.View.Width.standard
-        floatingViewHeight.constant     = Constants.View.Height.login
-        floatingViewToCenterX.constant          = -UIScreen.main.bounds.width
-        floatingViewToBottom.constant = UIScreen.main.bounds.height * 0.3
+        floatingView.backgroundColor   = UIColor.clear
+        floatingViewWidth.constant     = Constants.View.Width.standard
+        floatingViewHeight.constant    = Constants.View.Height.login
+        floatingViewToCenterX.constant = -UIScreen.main.bounds.width
+        floatingViewToBottom.constant  = UIScreen.main.bounds.height * 0.3
         
         // If first time seeing the view then slide in from the right
         if firstTimeSeeingView == true {
@@ -231,7 +231,9 @@ extension LoginViewController {
                     
                     // Go into the app
                     self.dismiss(animated: true, completion: {
+                        
                         self.delegate?.goToInApp()
+                        
                     })
                     
                 })
@@ -254,6 +256,7 @@ extension LoginViewController {
                 self.delegate?.goToForgotPassword()
                 
             })
+            
         }
         
     }
@@ -278,7 +281,8 @@ extension LoginViewController {
     
     func checkIfFirstLaunch() {
         
-        guard UserDefaults.standard.value(forKey: "IsFirstLaunch") == nil else { return }
+        // Check if its the first launch of the app
+        guard UserDefaults.standard.value(forKey: Constants.Key.firstLaunch) == nil else { return }
         
         // Present the welcomeVC
         loadWelcomeVC()
@@ -287,10 +291,12 @@ extension LoginViewController {
     
     func loadWelcomeVC(){
         
+        // Check if the welcomeVC can be created
         guard let welcomeVC = storyboard?.instantiateViewController(withIdentifier: Constants.ID.VC.welcome) as? WelcomeViewController else {
             return
         }
         
+        // Setup the welcomeVC and present it
         welcomeVC.modalPresentationStyle = .overCurrentContext
         present(welcomeVC, animated: true, completion: nil)
         

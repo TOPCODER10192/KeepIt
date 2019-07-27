@@ -451,8 +451,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J3a-4I-yVo" customClass="FloatingView" customModule="ItemTracker" customModuleProvider="target">
                                 <rect key="frame" x="57" y="238" width="300" height="420"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's Get Started" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ti-7l-r0d">
-                                        <rect key="frame" x="58.5" y="20" width="183.5" height="25"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ti-7l-r0d">
+                                        <rect key="frame" x="97" y="20" width="106.5" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="O98-6A-BET"/>
                                         </constraints>

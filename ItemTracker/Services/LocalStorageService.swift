@@ -211,6 +211,33 @@ final class LocalStorageService {
         
     }
     
+    static func deleteGeoFence(index: Int) {
+        
+        // Pull all the existing array from local storage
+        var names         = defaults.value(forKey: Constants.Key.GeoFence.name)           as? [String]   ?? [String]()
+        var centers       = defaults.value(forKey: Constants.Key.GeoFence.center)         as? [[Double]] ?? [[Double]]()
+        var radii         = defaults.value(forKey: Constants.Key.GeoFence.radius)         as? [Double]   ?? [Double]()
+        var entryTriggers = defaults.value(forKey: Constants.Key.GeoFence.triggerOnEntry) as? [Bool]     ?? [Bool]()
+        var exitTriggers  = defaults.value(forKey: Constants.Key.GeoFence.triggerOnExit)  as? [Bool]     ?? [Bool]()
+        var ids           = defaults.value(forKey: Constants.Key.GeoFence.id)             as? [String]   ?? [String]()
+        
+        names.remove(at: index)
+        centers.remove(at: index)
+        radii.remove(at: index)
+        entryTriggers.remove(at: index)
+        exitTriggers.remove(at: index)
+        ids.remove(at: index)
+        
+        // Place the arrays back in local storage
+        defaults.set(names, forKey: Constants.Key.GeoFence.name)
+        defaults.set(centers, forKey: Constants.Key.GeoFence.center)
+        defaults.set(radii, forKey: Constants.Key.GeoFence.radius)
+        defaults.set(entryTriggers, forKey: Constants.Key.GeoFence.triggerOnEntry)
+        defaults.set(exitTriggers, forKey: Constants.Key.GeoFence.triggerOnExit)
+        defaults.set(ids, forKey: Constants.Key.GeoFence.id)
+        
+    }
+    
     static func clearUser() {
         
         // Clear the users information

@@ -31,16 +31,15 @@ final class ForgotPasswordViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var resetPasswordButton: RoundedButton!
     
-    // MARK: - ForgotPasswordViewController Properties
+    // MARK: - Properties
     var delegate: ForgotPasswordProtocol?
-    
     var email: String?
     
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Setup the forgotPasswordVIew
+        // Setup the forgotPasswordView
         floatingViewWidth.constant      = Constants.View.Width.standard
         floatingViewX.constant          = UIScreen.main.bounds.width
         floatingViewHeight.constant     = Constants.View.Height.forgotPassword
@@ -134,6 +133,7 @@ final class ForgotPasswordViewController: UIViewController {
                 return
             }
             
+            // Show that the process was successful
             ProgressService.successAnimation(text: "Email to Reset Password was Sent")
             
         }
@@ -165,6 +165,7 @@ extension ForgotPasswordViewController {
     
     func slideViewIn() {
         
+        // Slide the view in from the right
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             
             self.floatingViewX.constant = 0
@@ -176,6 +177,7 @@ extension ForgotPasswordViewController {
     
     func slideViewOut(completion: @escaping () -> Void) {
         
+        // Slide the view out to the right
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
             
             self.floatingViewX.constant = UIScreen.main.bounds.width

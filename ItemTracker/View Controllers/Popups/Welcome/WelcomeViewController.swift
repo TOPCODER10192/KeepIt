@@ -46,7 +46,7 @@ extension WelcomeViewController {
     
     @IBAction func setupLaterButtonTapped(_ sender: UIButton) {
         
-        UserDefaults.standard.set(false, forKey: "IsFirstLaunch")
+        UserDefaults.standard.set(false, forKey: Constants.Key.firstLaunch)
         self.dismiss(animated: true, completion: nil)
         
     }
@@ -63,7 +63,7 @@ extension WelcomeViewController {
         else {
             
             // Dismiss the current view
-            UserDefaults.standard.set(false, forKey: "IsFirstLaunch") 
+            UserDefaults.standard.set(false, forKey: Constants.Key.firstLaunch)
             self.dismiss(animated: true, completion: nil)
             
         }
