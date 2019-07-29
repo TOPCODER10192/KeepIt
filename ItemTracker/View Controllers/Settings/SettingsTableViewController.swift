@@ -200,6 +200,7 @@ extension SettingsTableViewController {
             
             // Clear local storage
             LocalStorageService.clearUser()
+            Stored.user = nil
             
             // Create the authVC
             let authVC = UIStoryboard(name: Constants.ID.Storyboard.auth, bundle: .main)

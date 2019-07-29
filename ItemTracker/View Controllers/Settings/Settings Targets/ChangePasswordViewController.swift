@@ -134,22 +134,22 @@ extension ChangePasswordViewController {
         // Lower the keyboard
         lowerKeyboard()
         
+        // Check if the user has internet connection
+        
         // Start the progress animation
         ProgressService.progressAnimation(text: "Trying to Update Your Password")
         
         // Get the current user and check that it is not nil
-        let user = firebaseAuth.currentUser
-        guard user != nil else { return }
+        guard let user = firebaseAuth.currentUser else { return }
         
         // Get the current users email and check that it isn't nil
-        let email = user!.email
-        guard email != nil else { return }
+        guard let email = user.email else { return }
         
         // Create a credential from the users email and the password they typed in
-        let credential = EmailAuthProvider.credential(withEmail: email!, password: oldPassword!)
+        let credential = EmailAuthProvider.credential(withEmail: email, password: oldPassword!)
         
         // Reauthenticate the user
-        user!.reauthenticate(with: credential) { (authResult, error) in
+        user.reauthenticate(with: credential) { (authResult, error) in
             
             // Check if the users credential was valid
             guard error == nil, authResult != nil else {
@@ -165,7 +165,7 @@ extension ChangePasswordViewController {
                 return
             }
             
-            user!.updatePassword(to: self.newPassword!, completion: { (error) in
+            user.updatePassword(to: self.newPassword!, completion: { (error) in
                 
                 // Check if the process was successful
                 guard error == nil else {

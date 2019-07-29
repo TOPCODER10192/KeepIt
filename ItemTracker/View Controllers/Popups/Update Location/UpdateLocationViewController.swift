@@ -91,7 +91,7 @@ class UpdateLocationViewController: UIViewController {
         // Disable the button
         updateButton.isEnabled = false
         
-        guard locationManager.location?.coordinate != nil else {
+        guard let userLocation = [locationManager.location?.coordinate.latitude, locationManager.location?.coordinate.longitude] as? [Double] else {
             updateButton.isEnabled = true
             
             // Let the user know that they have to turn location services on
@@ -102,11 +102,15 @@ class UpdateLocationViewController: UIViewController {
             return
         }
         
+        // Check if there is any internet connection
+        guard InternetService.checkForConnection() == true else {
+            updateButton.isEnabled = true
+            ProgressService.errorAnimation(text: "No Internet Connection")
+            return
+        }
+        
         // Show a progress animation
         ProgressService.progressAnimation(text: "Trying to Update the Location of Your Items")
-        
-        // Get the users information and cast it as [Double]
-        let usersLocation = [locationManager.location?.coordinate.latitude, locationManager.location?.coordinate.longitude] as! [Double]
         
         // Get the current date
         let time = getTheDate()
@@ -124,7 +128,7 @@ class UpdateLocationViewController: UIViewController {
             
             // Change the items location and time of last update
             item.lastUpdateDate = time
-            item.mostRecentLocation = usersLocation
+            item.mostRecentLocation = userLocation
             
             // Attempt to update the item in firestore
             FirestoreService.updateItem(item: item) { (error) in

@@ -144,19 +144,17 @@ extension ChangeEmailViewController {
         // Start the progress animation
         ProgressService.progressAnimation(text: "Trying to Update Your Email")
         
-        // Get the curren user and check that it is not nil
-        let user = firebaseAuth.currentUser
-        guard user != nil else { return }
+        // Get the current user and check that it is not nil
+        guard let user = firebaseAuth.currentUser else { return }
         
         // Get the current users email and check that it isn't nil
-        let oldEmail = user!.email
-        guard oldEmail != nil else { return }
+        guard let oldEmail = user.email else { return }
         
         // Create a credential from the users email and the password they typed in
-        let credential = EmailAuthProvider.credential(withEmail: oldEmail!, password: password!)
+        let credential = EmailAuthProvider.credential(withEmail: oldEmail, password: password!)
         
         // Reauthenticate the user
-        user?.reauthenticate(with: credential, completion: { (authResult, error) in
+        user.reauthenticate(with: credential, completion: { (authResult, error) in
             
             // Check if the users credential was valid
             guard error == nil, authResult != nil else {
@@ -173,14 +171,14 @@ extension ChangeEmailViewController {
             }
             
             // Check if the new email is different than the old email
-            guard self.newEmail!.uppercased() != oldEmail!.uppercased() else {
+            guard self.newEmail!.uppercased() != oldEmail.uppercased() else {
                 self.saveChangesButton.isEnabled = true
                 ProgressService.errorAnimation(text: "Your Email is Already \(self.newEmail!)")
                 return
             }
             
             // Attempt to update the users email
-            user!.updateEmail(to: self.newEmail!, completion: { (error) in
+            user.updateEmail(to: self.newEmail!, completion: { (error) in
                 
                 // Check if there were any errors
                 guard error == nil else {

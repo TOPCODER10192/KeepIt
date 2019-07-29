@@ -76,6 +76,13 @@ struct Constants {
             
         }
         
+        struct Notification {
+            
+            static let timed = "TimedNotification"
+            static let location = "LocationNotification"
+            
+        }
+        
     }
     
     // MARK: - Views

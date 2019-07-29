@@ -80,23 +80,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: CLLocationManagerDelegate {
     
-    func handleEvent(for region: CLRegion!) {
+    func handleEvent(for region: CLRegion!, entered: Bool) {
         
-        // Pop up a notification that the user has crossed the geofence
-        NotificationService.createLocationNotification()
+        // Check if the user is signed in
+        guard Auth.auth().currentUser != nil else { return }
+        
+        for geoFence in Stored.geoFences {
+            
+            if region.identifier == geoFence.id {
+                
+                var message: String
+                
+                // Create a customized message based on if they entered or left the geofence
+                if entered == true {
+                    message = "You're at \(geoFence.name), note the items you brought"
+                }
+                else {
+                    message = "You've left \(geoFence.name), note the items you brought"
+                }
+                
+                // Pop up a notification telling the user that they crossed a geofence
+                NotificationService.createLocationNotification(message: message)
+                
+            }
+            
+        }
         
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        
         if region is CLCircularRegion {
-            handleEvent(for: region)
+            
+            handleEvent(for: region, entered: true)
+            
         }
+        
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        
         if region is CLCircularRegion {
-            handleEvent(for: region)
+            
+            handleEvent(for: region, entered: false)
+            
         }
+        
     }
     
 }

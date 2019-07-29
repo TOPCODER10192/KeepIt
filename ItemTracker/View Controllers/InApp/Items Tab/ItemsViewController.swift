@@ -55,11 +55,12 @@ final class ItemsViewController: UIViewController {
         super.viewDidAppear(animated)
         
         // Check if its the users first time being logged in
-        if UserDefaults.standard.value(forKey: "IsFirstLogin") == nil {
+        if UserDefaults.standard.value(forKey: Constants.Key.firstLogin) == nil {
             WalkthroughService.showCTHelp(vc: self)
         }
         
-        UserDefaults.standard.set(false, forKey: "IsFirstLogin")
+        
+        UserDefaults.standard.set(false, forKey: Constants.Key.firstLogin)
         
     }
     

@@ -62,6 +62,9 @@ extension LocationsCollectionViewCell {
         
         buttonTapped = true
         
+        // Acknowledge that the user has seen the welcome view and dismiss it
+        UserDefaults.standard.set(false, forKey: Constants.Key.firstLaunch)
+        
         // Check location services first
         locationManager.requestAlwaysAuthorization()
         

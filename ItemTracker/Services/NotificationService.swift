@@ -20,7 +20,7 @@ class NotificationService {
         center.requestAuthorization(options: [.badge, .alert, .sound]) { (granted, error) in
             
             // If they deny then return
-            guard error == nil, granted == true else { return }
+            guard error == nil else { return }
             
             // Create the notification content
             let content = UNMutableNotificationContent()
@@ -44,7 +44,7 @@ class NotificationService {
             let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: repeats)
             
             // Generate a request for the notification
-            let request = UNNotificationRequest(identifier: "CalendarNotification", content: content, trigger: trigger)
+            let request = UNNotificationRequest(identifier: Constants.ID.Notification.timed, content: content, trigger: trigger)
             
             // Add a request to the notification center
             center.add(request, withCompletionHandler: { (error) in
@@ -57,15 +57,15 @@ class NotificationService {
         
     }
     
-    static func createLocationNotification() {
+    static func createLocationNotification(message: String) {
         
         // Create the notification content
-        let content = UNMutableNotificationContent()
+        let content   = UNMutableNotificationContent()
         content.sound = UNNotificationSound.default
-        content.title = "Time to update your item locations!"
+        content.title = message
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let request = UNNotificationRequest(identifier: "LocationNotification", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: Constants.ID.Notification.location, content: content, trigger: trigger)
         
         center.add(request) { (error) in
             
@@ -75,32 +75,4 @@ class NotificationService {
         
     }
     
-    static func checkNotificationAccess(closure: @escaping (Bool?) -> Void) {
-        
-        // Get the users notification settings
-        center.getNotificationSettings { (settings) in
-            
-            switch settings.authorizationStatus {
-                
-            case .authorized:
-                closure(true)
-                
-            case .denied:
-                closure(false)
-                
-            case .notDetermined:
-                createTimedNotification(hour: 20, minute: 0, repeats: true)
-                closure(nil)
-                
-            case .provisional:
-                break
-                
-            @unknown default:
-                return
-            }
-            
-            return
-            
-        }
-    }
 }

@@ -24,6 +24,7 @@ class WelcomeViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        // Register the nibs as cells for the collection view
         let locationsCell = UINib(nibName: "LocationsCollectionViewCell", bundle: .main)
         collectionView.register(locationsCell, forCellWithReuseIdentifier: "LocationsCell")
         
@@ -46,6 +47,7 @@ extension WelcomeViewController {
     
     @IBAction func setupLaterButtonTapped(_ sender: UIButton) {
         
+        // Acknowledge that the user has seen the welcome view and dismiss it
         UserDefaults.standard.set(false, forKey: Constants.Key.firstLaunch)
         self.dismiss(animated: true, completion: nil)
         
@@ -62,14 +64,13 @@ extension WelcomeViewController {
         }
         else {
             
-            // Dismiss the current view
+            // Acknowledge that the user has seen the welcome view and dismiss it
             UserDefaults.standard.set(false, forKey: Constants.Key.firstLaunch)
             self.dismiss(animated: true, completion: nil)
             
         }
         
     }
-    
     
 }
 
@@ -78,7 +79,7 @@ extension WelcomeViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        // The collection view will only have 2 pages
+        // 1 page for location and 1 page for Notifications
         return 2
         
     }
@@ -88,7 +89,11 @@ extension WelcomeViewController: UICollectionViewDelegate, UICollectionViewDataS
         // Page 0 is the locations page
         if indexPath.row == 0 {
 
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LocationsCell", for: indexPath) as! LocationsCollectionViewCell
+            // Create the locations cell, set the delegate and return
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LocationsCell", for: indexPath) as? LocationsCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
             cell.delegate = self
             return cell
             
@@ -96,8 +101,11 @@ extension WelcomeViewController: UICollectionViewDelegate, UICollectionViewDataS
         // Page 1 is the notifications page
         else {
             
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NotificationsCell", for: indexPath) as! NotificationsCollectionViewCell
-            cell.delegate = self
+            // Create the notifications cell and return
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NotificationsCell", for: indexPath) as? NotificationsCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
             return cell
             
         }
@@ -124,7 +132,7 @@ extension WelcomeViewController: UICollectionViewDelegate, UICollectionViewDataS
 }
 
 // MARK: - Custom Protocol Methods
-extension WelcomeViewController: LocationProtocol, NotificationsProtocol {
+extension WelcomeViewController: LocationProtocol {
     
     func locationTapped() {
         
@@ -132,26 +140,6 @@ extension WelcomeViewController: LocationProtocol, NotificationsProtocol {
         self.pageControl.currentPage = 1
         self.collectionView.scrollToItem(at: IndexPath(row: self.pageControl.currentPage, section: 0), at: .left, animated: true)
 
-    }
-    
-    func notificationsTapped(access: Bool) {
-        
-        // Create an alert
-        var alert: UIAlertController
-        
-        // Create the controller based on the notification access
-        if access == true {
-             alert = AlertService.createGeneralAlert(description: "Notifications Are On!")
-        }
-        else {
-            alert = AlertService.createSettingsAlert(title: "Notifications Are Off",
-                                                     message: "Go to settings to turn them on",
-                                                     cancelAction: nil)
-        }
-        
-        // Present the alert
-        present(alert, animated: true, completion: nil)
-        
     }
     
 }

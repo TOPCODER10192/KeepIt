@@ -698,6 +698,13 @@ extension SingleItemViewController {
         // Disable the save item button
         saveItemButton.isEnabled = false
         
+        // Check if the user has an internet connection first
+        guard InternetService.checkForConnection() == true else {
+            saveItemButton.isEnabled = true
+            ProgressService.errorAnimation(text: "No Internet Connection")
+            return
+        }
+        
         // Determine if the user is attempting to delete an item
         if inEditMode == false && existingItem != nil {
             
@@ -843,7 +850,7 @@ extension SingleItemViewController {
         
         // Add actions to the alert
         areYouSureAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        areYouSureAlert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { (action) in
+        areYouSureAlert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
             
             // Start a Progress Animation
             ProgressService.progressAnimation(text: "Trying to Delete \(self.existingItem!.name)")

@@ -48,7 +48,7 @@ final class ErrorService {
                 return "No Email Was Provided"
                 
             case .networkError:
-                return "Unable to Reach Server, Check Your Wifi Connection"
+                return "No Internet Connection"
                 
             case .userDisabled:
                 return "This Account has Been Disabled"

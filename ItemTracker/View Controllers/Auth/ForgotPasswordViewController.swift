@@ -46,9 +46,10 @@ final class ForgotPasswordViewController: UIViewController {
         floatingViewToBottom.constant   = UIScreen.main.bounds.height * 0.3
         
         // Setup the navigation bar
-        backButton.tintColor            = Constants.Color.primary
+        backButton.tintColor = Constants.Color.primary
         
         // Setup the text field
+        emailTextField.delegate            = self
         emailTextField.tintColor           = Constants.Color.primary
         emailTextField.leftView?.tintColor = UIColor.black
         emailTextField.keyboardType        = .emailAddress
@@ -91,7 +92,11 @@ final class ForgotPasswordViewController: UIViewController {
         
     }
     
-    // MARK: - IBAction Methods
+}
+
+// MARK: - Navigation Bar Methods
+extension ForgotPasswordViewController {
+    
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         
         // Slide the view out to the right
@@ -105,14 +110,33 @@ final class ForgotPasswordViewController: UIViewController {
         
     }
     
+}
+
+// MARK: - Text Field Methods
+extension ForgotPasswordViewController: UITextFieldDelegate {
+    
     @IBAction func emailTextFieldEditing(_ sender: UITextField) {
         
         // Store the email textfields text
         email = emailTextField.text?.trimmingCharacters(in: .whitespaces)
         
+        // Check to see if the buttons should be activated
         checkToActivateButton()
         
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        // Lower the keyboard
+        textField.resignFirstResponder()
+        return true
+        
+    }
+    
+}
+
+// MARK: - Button Methods
+extension ForgotPasswordViewController {
     
     @IBAction func resetPasswordButtonTapped(_ sender: UIButton) {
         
@@ -140,11 +164,6 @@ final class ForgotPasswordViewController: UIViewController {
         
     }
     
-}
-
-// MARK: - Helper Methods
-extension ForgotPasswordViewController {
-    
     func checkToActivateButton() {
         
         // If the text field is empty, deactivate the button
@@ -160,7 +179,7 @@ extension ForgotPasswordViewController {
     
 }
 
-// MARK: - Methods relating to animation
+// MARK: - Animation Methods
 extension ForgotPasswordViewController {
     
     func slideViewIn() {

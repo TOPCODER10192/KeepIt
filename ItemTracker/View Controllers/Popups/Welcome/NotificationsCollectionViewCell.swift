@@ -9,12 +9,6 @@
 import UIKit
 import UserNotifications
 
-protocol NotificationsProtocol {
-    
-    func notificationsTapped(access: Bool)
-    
-}
-
 class NotificationsCollectionViewCell: UICollectionViewCell {
 
     // MARK: IBOutlet Properties
@@ -22,9 +16,7 @@ class NotificationsCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var notificationsButton: UIButton!
     
-    // MARK: Properties
-    var delegate: NotificationsProtocol?
-    
+    // MARK: - View Methods
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -45,26 +37,31 @@ class NotificationsCollectionViewCell: UICollectionViewCell {
         notificationsButton.layer.borderWidth = 1
         
     }
+    
+}
 
+// MARK: - Button Methods
+extension NotificationsCollectionViewCell {
+    
     @IBAction func notificationsButtonTapped(_ sender: UIButton) {
         
-        NotificationService.checkNotificationAccess { (access) in
-            
-            // If the user has access, then disable the button
-            if access == nil || access == true {
-                
-                DispatchQueue.main.async {
-                    self.notificationsButton.isEnabled = false
-                    self.notificationsButton.setTitleColor(UIColor.white, for: .disabled)
-                    self.notificationsButton.backgroundColor = Constants.Color.primary
-                }
-                
-            }
-            
-            if access != nil {
-                self.delegate?.notificationsTapped(access: access!)
-            }
-        }
+        // Acknowledge that the user has seen the welcome view and dismiss it
+        UserDefaults.standard.set(false, forKey: Constants.Key.firstLaunch)
+        
+        // Ask the user if they want notifications, if they say yes set a default for 7PM Daily
+        NotificationService.createTimedNotification(hour: 19, minute: 0, repeats: true)
+        
+        // Disable the button
+        activateButton(isActivated: false, color: Constants.Color.primary)
         
     }
+    
+    func activateButton(isActivated: Bool, color: UIColor) {
+        
+        // Set the button state
+        notificationsButton.isEnabled = isActivated
+        notificationsButton.backgroundColor = color
+        
+    }
+    
 }

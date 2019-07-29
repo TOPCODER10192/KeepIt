@@ -102,6 +102,16 @@ extension ChangeNameViewController {
         // Disable the button to prevent multiple taps
         saveChangesButton.isEnabled = false
         
+        // Lower the keyboard
+        lowerKeyboard()
+        
+        // Check if the user has internet connection
+        guard InternetService.checkForConnection() == true else {
+            saveChangesButton.isEnabled = true
+            ProgressService.errorAnimation(text: "No Internet Connection")
+            return
+        }
+        
         // Start the progress animation
         ProgressService.progressAnimation(text: "Trying to Update Your Name")
         
@@ -140,11 +150,6 @@ extension ChangeNameViewController {
         
     }
     
-}
-
-// MARK: - Helper Methods
-extension ChangeNameViewController {
-    
     func checkToActivateButton() {
         
         // Check that both fields have been filled out, otherwise disable the button
@@ -155,6 +160,19 @@ extension ChangeNameViewController {
         
         // Activate the button
         saveChangesButton.activateButton(isActivated: true, color: Constants.Color.primary)
+        
+    }
+    
+}
+
+// MARK: - Helper Methods
+extension ChangeNameViewController {
+    
+    func lowerKeyboard() {
+        
+        // Lower the keyboard
+        firstNameTextField.resignFirstResponder()
+        lastNameTextField.resignFirstResponder()
         
     }
     
