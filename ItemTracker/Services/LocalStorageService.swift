@@ -14,13 +14,11 @@ final class LocalStorageService {
     private static let defaults = UserDefaults.standard
     
     // MARK: - Write Methods
-    static func writeUser(user: UserInfo) {
+    static func writeUser(id: String, email: String) {
         
         // Store the users information locally
-        defaults.set(user.id       , forKey: Constants.Key.User.id)
-        defaults.set(user.firstName, forKey: Constants.Key.User.firstName)
-        defaults.set(user.lastName , forKey: Constants.Key.User.lastName)
-        defaults.set(user.email    , forKey: Constants.Key.User.email)
+        defaults.set(id       , forKey: Constants.Key.User.id)
+        defaults.set(email    , forKey: Constants.Key.User.email)
         
     }
     
@@ -99,24 +97,35 @@ final class LocalStorageService {
         
     }
     
-    // MARK: - Read Methods
-    static func getUser() {
+    static func updateGeoFence(index: Int, geoFence: GeoFence) {
         
-        // Retrieve the users information from local storage
-        let userID    = defaults.value(forKey: Constants.Key.User.id)        as? String
-        let firstName = defaults.value(forKey: Constants.Key.User.firstName) as? String
-        let lastName  = defaults.value(forKey: Constants.Key.User.lastName)  as? String
-        let email     = defaults.value(forKey: Constants.Key.User.email)     as? String
+        // Pull all the existing array from local storage
+        var names         = defaults.value(forKey: Constants.Key.GeoFence.name)           as? [String]   ?? [String]()
+        var centers       = defaults.value(forKey: Constants.Key.GeoFence.center)         as? [[Double]] ?? [[Double]]()
+        var radii         = defaults.value(forKey: Constants.Key.GeoFence.radius)         as? [Double]   ?? [Double]()
+        var entryTriggers = defaults.value(forKey: Constants.Key.GeoFence.triggerOnEntry) as? [Bool]     ?? [Bool]()
+        var exitTriggers  = defaults.value(forKey: Constants.Key.GeoFence.triggerOnExit)  as? [Bool]     ?? [Bool]()
+        var ids           = defaults.value(forKey: Constants.Key.GeoFence.id)             as? [String]   ?? [String]()
         
-        // Check that all properties are filled otherwise return nil
-        guard userID != nil, firstName != nil && lastName != nil && email != nil else { return }
+        // Update the array
+        names[index]         = geoFence.name
+        centers[index]       = geoFence.centreCoordinate
+        radii[index]         = geoFence.radius
+        entryTriggers[index] = geoFence.triggerOnEntrance
+        exitTriggers[index]  = geoFence.triggerOnExit
+        ids[index]           = geoFence.id
         
-        // Create the user
-        let user         = UserInfo(id: userID!, firstName: firstName!, lastName: lastName!, email: email!)
-        Stored.user      = user
+        // Place the arrays back in local storage
+        defaults.set(names, forKey: Constants.Key.GeoFence.name)
+        defaults.set(centers, forKey: Constants.Key.GeoFence.center)
+        defaults.set(radii, forKey: Constants.Key.GeoFence.radius)
+        defaults.set(entryTriggers, forKey: Constants.Key.GeoFence.triggerOnEntry)
+        defaults.set(exitTriggers, forKey: Constants.Key.GeoFence.triggerOnExit)
+        defaults.set(ids, forKey: Constants.Key.GeoFence.id)
         
     }
     
+    // MARK: - Read Methods
     static func listItems() {
         
         // Read in the arrays of item properties
@@ -242,8 +251,6 @@ final class LocalStorageService {
         
         // Clear the users information
         defaults.set(nil, forKey: Constants.Key.User.id)
-        defaults.set(nil, forKey: Constants.Key.User.firstName)
-        defaults.set(nil, forKey: Constants.Key.User.lastName)
         defaults.set(nil, forKey: Constants.Key.User.email)
         
         // Clear the item arrays
@@ -252,6 +259,8 @@ final class LocalStorageService {
         defaults.set(nil, forKey: Constants.Key.Item.location)
         defaults.set(nil, forKey: Constants.Key.Item.lastUpdateDate)
         defaults.set(nil, forKey: Constants.Key.Item.imageURL)
+        
+        Stored.userItems = []
         
     }
 }

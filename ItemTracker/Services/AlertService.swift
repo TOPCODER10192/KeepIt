@@ -2,7 +2,7 @@
 //  ErrorService.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-12.
+//  Created by Brock Chelle on 2019-07-12.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 

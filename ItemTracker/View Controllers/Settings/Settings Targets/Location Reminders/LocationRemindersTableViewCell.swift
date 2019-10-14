@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class LocationRemindersTableViewCell: UITableViewCell {
+final class LocationRemindersTableViewCell: UITableViewCell {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var mapView: MKMapView!
@@ -24,16 +24,9 @@ class LocationRemindersTableViewCell: UITableViewCell {
         
         // Setup the map view
         mapView.delegate = self
-        mapView.layer.cornerRadius = mapView.bounds.width / 2
         mapView.layer.borderWidth  = 1
         mapView.layer.borderColor  = Constants.Color.primary.cgColor
         
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }
@@ -43,19 +36,23 @@ extension LocationRemindersTableViewCell: MKMapViewDelegate {
     
     func centerMapViewOnGeoFence(coordinate: [Double], radius: Double) {
         
+        // Get coordinates for the geofence
         let latitude = coordinate[0] as CLLocationDegrees
         let longitude = coordinate[1] as CLLocationDegrees
         let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         
+        // Get the region for the geofence
         let region = MKCoordinateRegion(center: center, latitudinalMeters: radius * 4, longitudinalMeters: radius * 4)
         mapView.setRegion(region, animated: false)
         
+        // Draw the geofence
         drawGeoFence(center: center, radius: radius)
         
     }
     
     func drawGeoFence(center: CLLocationCoordinate2D, radius: CLLocationDistance) {
     
+        // Create a circular geofence and add it to the map
         let circle = MKCircle(center: center, radius: radius)
         mapView.addOverlay(circle)
         
@@ -73,6 +70,7 @@ extension LocationRemindersTableViewCell: MKMapViewDelegate {
         // Check if the overlay can be cast as an MKCircle
         guard let circleOverlay = overlay as? MKCircle else { return MKOverlayRenderer() }
         
+        // Create a renderer for the circle and set its properties
         let circleRenderer = MKCircleRenderer(overlay: circleOverlay)
         
         circleRenderer.strokeColor = Constants.Color.primary
@@ -80,13 +78,9 @@ extension LocationRemindersTableViewCell: MKMapViewDelegate {
         circleRenderer.fillColor   = Constants.Color.softPrimary
         circleRenderer.alpha       = 0.5
         
+        // Return the renderer
         return circleRenderer
         
     }
-    
-}
-
-extension LocationRemindersTableViewCell {
-    
     
 }

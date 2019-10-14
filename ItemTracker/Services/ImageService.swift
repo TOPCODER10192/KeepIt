@@ -9,17 +9,19 @@
 import Foundation
 import FirebaseStorage
 import FirebaseFirestore
+import FirebaseAuth
 
 final class ImageService {
     
+    static let firebaseAuth    = Auth.auth()
     static let firebaseStorage = Storage.storage()
     
     static func storeImage(image: UIImage, itemName: String, completion: @escaping (URL) -> Void) {
         
-        guard let userEmail = Stored.user?.email else { return }
+        guard let userID = firebaseAuth.currentUser?.uid else { return }
         
         // Get a storage reference
-        let uploadRef = firebaseStorage.reference().child(userEmail).child(itemName)
+        let uploadRef = firebaseStorage.reference().child(userID).child(itemName)
         
         // Get Data Representation of the image
         guard let imageData = image.jpegData(compressionQuality: 0.01) else { return }
@@ -53,9 +55,9 @@ final class ImageService {
     
     static func deleteImage(itemName: String) {
         
-        guard let userEmail = Stored.user?.email else { return }
+        guard let userID = firebaseAuth.currentUser?.uid else { return }
         
-        let deleteRef = firebaseStorage.reference().child(userEmail).child(itemName)
+        let deleteRef = firebaseStorage.reference().child(userID).child(itemName)
         
         deleteRef.delete { (error) in
             

@@ -2,7 +2,7 @@
 //  NotificationService.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-23.
+//  Created by Brock Chelle on 2019-07-23.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 
@@ -10,11 +10,11 @@ import Foundation
 import UserNotifications
 import CoreLocation
 
-class NotificationService {
+final class NotificationService {
     
     private static let center = UNUserNotificationCenter.current()
     
-    static func createTimedNotification(weekday: Int? = 0, hour: Int, minute: Int, repeats: Bool) {
+    static func createTimedNotification(weekday: Int? = nil, hour: Int, minute: Int, repeats: Bool) {
         
         // Ask the user for notification authorization
         center.requestAuthorization(options: [.badge, .alert, .sound]) { (granted, error) in
@@ -57,6 +57,13 @@ class NotificationService {
         
     }
     
+    static func removeTimedNotification() {
+        
+        // Remove the timed notification
+        center.removePendingNotificationRequests(withIdentifiers: [Constants.ID.Notification.timed])
+        
+    }
+    
     static func createLocationNotification(message: String) {
         
         // Create the notification content
@@ -64,6 +71,7 @@ class NotificationService {
         content.sound = UNNotificationSound.default
         content.title = message
         
+        // Create a trigger for the notification
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: Constants.ID.Notification.location, content: content, trigger: trigger)
         

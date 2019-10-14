@@ -2,7 +2,7 @@
 //  CreditsTableViewController.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-22.
+//  Created by Brock Chelle on 2019-07-22.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 
@@ -16,7 +16,7 @@ struct CreditCell {
     
 }
 
-class CreditsTableViewController: UITableViewController {
+final class CreditsTableViewController: UITableViewController {
     
     // MARK: - Properties
     let tableData = [CreditCell(title: "\"keys\"",
@@ -37,36 +37,31 @@ class CreditsTableViewController: UITableViewController {
                      CreditCell(title: "\"Bell\"",
                                 text: "\"Bell\"\nby Graphic Tigers from the Noun Project",
                                 url: "https://thenounproject.com/search/?q=timed%20notification&i=818887"),
-                    CreditCell(title: "\"Email\"",
-                               text: "\"Email\"\n by unlimicon from the Noun Project",
-                               url: "https://thenounproject.com/search/?q=mail&i=565415"),
-                    CreditCell(title: "\"name\"",
-                               text: "\"name\"\n by Adrien Coquet from the Noun Project",
-                               url: "https://thenounproject.com/search/?q=name&i=1946983"),
-                    CreditCell(title: "\"treasure map\"",
-                               text: "\"treasure map\"\nby Nikita Kozin from the Noun Project",
-                               url: "https://thenounproject.com/search/?q=map&i=1173392"),
-                    CreditCell(title: "\"call\"",
-                               text: "\"call\"\nby Gregor Cresnar from the Noun Project",
-                               url: "https://thenounproject.com/search/?q=phone%20notification&i=625941"),
-                    CreditCell(title: "\"Lost and Found\"",
-                               text: "\"Lost and Found\"\nby icon 54 from the Noun Project",
-                               url: "https://thenounproject.com/search/?q=lost%20and%20found&i=545855"),
-                    CreditCell(title:"\"Book\"",
-                               text: "\"Book\"\nby scott desmond from the Noun Project",
-                               url: "https://thenounproject.com/search/?q=BOOk&i=2173674")]
-    
-    // MARK: - View Methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
+                     CreditCell(title: "\"Email\"",
+                                text: "\"Email\"\nby unlimicon from the Noun Project",
+                                url: "https://thenounproject.com/search/?q=mail&i=565415"),
+                     CreditCell(title: "\"treasure map\"",
+                                text: "\"treasure map\"\nby Nikita Kozin from the Noun Project",
+                                url: "https://thenounproject.com/search/?q=map&i=1173392"),
+                     CreditCell(title: "\"call\"",
+                                text: "\"call\"\nby Gregor Cresnar from the Noun Project",
+                                url: "https://thenounproject.com/search/?q=phone%20notification&i=625941"),
+                     CreditCell(title: "\"Lost and Found\"",
+                                text: "\"Lost and Found\"\nby icon 54 from the Noun Project",
+                                url: "https://thenounproject.com/search/?q=lost%20and%20found&i=545855"),
+                     CreditCell(title:"\"Book\"",
+                                text: "\"Book\"\nby scott desmond from the Noun Project",
+                                url: "https://thenounproject.com/search/?q=BOOk&i=2173674"),
+                     CreditCell(title: "\"link\"",
+                                text: "\"link\"\nby Luiz Carvalho from the Noun Project",
+                                url: "https://thenounproject.com/search/?q=link&i=1713473")]
 
     // MARK: - Section Methods
     override func numberOfSections(in tableView: UITableView) -> Int {
         
         // Return the section for icon creators
         return 1
+        
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -81,6 +76,7 @@ class CreditsTableViewController: UITableViewController {
         view.backgroundColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 255/255)
         view.addSubview(label)
         
+        // Return the view
         return view
         
     }
@@ -113,6 +109,7 @@ class CreditsTableViewController: UITableViewController {
         // Create a hyperlink for the information
         cell.linkTextView.attributedText = NSAttributedString.makeHyperlink(for: url, in: creditText, as: name)
         
+        // Return the cell
         return cell
     }
     

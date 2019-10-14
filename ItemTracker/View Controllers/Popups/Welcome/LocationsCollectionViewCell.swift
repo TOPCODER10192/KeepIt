@@ -15,7 +15,7 @@ protocol LocationProtocol {
     
 }
 
-class LocationsCollectionViewCell: UICollectionViewCell {
+final class LocationsCollectionViewCell: UICollectionViewCell {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var imageViewContainer: UIView!

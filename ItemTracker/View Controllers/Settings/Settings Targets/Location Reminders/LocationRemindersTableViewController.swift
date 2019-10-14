@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class LocationRemindersTableViewController: UITableViewController {
+final class LocationRemindersTableViewController: UITableViewController {
     
     // MARK: IBOutlet Properties
     @IBOutlet weak var infoLabel: UILabel!
@@ -18,7 +18,7 @@ class LocationRemindersTableViewController: UITableViewController {
     // MARK: - Properties
     let locationManager = CLLocationManager()
     
-    // MARK: View Methods
+    // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,6 +30,7 @@ class LocationRemindersTableViewController: UITableViewController {
         addGeoFenceButton.setTitleColor(UIColor.white, for: .normal)
         addGeoFenceButton.setTitleColor(UIColor.clear, for: .disabled)
         
+        // Check to see if the button should be activated
         checkToActivateButton()
 
         // Display an edit button
@@ -97,6 +98,9 @@ extension LocationRemindersTableViewController {
         // Create a cell
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.ID.Cell.geoFence, for: indexPath) as! LocationRemindersTableViewCell
         
+        // Set the cells selection style
+        cell.selectionStyle = .none
+        
         // Get the corresponding geofence for the cell
         let geoFence = Stored.geoFences[indexPath.row]
         
@@ -122,11 +126,10 @@ extension LocationRemindersTableViewController {
             cell.exitNotificationLabel.text = "Notify on Exit: NO"
         }
         
-        
+        // Return the cell
         return cell
     }
     
-    // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         
         // Disable reordering of the row
@@ -158,7 +161,6 @@ extension LocationRemindersTableViewController {
                 cell.clearMapOverlays()
             }
             
-            
             // Load the new info label
             loadInfoLabel()
             
@@ -179,6 +181,23 @@ extension LocationRemindersTableViewController {
         
         // Clear all the overlays in the cell
         cell.clearMapOverlays()
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        // Create an instance of the editGeoFence Controller
+        guard let editGeoFenceVC = UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main)
+            .instantiateViewController(withIdentifier: Constants.ID.VC.editGeoFence) as? EditGeoFenceViewController else { return }
+                
+        // Get the information for the corresponding geoFence
+        let geoFence = Stored.geoFences[indexPath.row]
+        editGeoFenceVC.geoFence = geoFence
+        editGeoFenceVC.index    = indexPath.row
+        editGeoFenceVC.delegate = self
+        
+        editGeoFenceVC.modalPresentationStyle = .overCurrentContext
+        present(editGeoFenceVC, animated: false, completion: nil)
         
     }
     
@@ -210,6 +229,7 @@ extension LocationRemindersTableViewController {
         // Add the section title to the view
         headerView.addSubview(sectionTitle)
         
+        // Return the header view
         return headerView
         
     }
@@ -217,7 +237,7 @@ extension LocationRemindersTableViewController {
 }
 
 // MARK: - Add GeoFence Button Methods
-extension LocationRemindersTableViewController: AddGeoFenceProtocol {
+extension LocationRemindersTableViewController {
     
     @IBAction func addGeoFenceButtonTapped(_ sender: RoundedButton) {
         
@@ -227,8 +247,10 @@ extension LocationRemindersTableViewController: AddGeoFenceProtocol {
                 return
         }
         
+        // Set the delegate
         addGeoFenceVC.delegate = self
         
+        // Setup the vc and present it
         addGeoFenceVC.modalPresentationStyle = .overCurrentContext
         present(addGeoFenceVC, animated: false, completion: nil)
         
@@ -246,17 +268,29 @@ extension LocationRemindersTableViewController: AddGeoFenceProtocol {
         
     }
     
+}
+
+// MARK: - Custom Protocol Methods
+extension LocationRemindersTableViewController: AddGeoFenceProtocol, EditGeoFenceProtocol {
+    
     func geoFenceAdded(geoFence: GeoFence) {
         
+        // Insert a new row for the geofence
         tableView.insertRows(at: [IndexPath(row: tableView.numberOfRows(inSection: 0), section: 0)], with: .fade)
         loadInfoLabel()
         tableView.reloadData()
         
     }
     
+    func geoFenceEdited(geoFence: GeoFence) {
+        
+        tableView.reloadData()
+        
+    }
+    
 }
 
-// MARK: Location Methods
+// MARK: - Location Methods
 extension LocationRemindersTableViewController {
     
     func stopMonitoring(geoFence: GeoFence) {
@@ -264,6 +298,7 @@ extension LocationRemindersTableViewController {
         // Iterate through the geofences
         for region in locationManager.monitoredRegions {
             
+            // Match the region to the corresponding geofence
             guard let circularRegion = region as? CLCircularRegion, circularRegion.identifier == geoFence.id else { continue }
             locationManager.stopMonitoring(for: circularRegion)
             

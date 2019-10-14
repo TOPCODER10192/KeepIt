@@ -9,9 +9,9 @@
 import UIKit
 import FirebaseAuth
 
-class ChangePasswordViewController: UIViewController {
+final class ChangePasswordViewController: UIViewController {
 
-    // MARK: - IBOUtlet Properties
+    // MARK: - IBOutlet Properties
     @IBOutlet weak var oldPasswordView: UIView!
     @IBOutlet weak var oldPasswordTextField: UITextField!
     
@@ -133,8 +133,6 @@ extension ChangePasswordViewController {
         
         // Lower the keyboard
         lowerKeyboard()
-        
-        // Check if the user has internet connection
         
         // Start the progress animation
         ProgressService.progressAnimation(text: "Trying to Update Your Password")

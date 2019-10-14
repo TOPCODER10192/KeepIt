@@ -15,18 +15,19 @@ protocol UpdateLocationCellProtocol {
     
 }
 
-class UpdateLocationTableViewCell: UITableViewCell {
+final class UpdateLocationTableViewCell: UITableViewCell {
 
     // MARK: - IBOutlet Properties
     @IBOutlet weak var itemImage: UIImageView!
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var checkBoxButton: UIButton!
     
-    // MARK: - UpdateLocationTableViewCell Properties
+    // MARK: - Properties
     var cellIndex: Int?
     var checkBoxState: Bool = false
     var delegate: UpdateLocationCellProtocol?
     
+    // MARK: - View Methods
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -42,12 +43,6 @@ class UpdateLocationTableViewCell: UITableViewCell {
         checkBoxButton.layer.borderColor  = Constants.Color.primary.cgColor
         checkBoxButton.layer.borderWidth  = 2
         
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     func setPhoto(url: URL) {
@@ -66,6 +61,7 @@ class UpdateLocationTableViewCell: UITableViewCell {
 
     @IBAction func checkBoxButtonTapped(_ sender: UIButton) {
         
+        // Set the color of the box based on the state
         if checkBoxState == false {
             checkBoxButton.backgroundColor = Constants.Color.primary
         }
@@ -73,8 +69,11 @@ class UpdateLocationTableViewCell: UITableViewCell {
             checkBoxButton.backgroundColor = UIColor.clear
         }
         
+        // Invert the state
         checkBoxState = !checkBoxState
-        delegate!.itemSelected(index: cellIndex!, state: checkBoxState)
+        
+        // Tell the delegate that a box was clicked
+        delegate?.itemSelected(index: cellIndex!, state: checkBoxState)
     }
     
 }

@@ -2,15 +2,16 @@
 //  ItemAnnotation.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-05.
+//  Created by Brock Chelle on 2019-07-05.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 
 import UIKit
 import MapKit
 
-class ItemAnnotationView: MKAnnotationView {
+final class ItemAnnotationView: MKAnnotationView {
     
+    // Set the sublayer for the annotation view
     func setSublayer(item: Item) {
         
         // Set the frame for the annotation view

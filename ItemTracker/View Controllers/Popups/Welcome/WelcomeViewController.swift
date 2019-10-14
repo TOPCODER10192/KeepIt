@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WelcomeViewController: UIViewController {
+final class WelcomeViewController: UIViewController {
 
     // MARK: - IBOutlet Properties
     @IBOutlet weak var floatingView: UIView!
@@ -48,7 +48,7 @@ extension WelcomeViewController {
     @IBAction func setupLaterButtonTapped(_ sender: UIButton) {
         
         // Acknowledge that the user has seen the welcome view and dismiss it
-        UserDefaults.standard.set(false, forKey: Constants.Key.firstLaunch)
+        UserDefaults.standard.set(false, forKey: Constants.Key.firstLogin)
         self.dismiss(animated: true, completion: nil)
         
     }
@@ -65,7 +65,7 @@ extension WelcomeViewController {
         else {
             
             // Acknowledge that the user has seen the welcome view and dismiss it
-            UserDefaults.standard.set(false, forKey: Constants.Key.firstLaunch)
+            UserDefaults.standard.set(false, forKey: Constants.Key.firstLogin)
             self.dismiss(animated: true, completion: nil)
             
         }

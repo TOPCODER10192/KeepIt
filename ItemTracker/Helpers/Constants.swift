@@ -31,23 +31,26 @@ struct Constants {
         
         struct VC {
 
-            static let backgroundAuth = "BackgroundAuthVC"
-            static let login          = "LoginVC"
-            static let createAccount  = "CreateAccountVC"
-            static let forgotPassword = "ForgotPasswordVC"
+            static let initial        = "InitialVC"
+            static let userLogin      = "UserLoginVC"
+            static let signUp         = "SignUpVC"
+            static let resetPassword  = "ResetPasswordVC"
             
             static let tabBar         = "TabBarVC"
             
             static let welcome        = "WelcomeVC"
             static let singleItem     = "SingleItemVC"
             static let updateLocation = "UpdateLocationVC"
-            static let addGeoFence     = "AddGeoFenceVC"
+            static let addGeoFence    = "AddGeoFenceVC"
+            static let editGeoFence   = "EditGeoFenceVC"
             
             static let settings       = "SettingsVC"
             
         }
         
         struct Cell {
+            
+            static let initial = "InitialCollectionViewCell"
             
             static let welcomeLocations     = "LocationsCell"
             static let welcomeNotifications = "NotificationsCell"
@@ -106,7 +109,8 @@ struct Constants {
             static let annotation: CGFloat     = 40
             static let updateLocation: CGFloat = 150
             static let itemHeader: CGFloat     = 200
-            static let addGeoFence: CGFloat     = min(700, UIScreen.main.bounds.height - 60)
+            static let addGeoFence: CGFloat    = min(700, UIScreen.main.bounds.height - 60)
+            static let editGeoFence: CGFloat   = 520
             
         }
         
@@ -161,6 +165,7 @@ struct Constants {
         
         static let firstLaunch = "isFirstLaunch"
         static let firstLogin  = "isFirstLogin"
+        static let numberOfUpdates = "numberOfUpdates"
     
     }
     

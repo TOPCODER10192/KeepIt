@@ -16,43 +16,11 @@ final class FirestoreService {
     private static let db = Firestore.firestore()
     
     // MARK: - Read Methods
-    static func getUser(userID: String, completion: @escaping (Error?, UserInfo?) -> Void) {
-        
-        // Get a reference to the users document
-        let userDocRef = db.collection(Constants.Key.User.users).document(userID)
-        
-        // Attempt to read the user document
-        userDocRef.getDocument
-        { (document, error) in
-           
-            // Check that the document was fetched without any errors
-            guard document != nil, document!.exists, error == nil else {
-                completion(error, nil)
-                return
-            }
-            
-            // Fetch the data from the document and check that it isn't nil
-            let data = document!.data()
-            guard data != nil else { return }
-            
-            // Pull the users information from the document
-            let user = UserInfo(id       : document!.documentID                           ,
-                                firstName: data![Constants.Key.User.firstName]! as! String,
-                                lastName : data![Constants.Key.User.lastName]!  as! String,
-                                email    : data![Constants.Key.User.email]!     as! String)
-            
-            // Call the Completion handler with no error and the user
-            completion(nil, user)
-            
-        }
-        
-    }
-    
-    static func listItems(completion: @escaping (Error?, [Item]?) -> Void) {
+    static func listItems(completion: @escaping (Error?, [Item]) -> Void) {
         
         // Get a reference to the items collection
         let itemsRef = db.collection(Constants.Key.User.users)
-                        .document(Stored.user!.id)
+                        .document(firebaseAuth.currentUser!.uid)
                         .collection(Constants.Key.Item.items)
         
         // Attempt to get all the documents in the users item collection
@@ -61,7 +29,7 @@ final class FirestoreService {
             
             // Check to see if all the documents were obtained without an error
             guard error == nil, query != nil else {
-                completion(error, nil)
+                completion(error, [])
                 return
             }
             
@@ -93,15 +61,13 @@ final class FirestoreService {
     }
     
     // MARK: - Write Methods
-    static func writeUser(user: UserInfo, completion: @escaping (Error?) -> Void) {
+    static func writeUser(id: String, completion: @escaping (Error?) -> Void) {
         
         // Get a reference to the document that the user will be written to
-        let userDocRef = db.collection(Constants.Key.User.users).document(user.id)
+        let userDocRef = db.collection(Constants.Key.User.users).document(id)
         
         // Attempt to send the data to firestore
-        userDocRef.setData([Constants.Key.User.firstName: user.firstName,
-                            Constants.Key.User.lastName : user.lastName ,
-                            Constants.Key.User.email    : user.email     ])
+        userDocRef.setData([:])
         { (error) in
             
             // Call the completion parameter with the error as the parameter
@@ -115,7 +81,7 @@ final class FirestoreService {
         
         // Get a reference to where the document will be written
         let itemRef = db.collection(Constants.Key.User.users)
-                        .document(Stored.user!.id)
+                        .document(firebaseAuth.currentUser!.uid)
                         .collection(Constants.Key.Item.items)
                         .document()
         
@@ -137,7 +103,7 @@ final class FirestoreService {
         
         // Get a reference to the items path in firestore
         let itemRef = db.collection(Constants.Key.User.users)
-                         .document(Stored.user!.id)
+                         .document(firebaseAuth.currentUser!.uid)
                          .collection(Constants.Key.Item.items)
                          .document(item.id)
         
@@ -159,7 +125,7 @@ final class FirestoreService {
         
         // Get a reference to the items path in firestore
         let itemDocRef = db.collection(Constants.Key.User.users)
-                        .document(Stored.user!.id)
+                        .document(firebaseAuth.currentUser!.uid)
                         .collection(Constants.Key.Item.items)
                         .document(item.id)
         
@@ -194,15 +160,25 @@ final class FirestoreService {
                 return
             }
             
-            // Attempt to delete all the users images
+            // Attempt to delete all the users images and items
             for item in Stored.userItems {
+                
+                self.deleteItem(item: item, completion: { (error) in
+                    
+                    guard error != nil else {
+                        completion(error)
+                        return
+                    }
+                    
+                })
+                
                 if URL(string: item.imageURL) != nil {
                     ImageService.deleteImage(itemName: item.name)
                 }
             }
             
             // Get a reference to the path containg the user in firestore
-            let userDocRef = db.collection(Constants.Key.User.users).document(Stored.user!.id)
+            let userDocRef = db.collection(Constants.Key.User.users).document(firebaseAuth.currentUser!.uid)
             
             // Attempt to delete the user from the firestore page
             userDocRef.delete(completion: { (error) in

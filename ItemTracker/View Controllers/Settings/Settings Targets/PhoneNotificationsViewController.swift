@@ -9,7 +9,7 @@
 import UIKit
 import UserNotifications
 
-class PhoneNotificationsViewController: UIViewController {
+final class PhoneNotificationsViewController: UIViewController {
 
     // MARK: - IBOutlet Properties
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -33,11 +33,10 @@ class PhoneNotificationsViewController: UIViewController {
         super.viewDidLoad()
         
         // Setup the segmented control
-        segmentedControl.selectedSegmentIndex = 1
+        segmentedControl.selectedSegmentIndex = 0
         segmentedControl.tintColor = Constants.Color.primary
         dailyPickerView.isHidden  = false
         weeklyPickerView.isHidden = true
-        noRemindersLabel.isHidden = true
 
         // Setup the picker views
         dailyPickerView.delegate    = self
@@ -45,6 +44,10 @@ class PhoneNotificationsViewController: UIViewController {
         
         weeklyPickerView.delegate   = self
         weeklyPickerView.dataSource = self
+        
+        // Set up the no reminders label
+        noRemindersLabel.isHidden = true
+        noRemindersLabel.adjustsFontSizeToFitWidth = true
         
         // Set the data for the weekly picker view and daily picker view
         weeklyPickerViewData.append(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"])
@@ -80,10 +83,6 @@ class PhoneNotificationsViewController: UIViewController {
         saveChangesButton.backgroundColor    = Constants.Color.primary
         
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-    }
 
 }
 
@@ -92,23 +91,22 @@ extension PhoneNotificationsViewController {
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
         
-        // Show the no notifications method if "Never" is seleceted
-        if segmentedControl.selectedSegmentIndex == 0 {
-            noRemindersLabel.isHidden = false
-            dailyPickerView.isHidden  = true
-            weeklyPickerView.isHidden = true
-        }
         // Show the daily picker view if "Daily" is selected
-        else if segmentedControl.selectedSegmentIndex == 1 {
-            noRemindersLabel.isHidden = true
+        if segmentedControl.selectedSegmentIndex == 0 {
             dailyPickerView.isHidden  = false
             weeklyPickerView.isHidden = true
+            noRemindersLabel.isHidden = true
         }
         // Show the weekly picker view if "Weekly is selected"
-        else {
-            noRemindersLabel.isHidden = true
+        else if segmentedControl.selectedSegmentIndex == 1 {
             dailyPickerView.isHidden  = true
             weeklyPickerView.isHidden = false
+            noRemindersLabel.isHidden = true
+        }
+        else {
+            dailyPickerView.isHidden  = true
+            weeklyPickerView.isHidden = true
+            noRemindersLabel.isHidden = false
         }
         
     }
@@ -249,52 +247,19 @@ extension PhoneNotificationsViewController {
     
     @IBAction func saveChangesButtonTapped(_ sender: UIButton) {
         
-        // Create a center for notifications
-        let center = UNUserNotificationCenter.current()
-        
-        // Create the notification content
-        let content = UNMutableNotificationContent()
-        content.title = "Time to update your item locations!"
-        
-        // Create the notification trigger
-        let gregorian = Calendar(identifier: .gregorian)
-        let now = Date()
-        
-        var components: DateComponents
-        
-        
+        // Create a daily notification
         if segmentedControl.selectedSegmentIndex == 0 {
-            components = gregorian.dateComponents([.hour, .minute, .second], from: now)
+            NotificationService.createTimedNotification(hour: hour, minute: minute, repeats: true)
         }
+        // Create a weekly notification
         else if segmentedControl.selectedSegmentIndex == 1 {
-            components = gregorian.dateComponents([.hour, .minute, .second], from: now)
-            
-            components.hour   = hour
-            components.minute = minute
-            components.second = 0
+            NotificationService.createTimedNotification(weekday: weekday, hour: hour, minute: minute, repeats: true)
         }
         else {
-            components = gregorian.dateComponents([.weekday, .hour, .minute, .second], from: now)
-            
-            components.weekday = weekday
-            components.hour    = hour
-            components.minute  = minute
-            components.second  = 0
+            NotificationService.removeTimedNotification()
         }
         
-        // Create a trigger for the notification
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: segmentedControl.selectedSegmentIndex != 0)
-        
-        // Generate a request for the notification
-        let request = UNNotificationRequest(identifier: "UpdateLocationsNotification", content: content, trigger: trigger)
-        
-        // Add a request to the notification center
-        center.add(request, withCompletionHandler: { (error) in
-            
-            guard error == nil else { return }
-            
-        })
-        
+        // Show that the process was successful
         ProgressService.successAnimation(text: "Successfully Chenged Your Notification Settings")
         
         // Navigate back to the settings page

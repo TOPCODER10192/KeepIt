@@ -9,7 +9,7 @@
 import UIKit
 import UserNotifications
 
-class NotificationsCollectionViewCell: UICollectionViewCell {
+final class NotificationsCollectionViewCell: UICollectionViewCell {
 
     // MARK: IBOutlet Properties
     @IBOutlet weak var imageViewContainer: UIView!

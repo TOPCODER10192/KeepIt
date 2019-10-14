@@ -28,7 +28,7 @@ final class MapViewController: UIViewController {
     
     var bannerView: GADBannerView!
     
-    // MARK: - AddItemViewController Properties
+    // MARK: - Properties
     let locationManager = CLLocationManager()
     var itemIndex: Int = -1
     
@@ -70,15 +70,14 @@ final class MapViewController: UIViewController {
         nextAnnotationButton.tintColor          = Constants.Color.primary
         
         // Setup the ad View
+        /*
         bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
         bannerView.delegate = self
         
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.adUnitID = "ca-app-pub-1584397833153899/1844990630"
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
-        
-        // Check the location services
-        checkLocationServices()
+         */
         
     }
     
@@ -91,26 +90,28 @@ final class MapViewController: UIViewController {
         // Set the maps geofences
         reloadGeoFences()
         
-    }
-    
-    // MARK: - IBAction Methods
-    @IBAction func zoomToUserButtonTapped(_ sender: RoundedButton) {
+        // Check location services
+        checkLocationServices()
         
-        centerMapOnUser(span: Constants.Map.defaultSpan)
-    
     }
+    
+}
+
+// MARK: - Navigation Bar Methods
+extension MapViewController {
     
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
         // Load the add item vc
         loadVC(ID: Constants.ID.VC.singleItem,
-                       sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
-                       animate:  false)
+               sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+               animate:  false)
         
     }
     
     @IBAction func updateLocationButtonTapped(_ sender: UIBarButtonItem) {
         
+        // Check if the user has any items
         guard Stored.userItems.count > 0 else {
             presentNoItemsAlert()
             return
@@ -118,14 +119,6 @@ final class MapViewController: UIViewController {
         
         // Load the update location vc
         loadVC(ID: Constants.ID.VC.updateLocation,
-                       sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
-                       animate: false)
-        
-    }
-    
-    @IBAction func addGeoFenceButtonTapped(_ sender: RoundedButton) {
-        
-        loadVC(ID: Constants.ID.VC.addGeoFence,
                sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
                animate: false)
         
@@ -135,9 +128,30 @@ final class MapViewController: UIViewController {
         
         // Load the settings VC
         loadVC(ID: Constants.ID.VC.settings,
-                       sb: UIStoryboard(name: Constants.ID.Storyboard.settings, bundle: .main),
-                       animate: true)
+               sb: UIStoryboard(name: Constants.ID.Storyboard.settings, bundle: .main),
+               animate: true)
         
+        
+    }
+    
+}
+
+// MARK: - Map Button Methods
+extension MapViewController {
+    
+    @IBAction func addGeoFenceButtonTapped(_ sender: RoundedButton) {
+        
+        // Load the add geoFenceVC
+        loadVC(ID: Constants.ID.VC.addGeoFence,
+               sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+               animate: false)
+        
+    }
+    
+    @IBAction func zoomToUserButtonTapped(_ sender: RoundedButton) {
+        
+        // Center the map on the user
+        centerMapOnUser(span: Constants.Map.defaultSpan)
         
     }
     
@@ -201,18 +215,26 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
         // Lower the keyboard
         searchBar.resignFirstResponder()
         
+        // Check if the search text is empty
+        guard let searchText = searchBar.text, searchBar.text!.count > 0 else { return }
+        
         // Iterate through all the annotations
-        for annotation in mapView.annotations {
+        for i in 0 ..< mapView.annotations.count {
             
-            // Skip over annotation if it is the user location
-            if annotation is MKUserLocation { continue }
+            // Skip annotation if its user location
+            if mapView.annotations[i] is MKUserLocation { continue }
             
             // If the text matches the annotation, then center the map on that annotation
-            if searchBar.text?.uppercased() == annotation.title!?.uppercased() {
-                centerMapOnItem(annotation: annotation, span: Constants.Map.defaultSpan)
+            if searchText.uppercased() == mapView.annotations[i].title!?.uppercased() {
+                self.itemIndex = i
+                centerMapOnItem(annotation: mapView.annotations[i], span: Constants.Map.defaultSpan)
+                return
             }
             
         }
+        
+        // Show an error if the item couldn't be found
+        ProgressService.errorAnimation(text: "You have no item named \"\(searchText)\"")
         
     }
     
@@ -231,9 +253,7 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
             
             // If the annotation title matches the item name then set the sublayer for the annotation to match the item
             if annotation.title == item.name {
-                
                 annotationView.setSublayer(item: item)
-                
             }
             
         }
@@ -277,11 +297,10 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
     func centerMapOnUser(span: MKCoordinateSpan) {
         
         // Get the users location
-        let location = locationManager.location?.coordinate
-        guard location != nil else { return }
+        guard let location = locationManager.location?.coordinate else { return }
         
         // Get the center and the region
-        let center = location!
+        let center = location
         let region = MKCoordinateRegion.init(center: center, span: span)
         
         // Set the region
@@ -291,6 +310,7 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
     
     func drawGeoFence(center: CLLocationCoordinate2D, radius: CLLocationDistance) {
         
+        // Create a circle overlay for the geoFence
         let circle = MKCircle(center: center, radius: radius)
         mapView.addOverlay(circle)
         
@@ -301,6 +321,7 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
         // Check if the overlay can be cast as an MKCircle
         guard let circleOverlay = overlay as? MKCircle else { return MKOverlayRenderer() }
         
+        // Create a circle renderer and set properties for it
         let circleRenderer = MKCircleRenderer(overlay: circleOverlay)
         
         circleRenderer.strokeColor = Constants.Color.primary
@@ -308,6 +329,7 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
         circleRenderer.fillColor   = Constants.Color.softPrimary
         circleRenderer.alpha       = 0.5
         
+        // Return the circle renderer
         return circleRenderer
         
     }
@@ -317,6 +339,7 @@ extension MapViewController: UISearchBarDelegate, MKMapViewDelegate {
         // Remove all the geofences
         mapView.removeOverlays(mapView.overlays)
         
+        // Iterate through all the stored geoFences
         for geofence in Stored.geoFences {
             
             geoFenceAdded(geoFence: geofence)
@@ -336,7 +359,7 @@ extension MapViewController: CLLocationManagerDelegate, AddGeoFenceProtocol {
         guard let locations = locations.last else { return }
         
         // Get the region
-        let region = MKCoordinateRegion.init(center: locations.coordinate, span: mapView.region.span)
+        let region = MKCoordinateRegion(center: locations.coordinate, span: mapView.region.span)
         
         // Set the mapview
         mapView.setRegion(region, animated: false)
@@ -369,12 +392,7 @@ extension MapViewController: CLLocationManagerDelegate, AddGeoFenceProtocol {
             
             // Hides the zoom to user button and add geofence button
             zoomToUserButton.isHidden = true
-            addGeoFenceButton.isHidden = true
             
-            // Let the user know that they have to turn location services on
-            present(AlertService.createSettingsAlert(title: "Locations Off", message: "Go to settings to turn your location on", cancelAction: nil),
-                    animated: true,
-                    completion: nil)
         }
         
     }
@@ -391,16 +409,18 @@ extension MapViewController: CLLocationManagerDelegate, AddGeoFenceProtocol {
             
         // Case if its not determined
         case .notDetermined:
-            break
+            locationManager.requestAlwaysAuthorization()
             
         // Case if no authorization
         case .restricted, .denied:
             // Let the user know that they have to turn location services on
-            present(AlertService.createSettingsAlert(title: "Locations Off", message: "Go to settings to turn your location on",            cancelAction: nil),
+            present(AlertService.createSettingsAlert(title: "Locations Off",
+                                                     message: "Go to settings to turn your location on",
+                                                     cancelAction: nil),
                     animated: true,
                     completion: nil)
             
-            addGeoFenceButton.isHidden = true
+            // Hide the zoom to user button
             zoomToUserButton.isHidden = true
             
             // If the user has at least 1 item, center the map over the first one
@@ -428,12 +448,14 @@ extension MapViewController: CLLocationManagerDelegate, AddGeoFenceProtocol {
     
     func geoFenceAdded(geoFence: GeoFence) {
         
+        // Get the latitude and longitude of the geofence center
         let latitude  = geoFence.centreCoordinate[0] as CLLocationDegrees
         let longitude = geoFence.centreCoordinate[1] as CLLocationDegrees
         
         let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let radius = geoFence.radius as CLLocationDistance
         
+        // Draw the geofence on the map
         drawGeoFence(center: center, radius: radius)
         
     }
@@ -469,6 +491,7 @@ extension MapViewController: SingleItemProtocol, UpdateLocationProtocol, Setting
     }
     
     func reloadAnnotations() {
+        
         // Remove all mapView Annotations
         mapView.removeAnnotations(mapView.annotations)
         
@@ -486,6 +509,7 @@ extension MapViewController: SingleItemProtocol, UpdateLocationProtocol, Setting
             
             // Add the annotation to the app
             mapView.addAnnotation(annotation)
+            
         }
     }
     
@@ -510,6 +534,7 @@ extension MapViewController {
     
     func presentNoItemsAlert() {
         
+        // Create an alert notifying the user that they have no items
         let noItemsAlert = UIAlertController(title: "No Items",
                                              message: "You're not keeping track of any of your items yet",
                                              preferredStyle: .alert)
@@ -531,8 +556,10 @@ extension MapViewController {
     
     func loadVC(ID: String, sb: UIStoryboard, animate: Bool) {
         
+        // Create a general view control
         let vc = sb.instantiateViewController(withIdentifier: ID)
         
+        // See if the view controller can be type cast and set properties if it can
         if let vc = vc as? SingleItemViewController {
             vc.delegate = self
         }
@@ -550,6 +577,7 @@ extension MapViewController {
             
         }
         
+        // Setup the vc and present it
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: animate, completion: nil)
         

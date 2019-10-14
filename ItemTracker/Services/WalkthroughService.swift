@@ -2,7 +2,7 @@
 //  WalkthroughService.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-27.
+//  Created by Brock Chelle on 2019-07-27.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 
@@ -19,7 +19,7 @@ class WalkthroughService {
         
         ctHelp.new(CTHelpItem(title:"Lets Get Started!",
                               helpText: "KeepIt was designed to help you keep track of all your important things without the use of tracking devices and do so in a way that will take less than a minute a day",
-                              imageName:"KeyImage"))
+                              imageName:"KeyImagePurple"))
         
         ctHelp.new(CTHelpItem(title: "Updating Item Locations",
                               helpText: "At the top-left of the screen is the reload icon, tap this when you want to update the location of any of your items", imageName: "ReloadImage"))

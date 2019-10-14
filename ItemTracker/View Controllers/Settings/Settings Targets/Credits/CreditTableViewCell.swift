@@ -8,10 +8,12 @@
 
 import UIKit
 
-class CreditTableViewCell: UITableViewCell {
+final class CreditTableViewCell: UITableViewCell {
     
+    // MARK: - IBOutlet Properties
     @IBOutlet weak var linkTextView: UITextView!
     
+    // MARK: - View Methods
     override func awakeFromNib() {
         
         self.tintColor = Constants.Color.primary
@@ -40,6 +42,7 @@ extension NSAttributedString {
         attributedString.addAttribute(.foregroundColor, value: Constants.Color.primary, range: substringRange)
         attributedString.addAttribute(.link, value: path, range: substringRange)
         
+        // Return the attributed string
         return attributedString
         
     }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Text-Regular.otf">
+            <string>SFProText-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DynamicTextField" customModule="ItemTracker" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eTo-dh-P0g" customClass="DynamicTextField" customModule="ItemTracker" customModuleProvider="target">
+                    <rect key="frame" x="57" y="418" width="300" height="60"/>
+                    <subviews>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SCu-HT-RRQ" userLabel="Text Field">
+                            <rect key="frame" x="0.0" y="19" width="300" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="7ix-Q6-6uf"/>
+                            </constraints>
+                            <nil key="textColor"/>
+                            <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <action selector="textFieldChangedEditing:" destination="-1" eventType="editingChanged" id="0sC-Ex-qAa"/>
+                            </connections>
+                        </textField>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRH-Ew-U7u" userLabel="Shifting Label">
+                            <rect key="frame" x="0.0" y="27" width="51.5" height="24"/>
+                            <fontDescription key="fontDescription" name="SFProText-Regular" family="SF Pro Text" pointSize="20"/>
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B7D-MA-d9H" userLabel="Underline View">
+                            <rect key="frame" x="0.0" y="59" width="300" height="1"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="ULw-Da-CHq"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="gRH-Ew-U7u" firstAttribute="leading" secondItem="eTo-dh-P0g" secondAttribute="leading" id="5d5-Xz-PkX"/>
+                        <constraint firstAttribute="trailing" secondItem="SCu-HT-RRQ" secondAttribute="trailing" id="EUa-LG-6bJ"/>
+                        <constraint firstAttribute="width" constant="300" id="Fvp-Vq-oQ2"/>
+                        <constraint firstItem="SCu-HT-RRQ" firstAttribute="leading" secondItem="eTo-dh-P0g" secondAttribute="leading" id="aPb-JC-wEK"/>
+                        <constraint firstItem="B7D-MA-d9H" firstAttribute="leading" secondItem="eTo-dh-P0g" secondAttribute="leading" id="gFV-fe-llf"/>
+                        <constraint firstAttribute="height" constant="60" id="hzU-WW-8Wl"/>
+                        <constraint firstAttribute="bottom" secondItem="B7D-MA-d9H" secondAttribute="bottom" id="kwI-F6-JAh"/>
+                        <constraint firstAttribute="trailing" secondItem="B7D-MA-d9H" secondAttribute="trailing" id="m6i-m0-mHP"/>
+                        <constraint firstItem="gRH-Ew-U7u" firstAttribute="centerY" secondItem="SCu-HT-RRQ" secondAttribute="centerY" id="uPZ-hy-VcV"/>
+                        <constraint firstItem="B7D-MA-d9H" firstAttribute="top" secondItem="SCu-HT-RRQ" secondAttribute="bottom" id="zVN-Lr-hka"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="shiftingLabel" destination="gRH-Ew-U7u" id="tOp-BH-6Ub"/>
+                        <outlet property="textField" destination="SCu-HT-RRQ" id="BwA-0t-t3d"/>
+                        <outlet property="underlineView" destination="B7D-MA-d9H" id="fVI-jE-Mcp"/>
+                    </connections>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="eTo-dh-P0g" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="EKG-zS-2QH"/>
+                <constraint firstItem="eTo-dh-P0g" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="hmy-0C-je3"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+        </view>
+    </objects>
+</document>

@@ -10,7 +10,6 @@ import Foundation
 
 final class Stored {
 
-    static var user: UserInfo?
     static var userItems = [Item]()
     static var geoFences = [GeoFence]()
     

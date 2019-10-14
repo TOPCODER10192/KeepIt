@@ -2,7 +2,7 @@
 //  DeleteAccountViewController.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-19.
+//  Created by Brock Chelle on 2019-07-19.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class DeleteAccountViewController: UIViewController {
+final class DeleteAccountViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet weak var passwordView: UIView!
@@ -72,6 +72,9 @@ extension DeleteAccountViewController {
         // Disable the button
         deleteAccountButton.isEnabled = false
         
+        // Lower the keyboard
+        passwordTextField.resignFirstResponder()
+        
         // Show a progress animation
         ProgressService.progressAnimation(text: "Trying to Delete Your Account")
         
@@ -91,7 +94,7 @@ extension DeleteAccountViewController {
             
             // Create the authVC
             let authVC = UIStoryboard(name: Constants.ID.Storyboard.auth, bundle: .main)
-                .instantiateViewController(withIdentifier: Constants.ID.VC.backgroundAuth) as! BackgroundViewController
+                .instantiateViewController(withIdentifier: Constants.ID.VC.initial) as! InitialViewController
             
             // Present the Auth VC
             self.view.window?.rootViewController = authVC

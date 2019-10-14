@@ -2,7 +2,7 @@
 //  RoundedSearchBar.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-22.
+//  Created by Brock Chelle on 2019-07-22.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 

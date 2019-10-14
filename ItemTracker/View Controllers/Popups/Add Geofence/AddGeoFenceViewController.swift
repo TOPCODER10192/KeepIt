@@ -16,7 +16,7 @@ protocol AddGeoFenceProtocol {
     
 }
 
-class AddGeoFenceViewController: UIViewController {
+final class AddGeoFenceViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet var dimView: UIView!
@@ -68,9 +68,9 @@ class AddGeoFenceViewController: UIViewController {
         floatingViewY.constant         = UIScreen.main.bounds.height
         
         // Setup the labels
-        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.adjustsFontSizeToFitWidth      = true
         remindersLabel.adjustsFontSizeToFitWidth = true
-        mapLabel.adjustsFontSizeToFitWidth = true
+        mapLabel.adjustsFontSizeToFitWidth       = true
         
         // Setup the text field
         geoFenceNameTextField.delegate  = self
@@ -86,7 +86,6 @@ class AddGeoFenceViewController: UIViewController {
         mapView.layer.borderColor      = Constants.Color.primary.cgColor
         mapView.tintColor              = Constants.Color.primary
         mapView.showsUserLocation      = false
-        centerMapOnUser(span: Constants.Map.defaultSpan)
         
         // Setup the Map Search Bar
         mapSearchBar.delegate          = self
@@ -101,6 +100,7 @@ class AddGeoFenceViewController: UIViewController {
         // Set up the add geoFence button
         addGeoFenceButton.activateButton(isActivated: false , color: Constants.Color.inactiveButton)
         
+        // Add a tool bar for the radius text field
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
         let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonTapped))
@@ -112,11 +112,12 @@ class AddGeoFenceViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Check Location Services
-        setupLocationManager()
+        // Check location services
+        checkLocationServices()
         
         // Slide the view in
         slideViewIn()
+        
     }
     
 }
@@ -148,25 +149,30 @@ extension AddGeoFenceViewController: UITextFieldDelegate {
     
     @IBAction func radiusTextFieldDoneEditing(_ sender: UITextField) {
         
+        // Check if the map has any overlays
         guard mapView.overlays.count > 0 else { return }
         
+        // Redraw the geofence if it does
         drawGeoFence(center: mapView.overlays[0].coordinate)
         
     }
     
     @objc func doneButtonTapped() {
         
+        // Lower the number pad
         view.endEditing(true)
         
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        // If its not the radius text field, then return
         guard textField == radiusTextField else { return true }
         
         // Find out what the text field will be after adding the current edit
         let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
         
+        // See if the text can be cast as a double
         if let numText = Double(text) {
             radius = numText
         }
@@ -190,6 +196,7 @@ extension AddGeoFenceViewController {
     
     @IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         
+        // Set the properties for entrance and exit notifications
         switch segmentedControl.selectedSegmentIndex {
         case 0:
             triggerOnEntrance = true
@@ -232,6 +239,7 @@ extension AddGeoFenceViewController: MKMapViewDelegate {
     
     func drawGeoFence(center: CLLocationCoordinate2D) {
         
+        // Create a circle overlay that rewrites the previous one
         let circle = MKCircle(center: center, radius: radius as CLLocationDistance)
         mapView.removeOverlays(mapView.overlays)
         mapView.addOverlay(circle)
@@ -253,6 +261,7 @@ extension AddGeoFenceViewController: MKMapViewDelegate {
         // Check if the overlay can be cast as an MKCircle
         guard let circleOverlay = overlay as? MKCircle else { return MKOverlayRenderer() }
         
+        // Render the circle and set its properties
         let circleRenderer = MKCircleRenderer(overlay: circleOverlay)
         
         circleRenderer.strokeColor = Constants.Color.primary
@@ -260,6 +269,7 @@ extension AddGeoFenceViewController: MKMapViewDelegate {
         circleRenderer.fillColor   = Constants.Color.softPrimary
         circleRenderer.alpha       = 0.5
         
+        // Return the circle renderer
         return circleRenderer
     }
     
@@ -270,7 +280,7 @@ extension AddGeoFenceViewController: MKMapViewDelegate {
         
         // Get the center and the region
         let center = location
-        let region = MKCoordinateRegion.init(center: center, span: span)
+        let region = MKCoordinateRegion(center: center, span: span)
         
         // Set the region
         mapView.setRegion(region, animated: true)
@@ -284,6 +294,7 @@ extension AddGeoFenceViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
+        // Check location services again
         checkLocationServices()
         
     }
@@ -303,12 +314,6 @@ extension AddGeoFenceViewController: CLLocationManagerDelegate {
             setupLocationManager()
             checkLocationAuthorization()
         }
-        else {
-            
-            // Let the user know that they have to turn location services on
-            slideViewOut()
-            
-        }
         
     }
     
@@ -320,18 +325,18 @@ extension AddGeoFenceViewController: CLLocationManagerDelegate {
         // Case if its authorized
         case .authorizedAlways, .authorizedWhenInUse:
             centerMapOnUser(span: Constants.Map.defaultSpan)
-            drawGeoFence(center: locationManager.location!.coordinate)
             
         // Case if its not determined
         case .notDetermined:
-            break
+            locationManager.requestAlwaysAuthorization()
             
         // Case if no authorization
         case .restricted, .denied:
-            slideViewOut()
+            break
             
         @unknown default:
             break
+            
         }
         
     }
@@ -339,15 +344,20 @@ extension AddGeoFenceViewController: CLLocationManagerDelegate {
     func startMonitoring(geoFence: GeoFence) -> Bool {
         
         // Check if the device supports geofencing
-        if CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) == false {
+        guard CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) == true else {
             present(AlertService.createGeneralAlert(description: "Geofencing Not Available On This Device"),
                     animated: true, completion: nil)
             return false
         }
         
         // Check if the user always allows location access
-        if CLLocationManager.authorizationStatus() != .authorizedAlways {
-            present(AlertService.createSettingsAlert(title: "GeoFence Saved but It Won't Be Activated Until Your Location Authorization Permissions Are \"Always\"", message: "", cancelAction: nil), animated: true, completion: nil)
+        guard CLLocationManager.authorizationStatus() == .authorizedAlways else {
+            present(AlertService.createSettingsAlert(title: "Location Permissions Must Be \"Always\" to Use GeoFences",
+                                                     message: "",
+                                                     cancelAction: nil),
+                    animated: true,
+                    completion: nil)
+            return false
         }
         
         // Get the fence region for the geofence
@@ -388,24 +398,36 @@ extension AddGeoFenceViewController: UISearchBarDelegate {
         // Lower the keyboard
         searchBar.resignFirstResponder()
         
+        // Check if the seacrch bar has any text
+        guard let location = searchBar.text, searchBar.text!.count > 0 else { return }
+        
+        // Check if the user has internet connection
+        guard InternetService.checkForConnection() == true else {
+            ProgressService.errorAnimation(text: "No Internet Connection")
+            return
+        }
+        
         // Create the search request
         let searchRequest = MKLocalSearch.Request()
-        searchRequest.naturalLanguageQuery = searchBar.text
+        searchRequest.naturalLanguageQuery = location
         
         // Create an active search based off the search request and start the search
         let activeSearch = MKLocalSearch(request: searchRequest)
         activeSearch.start { (response, error) in
             
             // If the search was unsuccessful then present an error message
-            guard response != nil && error == nil else { return }
-            
-            // Get the coordinates of the location searched
-            let latitude = response?.boundingRegion.center.latitude
-            let longitude = response?.boundingRegion.center.longitude
+            guard response != nil && error == nil else {
+                ProgressService.errorAnimation(text: "No result For \"\(location)\"")
+                return
+            }
             
             // Check that the coordinates are not nil
-            guard latitude != nil && longitude != nil else { return }
-            let coordinates = CLLocationCoordinate2DMake(latitude!, longitude!)
+            guard let latitude = response?.boundingRegion.center.latitude else { return }
+            guard let longitude = response?.boundingRegion.center.longitude else { return }
+            
+            self.center = [latitude, longitude]
+            
+            let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
             
             // Create the annotation for the item
             self.drawGeoFence(center: coordinates)
@@ -431,6 +453,7 @@ extension AddGeoFenceViewController {
             return
         }
         
+        // Activate the button if all info is filled
         addGeoFenceButton.activateButton(isActivated: true, color: Constants.Color.primary)
         
     }
@@ -452,9 +475,12 @@ extension AddGeoFenceViewController {
         LocalStorageService.createGeoFence(geoFence: geoFence)
         Stored.geoFences.append(geoFence)
         
+        ProgressService.successAnimation(text: "Successfully Added \(geoFence.name)!")
+        
         // Tell the delegate that a geofence was added
         delegate?.geoFenceAdded(geoFence: geoFence)
         
+        // Slide the view out
         slideViewOut()
         
     }
@@ -512,6 +538,7 @@ extension AddGeoFenceViewController {
     
     func lowerKeyboard() {
         
+        // Lower the keyboard
         geoFenceNameTextField.resignFirstResponder()
         mapSearchBar.resignFirstResponder()
         

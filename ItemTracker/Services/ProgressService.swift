@@ -22,7 +22,7 @@ final class ProgressService {
         
     }
     
-    static func progressAnimation(text: String) {
+    static func progressAnimation(text: String?) {
         
         // Setup SVProgressHUD
         setupSVProgressHUD()
@@ -32,7 +32,7 @@ final class ProgressService {
         
     }
     
-    static func errorAnimation(text: String) {
+    static func errorAnimation(text: String?) {
         
         // Setup SVProgressHUD
         setupSVProgressHUD()
@@ -43,7 +43,7 @@ final class ProgressService {
         
     }
     
-    static func successAnimation(text: String) {
+    static func successAnimation(text: String?) {
         
         // Setup SVProgressHUD
         setupSVProgressHUD()

@@ -43,7 +43,7 @@ class CustomTextField: UITextField {
         
         lineView.backgroundColor = color
         
-        lineView.translatesAutoresizingMaskIntoConstraints = false // This is important!
+        lineView.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(lineView)
         

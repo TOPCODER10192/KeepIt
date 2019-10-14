@@ -8,15 +8,17 @@
 
 import UIKit
 import MessageUI
+import FirebaseAuth
 
 import FirebaseAuth
-import FirebaseFirestore
 
 struct CellData {
     
     var text: String
     let icon: UIImage
     let target: String
+    let showIfAnonymous: Bool
+    let showIfSignedIn: Bool
     
 }
 
@@ -27,26 +29,25 @@ protocol SettingsProtocol {
     
 }
 
-class SettingsTableViewController: UITableViewController {
+final class SettingsTableViewController: UITableViewController {
 
     // MARK: - IBOutlet Properties
     @IBOutlet weak var closeButton: UIBarButtonItem!
     @IBOutlet weak var signOutButton: UIBarButtonItem!
     
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     
     @IBOutlet weak var deleteAccountButton: UIButton!
     
     // MARK: - Properties
-    var tableData = [CellData(text: "Change Name", icon: UIImage(named: "NameIcon")!, target: "ChangeNameSegue"),
-                     CellData(text: "Change Email", icon: UIImage(named: "MailIcon")!, target: "ChangeEmailSegue"),
-                     CellData(text: "Change Password", icon: UIImage(named: "LockIcon")!, target: "ChangePasswordSegue"),
-                     CellData(text: "Timed Reminders", icon: UIImage(named: "TimedNotificationIcon")!, target: "TimedRemindersSegue"),
-                     CellData(text: "Location Reminders", icon: UIImage(named: "LocationNotificationIcon")!, target: "LocationRemindersSegue"),
-                     CellData(text: "Show Walkthrough Again", icon: UIImage(named: "WalkthroughIcon")!, target: "Walkthrough"),
-                     CellData(text: "Report a Problem", icon: UIImage(named: "ErrorIcon")!, target: "Mail"),
-                     CellData(text: "Credits", icon: UIImage(named: "CreditIcon")!, target: "CreditsSegue")]
+    var tableData = [CellData(text: "Change Email", icon: UIImage(named: "MailIcon")!, target: "ChangeEmailSegue", showIfAnonymous: false, showIfSignedIn: true),
+                     CellData(text: "Change Password", icon: UIImage(named: "LockIcon")!, target: "ChangePasswordSegue", showIfAnonymous: false, showIfSignedIn: true),
+                     CellData(text: "Link Account to An Email", icon: UIImage(named: "LinkIcon")!, target: "LinkAccountSegue", showIfAnonymous: true, showIfSignedIn: false),
+                     CellData(text: "Timed Reminders", icon: UIImage(named: "TimedNotificationIcon")!, target: "TimedRemindersSegue", showIfAnonymous: true, showIfSignedIn: true),
+                     CellData(text: "Location Reminders", icon: UIImage(named: "LocationNotificationIcon")!, target: "LocationRemindersSegue", showIfAnonymous: true, showIfSignedIn: true),
+                     CellData(text: "Show Walkthrough Again", icon: UIImage(named: "WalkthroughIcon")!, target: "Walkthrough", showIfAnonymous: true, showIfSignedIn: true),
+                     CellData(text: "Report a Problem", icon: UIImage(named: "ErrorIcon")!, target: "Mail", showIfAnonymous: true, showIfSignedIn: true),
+                     CellData(text: "Credits", icon: UIImage(named: "CreditIcon")!, target: "CreditsSegue", showIfAnonymous: true, showIfSignedIn: true)]
     
     var delegate: SettingsProtocol?
     
@@ -60,15 +61,20 @@ class SettingsTableViewController: UITableViewController {
         // Setup the closeButton
         closeButton.tintColor = Constants.Color.primary
         
+        // Setup the email label
+        emailLabel.text = Auth.auth().currentUser?.email ?? "Anonymous User"
+        
         // Setup the signOutButton
         signOutButton.tintColor   = Constants.Color.primary
+        signOutButton.isEnabled   = !(Auth.auth().currentUser!.isAnonymous)
         
-        // Setup the name label and the email label
-        nameLabel.text  = "\(Stored.user!.firstName) \(Stored.user!.lastName)"
-        emailLabel.text = "\(Stored.user!.email)"
+        if Auth.auth().currentUser!.isAnonymous == true {
+            signOutButton.tintColor   = UIColor.clear
+        }
         
         // Setup the delete account button
         deleteAccountButton.backgroundColor = Constants.Color.deleteButton
+        deleteAccountButton.isHidden        = Auth.auth().currentUser!.isAnonymous
         
     }
 
@@ -93,17 +99,34 @@ extension SettingsTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Let the cell be a settings bodyCell
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.ID.Cell.settingsRow) as! SettingsRowTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.ID.Cell.settingsRow) as? SettingsRowTableViewCell else {
+            return UITableViewCell()
+        }
         
         // Set the label to match the section and row in the sectionData
         cell.iconImageView.image = tableData[indexPath.row].icon
         cell.label.text          = tableData[indexPath.row].text
         
+        if Auth.auth().currentUser!.isAnonymous {
+            cell.isHidden = !tableData[indexPath.row].showIfAnonymous
+        }
+        else {
+            cell.isHidden = !tableData[indexPath.row].showIfSignedIn
+        }
+        
+        
+        // Return the cell
         return cell
         
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        // Check if the cell should be hidden
+        if (Auth.auth().currentUser!.isAnonymous == true && tableData[indexPath.row].showIfAnonymous == false) ||
+           (Auth.auth().currentUser!.isAnonymous == false && tableData[indexPath.row].showIfSignedIn == false) {
+            return 0
+        }
         
         // Let the row height be 44
         return 44
@@ -143,13 +166,12 @@ extension SettingsTableViewController {
         
         // Let the destinationVC be the destination of the segue
         let destinationVC = segue.destination
-        
-        // Attempt to type cast it as a ChangeNameVC
-        if let destinationVC = destinationVC as? ChangeNameViewController {
+
+        // Attempt to type cast it as a ChangeEmailVC
+        if let destinationVC = destinationVC as? ChangeEmailViewController {
             destinationVC.delegate = self
         }
-        // Attempt to type cast it as a ChangeEmailVC
-        else if let destinationVC = destinationVC as? ChangeEmailViewController {
+        else if let destinationVC = destinationVC as? LinkAccountViewController {
             destinationVC.delegate = self
         }
         
@@ -200,11 +222,11 @@ extension SettingsTableViewController {
             
             // Clear local storage
             LocalStorageService.clearUser()
-            Stored.user = nil
+            Stored.userItems = [Item]()
             
             // Create the authVC
             let authVC = UIStoryboard(name: Constants.ID.Storyboard.auth, bundle: .main)
-                .instantiateViewController(withIdentifier: Constants.ID.VC.backgroundAuth) as! BackgroundViewController
+                .instantiateViewController(withIdentifier: Constants.ID.VC.initial) as! InitialViewController
             
             // Present the Auth VC
             self.view.window?.rootViewController = authVC
@@ -226,6 +248,7 @@ extension SettingsTableViewController {
     
     @IBAction func deleteAccountButtonTapped(_ sender: UIButton) {
         
+        // Segue to the delete account vc
         performSegue(withIdentifier: Constants.ID.Segues.deleteAccount, sender: self)
         
     }
@@ -284,19 +307,28 @@ extension SettingsTableViewController: MFMailComposeViewControllerDelegate {
 }
 
 // MARK: - Custom Protocol Methods
-extension SettingsTableViewController: NameChangedProtocol, EmailChangedProtocol {
-    
-    func nameWasChanged(name: String) {
-        
-        // Change the name that is displayed
-        nameLabel.text = name
-        
-    }
+extension SettingsTableViewController: EmailChangedProtocol, LinkAccountProtocol {
     
     func emailWasChanged(email: String) {
         
         // Change the email that is displayed
         emailLabel.text = email
+        
+    }
+    
+    func accountLinked() {
+    
+        // Update the name and email label
+        emailLabel.text = Auth.auth().currentUser?.email ?? "Anonymous User"
+        
+        // Make the sign out and delete account buttons visible
+        signOutButton.isEnabled = true
+        signOutButton.tintColor = Constants.Color.primary
+        
+        deleteAccountButton.isHidden = false
+        
+        // Reload the table view
+        tableView.reloadData()
         
     }
     

@@ -13,8 +13,10 @@ final class InternetService {
     
     static func checkForConnection() -> Bool {
         
+        // Check if we can create a reachability object
         guard let reachability = Reachability() else { return false }
         
+        // Switvh over the connection
         switch reachability.connection {
             
         case .wifi, .cellular:

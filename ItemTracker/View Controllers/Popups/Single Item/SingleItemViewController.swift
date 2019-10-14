@@ -9,9 +9,9 @@
 import UIKit
 import MapKit
 
-import FirebaseFirestore
+import AVFoundation
+import Photos
 
-// MARK: - Add Item Protocol
 protocol SingleItemProtocol {
     
     func itemSaved(item: Item)
@@ -19,7 +19,7 @@ protocol SingleItemProtocol {
     
 }
 
-class SingleItemViewController: UIViewController {
+final class SingleItemViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet var dimView: UIView!
@@ -118,6 +118,7 @@ class SingleItemViewController: UIViewController {
         // Setup the Save Item Button
         saveItemButton.backgroundColor            = Constants.Color.primary
         saveItemButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
+        
         if existingItem == nil {
             saveItemButton.setTitle("Save Item", for: .disabled)
             saveItemButton.setTitle("Save Item", for: .normal)
@@ -157,6 +158,7 @@ extension SingleItemViewController {
     
     @IBAction func editButtonTapped(_ sender: Any) {
         
+        // Flip the edit state and set the vc to match the state
         inEditMode = !inEditMode
         
         setEditState()
@@ -174,10 +176,10 @@ extension SingleItemViewController: UIImagePickerControllerDelegate, UINavigatio
         lowerKeyboard()
         
         // Initialize an action sheet for the image picker
-        let actionSheet = UIAlertController(title: "Add Item Image", message: nil, preferredStyle: .actionSheet)
+        let actionSheet = UIAlertController(title: "Add an Image", message: "Choose an image source", preferredStyle: .alert)
         
         // If the camera is available then add it to the action sheet
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) && AVCaptureDevice.authorizationStatus(for: .video) != .denied {
             
             actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action) in
                 
@@ -189,9 +191,9 @@ extension SingleItemViewController: UIImagePickerControllerDelegate, UINavigatio
         }
         
         // If the photo library is available then add it to the action sheet
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) && PHPhotoLibrary.authorizationStatus() != .denied {
             
-            actionSheet.addAction(UIAlertAction(title: "Camera Roll", style: .default, handler: { (action) in
+            actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action) in
                 
                 // If the action is tapped then go to the users photo library
                 self.showImagePicker(type: .photoLibrary)
@@ -256,7 +258,7 @@ extension SingleItemViewController: UIImagePickerControllerDelegate, UINavigatio
 
 }
 
-// MARK: - Item Name Methods
+// MARK: - Text Field Methods
 extension SingleItemViewController: UITextFieldDelegate {
     
     @IBAction func itemNameTextFieldEditing(_ sender: UITextField) {
@@ -279,7 +281,7 @@ extension SingleItemViewController: UITextFieldDelegate {
     
 }
 
-// MARK: - Map Search Button Methods
+// MARK: - Map Search Bar Methods
 extension SingleItemViewController: UISearchBarDelegate {
         
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -287,24 +289,34 @@ extension SingleItemViewController: UISearchBarDelegate {
         // Lower the keyboard
         searchBar.resignFirstResponder()
         
+        // Check if the search bar has any text
+        guard let location = searchBar.text, searchBar.text!.count > 0 else { return }
+        
+        // Check if the user has internet access
+        guard InternetService.checkForConnection() == true else {
+            ProgressService.errorAnimation(text: "No Internet Connection")
+            return
+        }
+        
         // Create the search request
         let searchRequest = MKLocalSearch.Request()
-        searchRequest.naturalLanguageQuery = searchBar.text
+        searchRequest.naturalLanguageQuery = location
         
         // Create an active search based off the search request and start the search
         let activeSearch = MKLocalSearch(request: searchRequest)
         activeSearch.start { (response, error) in
             
             // If the search was unsuccessful then present an error message
-            guard response != nil && error == nil else { return }
-            
-            // Get the coordinates of the location searched
-            let latitude = response?.boundingRegion.center.latitude
-            let longitude = response?.boundingRegion.center.longitude
+            guard response != nil && error == nil else {
+                ProgressService.errorAnimation(text: "No result for \"\(location)\"")
+                return
+            }
             
             // Check that the coordinates are not nil
-            guard latitude != nil && longitude != nil else { return }
-            let coordinates = CLLocationCoordinate2DMake(latitude!, longitude!)
+            guard let latitude = response?.boundingRegion.center.latitude else { return }
+            guard let longitude = response?.boundingRegion.center.longitude else { return }
+            
+            let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
             
             // Create the annotation for the item
             self.createAnnotation(coordinate: coordinates, willCenterView: true)
@@ -472,16 +484,27 @@ extension SingleItemViewController: CLLocationManagerDelegate {
         
     }
     
+    func checkLocationServices() {
+        
+        // If the user has location services on then setup the location manager and check the level of authorization
+        if CLLocationManager.locationServicesEnabled() {
+            // Setup the location manager and check the level of authorization the user has given
+            setupLocationManager()
+            checkLocationAuthorization()
+        }
+        
+    }
+    
     func checkLocationAuthorization() {
         
         switch CLLocationManager.authorizationStatus() {
             
         case .authorizedAlways, .authorizedWhenInUse:
             
-            if inEditMode == true {
-            nearMeButton.isHidden = false
-            }
+            // If in edit mode then make the near me
+            nearMeButton.isHidden = inEditMode
             
+            // If there is no preexisting item, then center the map on the users location
             if existingItem == nil {
                 centerMapOnAnnotation(annotation: mapView.userLocation, span: Constants.Map.defaultSpan)
             }
@@ -491,24 +514,6 @@ extension SingleItemViewController: CLLocationManagerDelegate {
             
         @unknown default:
             print("Unknown Authoriztion Status")
-        }
-        
-    }
-    
-    func checkLocationServices() {
-        
-        // If the user has location services on then setup the location manager and check the level of authorization
-        if CLLocationManager.locationServicesEnabled() {
-            
-            // Setup the location manager and check the level of authorization the user has given
-            setupLocationManager()
-            checkLocationAuthorization()
-            
-        }
-        else {
-            
-            // Hide the Near Me Button
-            
         }
         
     }
@@ -622,14 +627,17 @@ extension SingleItemViewController {
     
     func setEditState() {
         
+        // Check if there is an existing item
         guard existingItem != nil else {
             editButton.isEnabled = false
             editButton.title     = ""
             return
         }
         
+        // Set the navigation bar title to the item name
         navigationBarTitle.title = existingItem!.name
         
+        // Set for in edit mode
         if inEditMode == true {
             
             editButton.title                  = "Reset"
@@ -651,6 +659,7 @@ extension SingleItemViewController {
             checkLocationAuthorization()
         
         }
+        // Set for not in edit mode
         else {
             
             editButton.title                  = "Edit"

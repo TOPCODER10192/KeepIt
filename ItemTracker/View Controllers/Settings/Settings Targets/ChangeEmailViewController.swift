@@ -2,7 +2,7 @@
 //  ChangeEmailViewController.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-15.
+//  Created by Brock Chelle on 2019-07-15.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 
@@ -15,7 +15,7 @@ protocol EmailChangedProtocol {
     
 }
 
-class ChangeEmailViewController: UIViewController {
+final class ChangeEmailViewController: UIViewController {
 
     // MARK: - IBOutlet Properties
     @IBOutlet weak var passwordView: UIView!
@@ -37,7 +37,7 @@ class ChangeEmailViewController: UIViewController {
     let firebaseAuth = Auth.auth()
     var delegate: EmailChangedProtocol?
     
-    
+    // MARK - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -186,33 +186,18 @@ extension ChangeEmailViewController {
                     ProgressService.errorAnimation(text: ErrorService.firebaseAuthError(error: error!))
                     return
                 }
+                    
+                // Show that the process was successful
+                ProgressService.successAnimation(text: "Successfully Updated Your Email to \(self.newEmail!)")
+                    
+                // Save the changes locally
+                LocalStorageService.writeUser(id: user.uid, email: user.email!)
+                    
+                // Tell the settings that the email was changed
+                self.delegate?.emailWasChanged(email: self.newEmail!)
                 
-                // Store the user with their new email
-                let user = UserInfo(id: Stored.user!.id, firstName: Stored.user!.firstName, lastName: Stored.user!.lastName, email: self.newEmail!)
-                
-                // Update the users email in the database
-                FirestoreService.writeUser(user: user, completion: { (error) in
-                    
-                    // Check if there were any errors
-                    guard error == nil else {
-                        ProgressService.errorAnimation(text: "Unable to Update Your Email")
-                        self.saveChangesButton.isEnabled = true
-                        return
-                    }
-                    
-                    // Show that the process was successful
-                    ProgressService.successAnimation(text: "Successfully Updated Your Email to \(self.newEmail!)")
-                    
-                    // Save the changes locally
-                    LocalStorageService.writeUser(user: user)
-                    Stored.user = user
-                    
-                    // Tell the settings that the email was changed
-                    self.delegate?.emailWasChanged(email: self.newEmail!)
-                    
-                    // Return to the settings page
-                    self.navigationController?.popViewController(animated: true)
-                })
+                // Return to the settings page
+                self.navigationController?.popViewController(animated: true)
                 
             })
             

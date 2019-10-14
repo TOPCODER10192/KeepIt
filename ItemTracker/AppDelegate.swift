@@ -24,12 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Setup AdMob
         GADMobileAds.sharedInstance().start(completionHandler: nil)
-
-        // Attempt to load the current user
-        LocalStorageService.getUser()
         
         // Check if a user exists in local storage
-        if Stored.user != nil {
+        if Auth.auth().currentUser != nil {
             
             LocalStorageService.listItems()
             LocalStorageService.listGeoFences()

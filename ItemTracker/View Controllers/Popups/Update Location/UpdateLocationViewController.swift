@@ -2,7 +2,7 @@
 //  UpdateLocationViewController.swift
 //  ItemTracker
 //
-//  Created by Bree Chelle on 2019-07-04.
+//  Created by Brock Chelle on 2019-07-04.
 //  Copyright © 2019 Brock Chelle. All rights reserved.
 //
 
@@ -16,7 +16,7 @@ protocol UpdateLocationProtocol {
     
 }
 
-class UpdateLocationViewController: UIViewController {
+final class UpdateLocationViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
     @IBOutlet var dimView: UIView!
@@ -31,7 +31,7 @@ class UpdateLocationViewController: UIViewController {
     
     @IBOutlet weak var updateButton: RoundedButton!
     
-    // MARK: - UpdateLoctationViewController Properties
+    // MARK: - Properties
     var boxesChecked: [Bool] = Array.init(repeating: false, count: Stored.userItems.count)
     
     let locationManager = CLLocationManager()
@@ -59,7 +59,9 @@ class UpdateLocationViewController: UIViewController {
         updateTableView.delegate         = self
         updateTableView.dataSource       = self
         
-        if floatingViewHeight.constant > UIScreen.main.bounds.height - 20 {
+        // If the floating view is going to overflow the screen then enable scrolling for the table view
+        if floatingViewHeight.constant > UIScreen.main.bounds.height - 60 {
+            floatingViewHeight.constant = UIScreen.main.bounds.height - 60
             updateTableView.isScrollEnabled = true
         }
         else {
@@ -74,17 +76,27 @@ class UpdateLocationViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        // Slide the view in
         slideViewIn()
         
     }
+
+}
+
+// MARK: - Navigation Bar Methods
+extension UpdateLocationViewController {
     
-    
-    // MARK: - IBAction Methods
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         
+        // Slide the view out
         slideViewOut()
         
     }
+    
+}
+
+// MARK: - Update Button Methods
+extension UpdateLocationViewController {
     
     @IBAction func updateButtonTapped(_ sender: UIButton) {
         
@@ -177,7 +189,7 @@ class UpdateLocationViewController: UIViewController {
         updateButton.activateButton(isActivated: false, color: Constants.Color.inactiveButton)
         
     }
-
+    
 }
 
 // MARK: - Animation Methods
@@ -253,7 +265,7 @@ extension UpdateLocationViewController {
         let updatesPerRequest = 20
         
         // Get the number of times the user has updated and increment it
-        var numUpdates = defaults.value(forKey: "NumberOfUpdates") as? Int ?? 0
+        var numUpdates = defaults.value(forKey: Constants.Key.numberOfUpdates) as? Int ?? 0
         numUpdates += 1
         
         // If the number of times is divisible by 20 then request a review
@@ -262,7 +274,7 @@ extension UpdateLocationViewController {
         }
         
         // Store the new number of updates
-        defaults.set(numUpdates, forKey: "NumberOfUpdates")
+        defaults.set(numUpdates, forKey: Constants.Key.numberOfUpdates)
         
     }
     
@@ -273,14 +285,16 @@ extension UpdateLocationViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
+        // Create a row for each registered item
         return Stored.userItems.count
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.ID.Cell.updateLocation, for: indexPath) as! UpdateLocationTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.ID.Cell.updateLocation, for: indexPath) as? UpdateLocationTableViewCell else { return UITableViewCell() }
         
+        // Set the properties for the cell
         cell.selectionStyle = .none
         cell.cellIndex = indexPath.row
         cell.itemName.text = Stored.userItems[indexPath.row].name
@@ -290,6 +304,7 @@ extension UpdateLocationViewController: UITableViewDelegate, UITableViewDataSour
             cell.setPhoto(url: url)
         }
         
+        // Return the cell
         return cell
         
         
@@ -302,16 +317,36 @@ extension UpdateLocationViewController: UpdateLocationCellProtocol {
    
     func itemSelected(index: Int, state: Bool) {
         
+        // Set the buttons state
         boxesChecked[index] = state
         
+        // Check to activate the button
         checkToActivateButton()
         
     }
     
 }
 
-// MARK: - Location Manager Methods
+// MARK: - Location Methods
 extension UpdateLocationViewController: CLLocationManagerDelegate {
+    
+    func setupLocationManager() {
+        
+        // Setup the location manager
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+    }
+    
+    func checkLocationServices() {
+        
+        // Check if the location services are enabled
+        if CLLocationManager.locationServicesEnabled() {
+            setupLocationManager()
+            checkLocationAuthorization()
+        }
+        
+    }
     
     func checkLocationAuthorization() {
         
@@ -324,34 +359,15 @@ extension UpdateLocationViewController: CLLocationManagerDelegate {
             
         // Case if its not determined
         case .notDetermined:
-            break
+            locationManager.requestAlwaysAuthorization()
             
         // Case if no authorization
         case .restricted, .denied:
-            // Dismiss the view controller
-            slideViewOut()
+            break
             
         @unknown default:
             break
-        }
-        
-    }
-    
-    func setupLocationManager() {
-        
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        
-    }
-    
-    func checkLocationServices() {
-        
-        if CLLocationManager.locationServicesEnabled() {
-            setupLocationManager()
-            checkLocationAuthorization()
-        }
-        else {
-            // Let the user know that they have to turn location services on
+            
         }
         
     }
@@ -359,7 +375,7 @@ extension UpdateLocationViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
         // Check the location authorization
-        checkLocationAuthorization()
+        checkLocationServices()
         
     }
     

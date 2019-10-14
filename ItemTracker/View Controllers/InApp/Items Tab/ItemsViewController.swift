@@ -7,39 +7,43 @@
 //
 
 import UIKit
-import SDWebImage
 import GoogleMobileAds
 
 final class ItemsViewController: UIViewController {
     
     // MARK: - IBOutlet Properties
-    @IBOutlet weak var itemsCollectionView: UICollectionView!
+    @IBOutlet weak var itemsTableView: UITableView!
+    @IBOutlet weak var itemsTableViewToBottom: NSLayoutConstraint!
+    
     @IBOutlet weak var navigationBar: UINavigationBar!
     var bannerView: GADBannerView!
+    
+    // MARK: - Properties
+    let topItemRGB: [CGFloat] = [175, 82, 222]
+    let bottomItemRGB: [CGFloat] = [233, 207, 246]
     
     // MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Setup the collectionView
-        itemsCollectionView.delegate            = self
-        itemsCollectionView.dataSource          = self
-        itemsCollectionView.layer.masksToBounds = false
-        itemsCollectionView.clipsToBounds       = true
+        itemsTableView.delegate            = self
+        itemsTableView.dataSource          = self
+        itemsTableView.layer.masksToBounds = false
+        itemsTableView.clipsToBounds       = true
         
         // Setup the navigation bar
         navigationBar.tintColor = Constants.Color.primary
         
         // Setup the Banner View
+        /*
         bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
-        addBannerViewToView(bannerView)
+        bannerView.delegate = self
         
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.adUnitID = "ca-app-pub-1584397833153899/1844990630"
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
-        
-        // Add a refresh control for the collection view
-        addRefreshControl()
+         */
         
     }
     
@@ -47,7 +51,7 @@ final class ItemsViewController: UIViewController {
         super.viewWillAppear(animated)
         
         // Reload the collection view
-        itemsCollectionView.reloadData()
+        itemsTableView.reloadData()
         
     }
     
@@ -56,15 +60,21 @@ final class ItemsViewController: UIViewController {
         
         // Check if its the users first time being logged in
         if UserDefaults.standard.value(forKey: Constants.Key.firstLogin) == nil {
+            loadVC(ID: Constants.ID.VC.welcome, sb: UIStoryboard(name: Constants.ID.Storyboard.tabBar, bundle: .main), animated: true)
             WalkthroughService.showCTHelp(vc: self)
         }
         
         
+        // Mark that the user has seen the walkthrough
         UserDefaults.standard.set(false, forKey: Constants.Key.firstLogin)
         
     }
     
-    // MARK: - IBAction Methods
+}
+
+// MARK: - Navigiation Bar Methods
+extension ItemsViewController {
+    
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         
         // Load the Add Item VC
@@ -73,16 +83,16 @@ final class ItemsViewController: UIViewController {
                animated: false)
         
     }
-
+    
     @IBAction func updateButtonTapped(_ sender: UIBarButtonItem) {
         
         // Load the Update Location VC
         if Stored.userItems.count > 0 {
             loadVC(ID: Constants.ID.VC.updateLocation,
-                           sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
-                           animated: false)
+                   sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
+                   animated: false)
         }
-        // Otherwise, show the user an alert that they need to add items
+            // Otherwise, show the user an alert that they need to add items
         else {
             
             presentNoItemsAlert()
@@ -102,57 +112,23 @@ final class ItemsViewController: UIViewController {
     
 }
 
-// MARK: - Refresh Control Methods
-extension ItemsViewController {
-    
-    func addRefreshControl() {
-        
-        let refreshControl = UIRefreshControl()
-        itemsCollectionView.addSubview(refreshControl)
-        refreshControl.addTarget(self, action: #selector(refreshInitiated(refreshControl:)), for: .valueChanged)
-        
-    }
-    
-    @objc func refreshInitiated(refreshControl: UIRefreshControl) {
-        
-        itemsCollectionView.reloadData()
-        refreshControl.endRefreshing()
-        
-    }
-    
-}
-
-// MARK: - Single Item Protocol Methods
-extension ItemsViewController: SingleItemProtocol {
-    
-    func itemDeleted() {
-        
-        // Refresh the collectionView
-        itemsCollectionView.reloadData()
-        
-    }
-    
-    func itemSaved(item: Item) {
-        
-        // Refresh the collectionView
-        itemsCollectionView.reloadData()
-        
-    }
-    
-}
-
-// MARK: - Collection View Methods
-extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+// MARK: - Table View Methods
+extension ItemsViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         let numItems = Stored.userItems.count
         
         if numItems > 0 {
-            collectionView.eraseEmptyMessage()
+            
+            // Erase the message that tells the user they have no items
+            tableView.eraseEmptyMessage()
+            
         }
         else {
-            collectionView.setEmptyMessage("You're not tracking any items\nPress the \"+\" to add an item")
+            
+            // Write a message that tells the user they have no items
+            tableView.setEmptyMessage("You're not tracking any items\nPress the \"+\" to add an item")
+            
         }
         
         // Return the number of items that the user has stored
@@ -160,47 +136,64 @@ extension ItemsViewController: UICollectionViewDelegate, UICollectionViewDataSou
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Create the cell and set the label accordingly
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.ID.Cell.item, for: indexPath) as! ItemCollectionViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.ID.Cell.item, for: indexPath) as! ItemTableViewCell
         
-        cell.itemLabel.text = Stored.userItems[indexPath.row].name
+        // Calculate the cells color based on its vertical position in the table view
+        let red = topItemRGB[0] + (CGFloat(indexPath.row) * (bottomItemRGB[0] - topItemRGB[0]) / CGFloat(tableView.numberOfRows(inSection: 0)))
+        let green = topItemRGB[1] + (CGFloat(indexPath.row) * (bottomItemRGB[1] - topItemRGB[1]) / CGFloat(tableView.numberOfRows(inSection: 0)))
+        let blue = topItemRGB[2] + (CGFloat(indexPath.row) * (bottomItemRGB[2] - topItemRGB[2]) / CGFloat(tableView.numberOfRows(inSection: 0)))
+        cell.floatingView.backgroundColor = UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 255/255)
         
-        let cellWidth  = itemsCollectionView.bounds.width * 0.45
-        let imageWidth = cellWidth * 0.65
-        cell.itemImage.layer.cornerRadius = imageWidth / 2
-        cell.itemImage.layer.borderColor = Constants.Color.primary.cgColor
-        cell.itemImage.layer.borderWidth = 2
+        // Set the cell label
+        cell.itemTitleLabel.text = Stored.userItems[indexPath.row].name
+        cell.itemUpdateDateLabel.text = "Last Updated: \(Stored.userItems[indexPath.row].lastUpdateDate)"
         
         if let url = URL(string: Stored.userItems[indexPath.row].imageURL) {
             cell.setPhoto(url: url)
         }
         else {
-            cell.itemImage.image = UIImage(named: "DefaultImage")
+            cell.itemImageView.image = UIImage(named: "DefaultImage")
         }
-            
+        
+        // Return the cell
         return cell
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        // Set the width and height 
-        let width = itemsCollectionView.bounds.width * 0.45
-        let height = width
-        
-        return CGSize(width: width, height: height)
-        
-    }
-
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // Present the selected item VC
         loadVC(ID: Constants.ID.VC.singleItem,
                sb: UIStoryboard(name: Constants.ID.Storyboard.popups, bundle: .main),
                animated: false)
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        return (UIScreen.main.bounds.width * 0.853333333 / 4) * 1.25
+        
+    }
+    
+}
+
+// MARK: - Cell Protocol Methods
+extension ItemsViewController: SingleItemProtocol {
+    
+    func itemDeleted() {
+        
+        // Refresh the collectionView
+        itemsTableView.reloadData()
+        
+    }
+    
+    func itemSaved(item: Item) {
+        
+        // Refresh the collectionView
+        itemsTableView.reloadData()
         
     }
     
@@ -212,7 +205,7 @@ extension ItemsViewController: SettingsProtocol {
     func settingsClosed() {
         
         // Reload the collection view
-        itemsCollectionView.reloadData()
+        itemsTableView.reloadData()
         
     }
     
@@ -250,16 +243,17 @@ extension ItemsViewController  {
     
     func loadVC(ID: String, sb: UIStoryboard, animated: Bool) {
         
+        // Create a general vc
         let vc = sb.instantiateViewController(withIdentifier: ID)
         
+        // Check if it can be type cast and setup the vc if it can be
         if let vc = vc as? SingleItemViewController{
             
-            let indexPaths = itemsCollectionView.indexPathsForSelectedItems
+            let indexPath = itemsTableView.indexPathForSelectedRow
             
-            if indexPaths != nil, indexPaths!.count > 0, let index = indexPaths?[0].row {
-                itemsCollectionView.selectItem(at: nil,
-                                               animated: false,
-                                               scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
+            if indexPath != nil, indexPath!.count > 0, let index = indexPath?.row {
+                
+                itemsTableView.selectRow(at: nil, animated: false, scrollPosition: UITableView.ScrollPosition.middle)
                 
                 vc.existingItem = Stored.userItems[index]
                 vc.existingItemIndex = index
@@ -275,6 +269,7 @@ extension ItemsViewController  {
             
         }
         
+        // Setup the vc and present it
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: animated, completion: nil)
         
@@ -283,7 +278,7 @@ extension ItemsViewController  {
 }
 
 // MARK: - Additional Collection View Methods
-extension UICollectionView {
+extension UITableView {
     
     func setEmptyMessage(_ message: String) {
         
@@ -317,8 +312,26 @@ extension UICollectionView {
 // MARK: - Advertisement Methods
 extension ItemsViewController: GADBannerViewDelegate {
     
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        
+        // Add the banner view to the view
+        addBannerViewToView(bannerView)
+        
+        // Shift the buttons at the bottom of the screen to be relative to the ad
+        shiftCollectionViewUp()
+        
+    }
+    
+    func shiftCollectionViewUp() {
+        
+        // Shift the map bottom to equal the top of the banner view
+        self.itemsTableViewToBottom.constant = self.bannerView.bounds.height
+        
+    }
+    
     func addBannerViewToView(_ bannerView: GADBannerView) {
         
+        // Add the bannerView to the view
         bannerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(bannerView)
         
