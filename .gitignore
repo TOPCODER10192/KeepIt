@@ -3,5 +3,6 @@ ItemTracker/Info.plist
 ItemTracker/ItemTracker.entitlements
 ItemTracker.xcodeproj
 ItemTracker.xcworkspace
+.DS_Store
 GoogleService-Info.plist
 Pods
