@@ -16,7 +16,7 @@ final class InternetService {
         // Check if we can create a reachability object
         guard let reachability = Reachability() else { return false }
         
-        // Switvh over the connection
+        // Switch over the connection
         switch reachability.connection {
             
         case .wifi, .cellular:

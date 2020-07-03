@@ -79,7 +79,7 @@ final class LocalStorageService {
         var exitTriggers  = defaults.value(forKey: Constants.Key.GeoFence.triggerOnExit)  as? [Bool]     ?? [Bool]()
         var ids           = defaults.value(forKey: Constants.Key.GeoFence.id)             as? [String]   ?? [String]()
         
-        // Append the new  geofence
+        // Append the new geofence
         names         += [geoFence.name]
         centers       += [geoFence.centreCoordinate]
         radii         += [geoFence.radius]

@@ -1,1 +1,7 @@
+ItemTracker/GoogleService-Info.plist
+ItemTracker/Info.plist
+ItemTracker/ItemTracker.entitlements
+ItemTracker.xcodeproj
+ItemTracker.xcworkspace
 GoogleService-Info.plist
+Pods

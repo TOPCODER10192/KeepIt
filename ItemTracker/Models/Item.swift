@@ -18,13 +18,11 @@ struct Item {
     var imageURL: String
 
     init(withID: String, withName: String, withLocation: [Double], withLastUpdateDate: String, withImageURL: String) {
-        
         id                 = withID
         name               = withName
         mostRecentLocation = withLocation
         lastUpdateDate     = withLastUpdateDate
         imageURL           = withImageURL
-        
     }
     
     
