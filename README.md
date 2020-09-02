@@ -1,7 +1,7 @@
 # KeepIt 🔑
 KeepIt is a hardware-free item tracking application available on iOS devices. The goal of this app was to create something similar to Tile, without using any special chips or trackers which can be quite expensive
 
-*App Store URL:* https://apps.apple.com/ca/app/keepit-item-tracker/id1474698806
+**App Store URL:** https://apps.apple.com/ca/app/keepit-item-tracker/id1474698806
 
 ## Key Features ✅
 * Authentication using Email/Password
