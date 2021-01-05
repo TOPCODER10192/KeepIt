@@ -3,9 +3,6 @@ KeepIt is a hardware-free item tracking application available on iOS devices. Th
 
 **App Store URL:** https://apps.apple.com/ca/app/keepit-item-tracker/id1474698806
 
-## Note ⚠
-You may notice that almost all the contributions in this repository are done by "Bree Chelle". This is because I did almost all the development for this application on a borrowed MacBook. I was unable to develop the app on my own laptop since it is not an Apple computer (I have a Dell XPS 13). A VM also wasn't a practical solution since my laptop has relatively low computing power.
-
 ## Key Features ✅
 * Authentication using Email/Password
 * Add, Edit, Delete any details about your important belongings (such as a wallet or car keys)
